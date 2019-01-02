@@ -9,10 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.zipext.plr.enums.EnumSituacao;
-
 @Entity
-@Table(name = "CAD_DIRETORIA")
+@Table(name = "CAD_DIRETORIA", schema = "BET_PLR")
 public class DiretoriaModel {
 
 	@Id
@@ -26,7 +24,7 @@ public class DiretoriaModel {
 	private String descricao;
 	
 	@Column(name = "IN_SITUACAO")
-	private EnumSituacao situacao;
+	private Character situacao;
 	
 	@OneToMany(mappedBy = "diretoria", cascade = CascadeType.ALL)
 	private Set<CargoModel> cargos;
@@ -61,14 +59,14 @@ public class DiretoriaModel {
 		this.descricao = descricao;
 	}
 
-	public EnumSituacao getSituacao() {
+	public Character getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(EnumSituacao situacao) {
+	public void setSituacao(Character situacao) {
 		this.situacao = situacao;
 	}
-	
+
 	public Set<CargoModel> getCargos() {
 		return cargos;
 	}

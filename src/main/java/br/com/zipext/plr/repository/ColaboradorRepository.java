@@ -8,4 +8,5 @@ import br.com.zipext.plr.model.ColaboradorModel;
 @Repository
 public interface ColaboradorRepository extends JpaRepository<ColaboradorModel, Long> {
 
+	public ColaboradorModel findByMatricula(String matricula);
 }

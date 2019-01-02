@@ -1,16 +1,17 @@
 package br.com.zipext.plr.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.zipext.plr.enums.EnumSituacao;
-
 @Entity
-@Table(name = "CAD_CARGO")
+@Table(name = "CAD_CARGO", schema = "BET_PLR")
 public class CargoModel {
 	
 	@Id
@@ -24,11 +25,14 @@ public class CargoModel {
 	private String descricao;
 	
 	@Column(name = "IN_SITUACAO")
-	private EnumSituacao situacao;
+	private Character situacao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_DIRETORIA")
 	private DiretoriaModel diretoria;
+	
+	@OneToMany(mappedBy = "pk.cargo")
+	private Set<ColaboradorCargoModel> colaboradoresCargos;
 	
 	public CargoModel() {}
 	
@@ -60,11 +64,11 @@ public class CargoModel {
 		this.descricao = descricao;
 	}
 
-	public EnumSituacao getSituacao() {
+	public Character getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(EnumSituacao situacao) {
+	public void setSituacao(Character situacao) {
 		this.situacao = situacao;
 	}
 
@@ -74,6 +78,14 @@ public class CargoModel {
 
 	public void setDiretoria(DiretoriaModel diretoria) {
 		this.diretoria = diretoria;
+	}
+	
+	public Set<ColaboradorCargoModel> getColaboradoresCargos() {
+		return colaboradoresCargos;
+	}
+
+	public void setColaboradoresCargos(Set<ColaboradorCargoModel> colaboradoresCargos) {
+		this.colaboradoresCargos = colaboradoresCargos;
 	}
 
 	@Override

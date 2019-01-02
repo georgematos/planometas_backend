@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import br.com.zipext.plr.enums.EnumSituacao;
 
 @Entity
-@Table(name = "CAD_META_ESPECIFICA")
+@Table(name = "CAD_META_ESPECIFICA", schema = "BET_PLR")
 public class MetaEspecificaModel {
 
 	@Id

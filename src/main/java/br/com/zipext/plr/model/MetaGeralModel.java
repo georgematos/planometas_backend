@@ -1,14 +1,15 @@
 package br.com.zipext.plr.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.zipext.plr.enums.EnumSituacao;
-
 @Entity
-@Table(name = "CAD_META_GERAL")
+@Table(name = "CAD_META_GERAL", schema = "BET_PLR")
 public class MetaGeralModel {
 	
 	@Id
@@ -22,7 +23,10 @@ public class MetaGeralModel {
 	private String descricao;
 	
 	@Column(name = "IN_SITUACAO")
-	private EnumSituacao situacao;
+	private Character situacao;
+	
+	@OneToMany(mappedBy = "pk.metaGeral")
+	private Set<ColaboradorMetaGeralModel> colaboradoresMetas;
 	
 	public MetaGeralModel() {}
 	
@@ -54,14 +58,22 @@ public class MetaGeralModel {
 		this.descricao = descricao;
 	}
 
-	public EnumSituacao getSituacao() {
+	public Character getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(EnumSituacao situacao) {
+	public void setSituacao(Character situacao) {
 		this.situacao = situacao;
 	}
-	
+
+	public Set<ColaboradorMetaGeralModel> getColaboradoresMetas() {
+		return colaboradoresMetas;
+	}
+
+	public void setColaboradoresMetas(Set<ColaboradorMetaGeralModel> colaboradoresMetas) {
+		this.colaboradoresMetas = colaboradoresMetas;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
