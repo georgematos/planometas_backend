@@ -33,8 +33,11 @@ public class ColaboradorModel {
 	private Set<ColaboradorCargoModel> colaboradoresCargos;
 	
 	@OneToMany(mappedBy = "pk.colaborador")
-	private Set<ColaboradorMetaGeralModel> colaboradoresMetas;
+	private Set<ColaboradorMetaGeralModel> colaboradoresMetasGerais;
 
+	@OneToMany(mappedBy = "pk.colaborador")
+	private Set<ColaboradorMetaEspecificaModel> colaboradoresMetasEspecificas;
+	
 	public ColaboradorModel() {}
 	
 	public ColaboradorModel(String matricula) {
@@ -87,6 +90,22 @@ public class ColaboradorModel {
 
 	public void setColaboradoresCargos(Set<ColaboradorCargoModel> colaboradoresCargos) {
 		this.colaboradoresCargos = colaboradoresCargos;
+	}
+	
+	public Set<ColaboradorMetaGeralModel> getColaboradoresMetasGerais() {
+		return colaboradoresMetasGerais;
+	}
+
+	public void setColaboradoresMetasGerais(Set<ColaboradorMetaGeralModel> colaboradoresMetasGerais) {
+		this.colaboradoresMetasGerais = colaboradoresMetasGerais;
+	}
+
+	public Set<ColaboradorMetaEspecificaModel> getColaboradoresMetasEspecificas() {
+		return colaboradoresMetasEspecificas;
+	}
+
+	public void setColaboradoresMetasEspecificas(Set<ColaboradorMetaEspecificaModel> colaboradoresMetasEspecificas) {
+		this.colaboradoresMetasEspecificas = colaboradoresMetasEspecificas;
 	}
 
 	@Override

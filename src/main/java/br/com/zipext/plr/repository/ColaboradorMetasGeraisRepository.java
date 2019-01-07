@@ -1,5 +1,7 @@
 package br.com.zipext.plr.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,5 +15,5 @@ public interface ColaboradorMetasGeraisRepository extends JpaRepository <Colabor
 	@Query("select model from ColaboradorMetaGeralModel model"
 			+ " join fetch model.pk.colaborador colab"
 			+ " where colab.matricula = :matricula" )
-	public ColaboradorMetaGeralModel findByMatricula(@Param("matricula") String matricula);
+	public List<ColaboradorMetaGeralModel> findByMatricula(@Param("matricula") String matricula);
 }

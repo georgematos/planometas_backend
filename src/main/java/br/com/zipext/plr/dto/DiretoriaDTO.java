@@ -2,9 +2,12 @@ package br.com.zipext.plr.dto;
 
 import org.springframework.beans.BeanUtils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import br.com.zipext.plr.dto.GenericDTO.Situacao;
 import br.com.zipext.plr.model.DiretoriaModel;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DiretoriaDTO {
 	
 	private Long id;

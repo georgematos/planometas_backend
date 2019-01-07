@@ -2,9 +2,13 @@ package br.com.zipext.plr.dto;
 
 import org.springframework.beans.BeanUtils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import br.com.zipext.plr.dto.GenericDTO.Situacao;
 import br.com.zipext.plr.model.CargoModel;
+import br.com.zipext.plr.model.ColaboradorCargoModel;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CargoDTO {
 	
 	private Long id;
@@ -14,6 +18,10 @@ public class CargoDTO {
 	private DiretoriaDTO diretoria;
 	
 	public CargoDTO() {}
+	
+	public CargoDTO(ColaboradorCargoModel model) {
+		this(model.getPk().getCargo());
+	}
 	
 	public CargoDTO(CargoModel model) {
 		if (model != null) {

@@ -22,7 +22,7 @@ public class ColaboradorMetasGeraisService {
 	}
 	
 	@Transactional(readOnly = true)
-	public ColaboradorMetaGeralModel findByMatricula(String matricula) {
+	public List<ColaboradorMetaGeralModel> findByMatricula(String matricula) {
 		return
 				this.repository.findByMatricula(matricula);
 	}
