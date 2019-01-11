@@ -24,6 +24,7 @@ public class MetasDTO {
 	private String prazo;
 	private String observacao;
 	private String descricao;
+	private String possuiMetaGeral;
 	private BigDecimal bonus;
 	private BigDecimal valor;
 	private BigDecimal peso;
@@ -33,8 +34,6 @@ public class MetasDTO {
 	public MetasDTO(ColaboradorMetaGeralModel model) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
-			this.prazo = model.getPrazo() != null ? 
-					model.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN)) : "";
 			this.id = model.getPk().getMetaGeral().getId();
 			this.meta = model.getPk().getMetaGeral().getNome();
 			this.observacao = model.getObservacao();
@@ -48,6 +47,7 @@ public class MetasDTO {
 					model.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN)) : "";
 			this.id = model.getPk().getMetaEspecifica().getId();
 			this.observacao = model.getObservacao();
+			this.sequencia = model.getPk().getSequencia();
 		}
 	}
 	
@@ -55,10 +55,14 @@ public class MetasDTO {
 	public ColaboradorMetaEspecificaModel getMetasForColaborador(String matricula) {
 		ColaboradorMetaEspecificaModel model = new ColaboradorMetaEspecificaModel();
 		BeanUtils.copyProperties(this, model);
-		
-		model.setPk(new ColaboradorMetaEspecificaModelPK(new ColaboradorModel(matricula), new MetaEspecificaModel(this.id)));
-		//model.setPrazo(ZonedDateTime.parse(this.prazo, DateTimeFormatter.ofPattern(PLRUtils.FRONT_DATE_PATTERN)).toLocalDateTime()); ;
-		model.setPrazo(LocalDateTime.now());
+
+		model.setPk(new ColaboradorMetaEspecificaModelPK(new ColaboradorModel(matricula), new MetaEspecificaModel(this.id), this.sequencia));
+		try {
+			model.setPrazo(LocalDateTime.parse(this.prazo, DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN)));
+		} catch (Exception e1) {
+			model.setPrazo(LocalDateTime.now());
+		}
+
 		return model;
 	}
 
@@ -140,5 +144,13 @@ public class MetasDTO {
 
 	public void setFrequenciaMedicao(String frequenciaMedicao) {
 		this.frequenciaMedicao = frequenciaMedicao;
+	}
+
+	public String getPossuiMetaGeral() {
+		return possuiMetaGeral;
+	}
+
+	public void setPossuiMetaGeral(String possuiMetaGeral) {
+		this.possuiMetaGeral = possuiMetaGeral;
 	}
 }

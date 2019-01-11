@@ -3,7 +3,6 @@ package br.com.zipext.plr.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +18,17 @@ public class ColaboradorMetaEspecificaService {
 	@Autowired
 	private ColaboradorMetaEspecificaRepository repository;
 	
-	@Modifying
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void delete(ColaboradorModel colaborador, MetaEspecificaModel metaEspecifica) {
-		this.repository.deleteColaboradorMeta(colaborador, metaEspecifica);
+	public void delete(ColaboradorMetaEspecificaModel model) {
+		this.delete(model.getPk().getColaborador(), model.getPk().getMetaEspecifica(), model.getPk().getSequencia());
 	}
-
+	
+	public void delete(ColaboradorModel colaborador, MetaEspecificaModel metaEspecifica, Integer sequencia) {
+		this.repository.deleteColaboradorMetaByFilter(colaborador.getMatricula(), metaEspecifica.getId(), sequencia);
+	}
+	
+	public void delete(ColaboradorModel colaborador, MetaEspecificaModel metaEspecifica) {
+		this.repository.deleteColaboradorMeta(colaborador.getMatricula(), metaEspecifica.getId());
+	}
 	
 	@Transactional(readOnly = true)
 	public List<ColaboradorMetaEspecificaModel> findByMatricula(String matricula) {
@@ -32,9 +36,9 @@ public class ColaboradorMetaEspecificaService {
 				this.repository.findByMatricula(matricula);
 	}
 	
-	public ColaboradorMetaEspecificaModel save(ColaboradorModel colaboradorModel, MetaEspecificaModel metaEspecifica) {
+	public ColaboradorMetaEspecificaModel save(ColaboradorModel colaboradorModel, MetaEspecificaModel metaEspecifica, Integer sequencia) {
 		return
-				this.save(new ColaboradorMetaEspecificaModel(colaboradorModel, metaEspecifica));
+				this.save(new ColaboradorMetaEspecificaModel(colaboradorModel, metaEspecifica, sequencia));
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -51,7 +55,7 @@ public class ColaboradorMetaEspecificaService {
 	
 	public List<ColaboradorMetaEspecificaModel> updateAll(List<ColaboradorMetaEspecificaModel> models) {
 		if (models != null && !models.isEmpty()) {
-			this.repository.delete(models.get(0));
+			this.delete(models.get(0).getPk().getColaborador(), models.get(0).getPk().getMetaEspecifica());
 		}
 		
 		return

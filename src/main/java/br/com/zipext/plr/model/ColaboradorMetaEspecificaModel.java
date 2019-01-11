@@ -22,17 +22,17 @@ public class ColaboradorMetaEspecificaModel {
 	@EmbeddedId
 	private ColaboradorMetaEspecificaModelPK pk;
 	
-	@Column(name = "NU_SEQUENCIA")
-	private Integer sequencia;
-	
 	@Column(name = "DS_META")
 	private String meta;
 
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
 	
-	@Column(name = "DS_FREQUENCIA")
+	@Column(name = "DS_FREQUENCIA_MED")
 	private String frequenciaMedicao;
+	
+	@Column(name = "DS_DESCRICAO")
+	private String descricao;
 
 	@Column(name = "QT_PESO")
 	private BigDecimal peso;
@@ -43,8 +43,8 @@ public class ColaboradorMetaEspecificaModel {
 	
 	public ColaboradorMetaEspecificaModel() {}
 		
-	public ColaboradorMetaEspecificaModel(ColaboradorModel colaboradorModel, MetaEspecificaModel metaEspecifica) {
-		this.pk = new ColaboradorMetaEspecificaModelPK(colaboradorModel, metaEspecifica);
+	public ColaboradorMetaEspecificaModel(ColaboradorModel colaboradorModel, MetaEspecificaModel metaEspecifica, Integer sequencia) {
+		this.pk = new ColaboradorMetaEspecificaModelPK(colaboradorModel, metaEspecifica, sequencia);
 	}
 
 	@Embeddable
@@ -60,9 +60,13 @@ public class ColaboradorMetaEspecificaModel {
 		@JoinColumn(name = "CD_META")
 		private MetaEspecificaModel metaEspecifica;
 		
+		@Column(name = "NU_SEQUENCIA")
+		private Integer sequencia;
+		
 		public ColaboradorMetaEspecificaModelPK() {}
 		
-		public ColaboradorMetaEspecificaModelPK(ColaboradorModel colaborador, MetaEspecificaModel metaEspecifica) {
+		public ColaboradorMetaEspecificaModelPK(ColaboradorModel colaborador, MetaEspecificaModel metaEspecifica, Integer sequencia) {
+			this.sequencia = sequencia;
 			this.colaborador = colaborador;
 			this.metaEspecifica = metaEspecifica;
 		}
@@ -82,6 +86,14 @@ public class ColaboradorMetaEspecificaModel {
 		public void setMetaEspecifica(MetaEspecificaModel metaEspecifica) {
 			this.metaEspecifica = metaEspecifica;
 		}
+
+		public Integer getSequencia() {
+			return sequencia;
+		}
+
+		public void setSequencia(Integer sequencia) {
+			this.sequencia = sequencia;
+		}
 	}
 
 	public ColaboradorMetaEspecificaModelPK getPk() {
@@ -90,14 +102,6 @@ public class ColaboradorMetaEspecificaModel {
 
 	public void setPk(ColaboradorMetaEspecificaModelPK pk) {
 		this.pk = pk;
-	}
-
-	public Integer getSequencia() {
-		return sequencia;
-	}
-
-	public void setSequencia(Integer sequencia) {
-		this.sequencia = sequencia;
 	}
 
 	public String getMeta() {
@@ -138,5 +142,13 @@ public class ColaboradorMetaEspecificaModel {
 
 	public void setFrequenciaMedicao(String frequenciaMedicao) {
 		this.frequenciaMedicao = frequenciaMedicao;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 }

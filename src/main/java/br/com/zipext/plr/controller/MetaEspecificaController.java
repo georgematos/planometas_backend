@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zipext.plr.dto.MetasDTO;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
-import br.com.zipext.plr.model.ColaboradorModel;
-import br.com.zipext.plr.model.MetaEspecificaModel;
 import br.com.zipext.plr.service.ColaboradorMetaEspecificaService;
 
 @RestController
@@ -37,9 +35,10 @@ public class MetaEspecificaController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/colaborador/{matricula}/meta/{idMeta}")
-	public ResponseEntity<Void> delete(@PathVariable("matricula") String matricula, @PathVariable("idMeta") Long idMeta) {
-		this.service.delete(new ColaboradorModel(matricula), new MetaEspecificaModel(idMeta));
+	@DeleteMapping("/colaborador/{matricula}")
+	public ResponseEntity<Void> delete(@RequestBody MetasDTO dto, @PathVariable("matricula") String matricula) {
+		ColaboradorMetaEspecificaModel model = dto.getMetasForColaborador(matricula);
+		this.service.delete(model);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

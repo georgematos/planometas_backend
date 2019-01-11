@@ -7,19 +7,27 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
-import br.com.zipext.plr.model.ColaboradorModel;
-import br.com.zipext.plr.model.MetaEspecificaModel;
 
 @Repository
 public interface ColaboradorMetaEspecificaRepository extends JpaRepository<ColaboradorMetaEspecificaModel, ColaboradorMetaEspecificaModel.ColaboradorMetaEspecificaModelPK> {
-
+	
 	@Modifying
+	@Transactional
 	@Query("delete from ColaboradorMetaEspecificaModel model"
-			+ " where model.pk.colaborador = :colaborador"
-			+ " and model.pk.metaEspecifica = :metaEspecifica")
-	public void deleteColaboradorMeta(@Param("colaborador") ColaboradorModel colaborador, @Param("metaEspecifica") MetaEspecificaModel metaEspecifica);
+			+ " where model.pk.colaborador.matricula = ?1"
+			+ " and model.pk.metaEspecifica.id = ?2"
+			+ " and model.pk.sequencia = ?3")
+	public void deleteColaboradorMetaByFilter(String matricula, Long idMetaEspecifica, Integer sequencia);
+	
+	@Modifying
+	@Transactional
+	@Query("delete from ColaboradorMetaEspecificaModel model"
+			+ " where model.pk.colaborador.matricula = ?1"
+			+ " and model.pk.metaEspecifica.id = ?2")
+	public void deleteColaboradorMeta(String matricula, Long idMetaEspecifica);
 	
 	@Query("select model from ColaboradorMetaEspecificaModel model"
 			+ " join fetch model.pk.colaborador colab"

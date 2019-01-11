@@ -32,24 +32,26 @@ public class ColaboradorDTO {
 	public ColaboradorDTO() {}
 	
 	public ColaboradorDTO(ColaboradorModel model) {
-		BeanUtils.copyProperties(model, this);
-		this.cargo = new CargoDTO((ColaboradorCargoModel) model.getColaboradoresCargos().toArray()[0]);
-		this.metasGerais = new ArrayList<>();
-		this.metasProjetos = new ArrayList<>();
-		this.metasQuantitativas = new ArrayList<>();
-		
-		Set<ColaboradorMetaGeralModel> metasGerais = model.getColaboradoresMetasGerais();
-		if (metasGerais != null && !metasGerais.isEmpty()) {
-			metasGerais.forEach(meta -> this.metasGerais.add(new MetasDTO(meta)));
-		}
-		
-		Set<ColaboradorMetaEspecificaModel> metasEspecificas = model.getColaboradoresMetasEspecificas();
-		if (metasEspecificas != null && !metasEspecificas.isEmpty()) {
-			metasEspecificas.stream().filter(meta -> meta.getPk().getMetaEspecifica().equals(new MetaEspecificaModel(1L)))
-					.forEach(meta -> this.metasQuantitativas.add(new MetasDTO(meta)));
+		if (model != null) {
+			BeanUtils.copyProperties(model, this);
+			this.cargo = new CargoDTO((ColaboradorCargoModel) model.getColaboradoresCargos().toArray()[0]);
+			this.metasGerais = new ArrayList<>();
+			this.metasProjetos = new ArrayList<>();
+			this.metasQuantitativas = new ArrayList<>();
 			
-			metasEspecificas.stream().filter(meta -> meta.getPk().getMetaEspecifica().equals(new MetaEspecificaModel(2L)))
-					.forEach(meta -> this.metasProjetos.add(new MetasDTO(meta)));
+			Set<ColaboradorMetaGeralModel> metasGerais = model.getColaboradoresMetasGerais();
+			if (metasGerais != null && !metasGerais.isEmpty()) {
+				metasGerais.forEach(meta -> this.metasGerais.add(new MetasDTO(meta)));
+			}
+			
+			Set<ColaboradorMetaEspecificaModel> metasEspecificas = model.getColaboradoresMetasEspecificas();
+			if (metasEspecificas != null && !metasEspecificas.isEmpty()) {
+				metasEspecificas.stream().filter(meta -> meta.getPk().getMetaEspecifica().equals(new MetaEspecificaModel(1L)))
+						.forEach(meta -> this.metasQuantitativas.add(new MetasDTO(meta)));
+				
+				metasEspecificas.stream().filter(meta -> meta.getPk().getMetaEspecifica().equals(new MetaEspecificaModel(2L)))
+						.forEach(meta -> this.metasProjetos.add(new MetasDTO(meta)));
+			}	
 		}
 	}
 	

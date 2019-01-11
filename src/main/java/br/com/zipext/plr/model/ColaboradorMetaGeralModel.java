@@ -2,18 +2,14 @@ package br.com.zipext.plr.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
 
 @Entity
 @Table(name = "ASS_COLAB_META_GERAL", schema = "BET_PLR")
@@ -30,10 +26,6 @@ public class ColaboradorMetaGeralModel {
 	
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
-	
-	@Column(name = "DT_PRAZO")
-	@Convert(converter = LocalDateTimeConverter.class)
-	private LocalDateTime prazo;
 	
 	public ColaboradorMetaGeralModel() {}
 	
@@ -108,13 +100,5 @@ public class ColaboradorMetaGeralModel {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
-	}
-
-	public LocalDateTime getPrazo() {
-		return prazo;
-	}
-
-	public void setPrazo(LocalDateTime prazo) {
-		this.prazo = prazo;
 	}
 }
