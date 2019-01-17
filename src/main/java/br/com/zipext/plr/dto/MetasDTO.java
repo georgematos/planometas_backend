@@ -1,7 +1,7 @@
 package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.BeanUtils;
@@ -44,7 +44,7 @@ public class MetasDTO {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
  			this.prazo = model.getPrazo() != null ? 
-					model.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN)) : "";
+					model.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)) : "";
 			this.id = model.getPk().getMetaEspecifica().getId();
 			this.observacao = model.getObservacao();
 			this.sequencia = model.getPk().getSequencia();
@@ -58,9 +58,9 @@ public class MetasDTO {
 
 		model.setPk(new ColaboradorMetaEspecificaModelPK(new ColaboradorModel(matricula), new MetaEspecificaModel(this.id), this.sequencia));
 		try {
-			model.setPrazo(LocalDateTime.parse(this.prazo, DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN)));
+			model.setPrazo(LocalDate.parse(this.prazo.substring(0, 10), DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_DB)));
 		} catch (Exception e1) {
-			model.setPrazo(LocalDateTime.now());
+			model.setPrazo(LocalDate.now());
 		}
 
 		return model;

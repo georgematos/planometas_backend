@@ -2,18 +2,15 @@ package br.com.zipext.plr.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
 
 @Entity
 @Table(name = "ASS_COLAB_META_ESPECIF", schema = "BET_PLR")
@@ -38,8 +35,7 @@ public class ColaboradorMetaEspecificaModel {
 	private BigDecimal peso;
 
 	@Column(name = "DT_PRAZO")
-	@Convert(converter = LocalDateTimeConverter.class)
-	private LocalDateTime prazo;
+	private LocalDate prazo;
 	
 	public ColaboradorMetaEspecificaModel() {}
 		
@@ -128,14 +124,6 @@ public class ColaboradorMetaEspecificaModel {
 		this.peso = peso;
 	}
 
-	public LocalDateTime getPrazo() {
-		return prazo;
-	}
-
-	public void setPrazo(LocalDateTime prazo) {
-		this.prazo = prazo;
-	}
-
 	public String getFrequenciaMedicao() {
 		return frequenciaMedicao;
 	}
@@ -150,5 +138,13 @@ public class ColaboradorMetaEspecificaModel {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public LocalDate getPrazo() {
+		return prazo;
+	}
+
+	public void setPrazo(LocalDate prazo) {
+		this.prazo = prazo;
 	}
 }
