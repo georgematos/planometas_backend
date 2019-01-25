@@ -14,6 +14,7 @@ public class DiretoriaDTO {
 	private String nome;
 	private String descricao;
 	private Situacao situacao;
+	private Character possuiMetaExtra;
 	
 	public DiretoriaDTO() {}
 	
@@ -53,5 +54,13 @@ public class DiretoriaDTO {
 
 	public void setSituacao(Situacao situacao) {
 		this.situacao = situacao;
+	}
+
+	public Character getPossuiMetaExtra() {
+		return possuiMetaExtra;
+	}
+
+	public void setPossuiMetaExtra(Character possuiMetaExtra) {
+		this.possuiMetaExtra = possuiMetaExtra;
 	}
 }

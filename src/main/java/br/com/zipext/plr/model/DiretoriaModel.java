@@ -27,7 +27,7 @@ public class DiretoriaModel {
 	private Character situacao;
 	
 	@Column(name = "IN_META_EXTRA")
-	private Character possuiMetaGeral;
+	private Character possuiMetaExtra;
 	
 	@OneToMany(mappedBy = "diretoria", cascade = CascadeType.ALL)
 	private Set<CargoModel> cargos;
@@ -70,12 +70,12 @@ public class DiretoriaModel {
 		this.situacao = situacao;
 	}
 	
-	public Character getPossuiMetaGeral() {
-		return possuiMetaGeral;
+	public Character getPossuiMetaExtra() {
+		return possuiMetaExtra;
 	}
 
-	public void setPossuiMetaGeral(Character possuiMetaGeral) {
-		this.possuiMetaGeral = possuiMetaGeral;
+	public void setPossuiMetaExtra(Character possuiMetaExtra) {
+		this.possuiMetaExtra = possuiMetaExtra;
 	}
 
 	public Set<CargoModel> getCargos() {
