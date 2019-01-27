@@ -53,12 +53,10 @@ public class ColaboradorMetaEspecificaService {
 				this.repository.saveAll(models);
 	}
 	
-	public List<ColaboradorMetaEspecificaModel> updateAll(List<ColaboradorMetaEspecificaModel> models) {
-		if (models != null && !models.isEmpty()) {
-			this.delete(models.get(0).getPk().getColaborador(), models.get(0).getPk().getMetaEspecifica());
-		}
-		
+	public ColaboradorMetaEspecificaModel update(ColaboradorMetaEspecificaModel model) {
+		this.delete(model);
 		return
-				this.saveAll(models);
+				this.repository.save(model);
 	}
+	
 }

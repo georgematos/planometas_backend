@@ -58,7 +58,7 @@ public class MetasDTO {
 
 		model.setPk(new ColaboradorMetaEspecificaModelPK(new ColaboradorModel(matricula), new MetaEspecificaModel(this.id), this.sequencia));
 		try {
-			model.setPrazo(LocalDate.parse(this.prazo.substring(0, 10), DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_DB)));
+			model.setPrazo(LocalDate.parse(this.prazo.substring(0, 10), DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 		} catch (Exception e1) {
 			model.setPrazo(LocalDate.now());
 		}

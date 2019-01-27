@@ -13,7 +13,7 @@ public class PLR extends SpringBootServletInitializer {
 	}
 	  
 	@Override
-	   protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-	        return builder.sources(PLR.class);
-	   }
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(PLR.class);
+	}
 }
