@@ -3,7 +3,10 @@ package br.com.zipext.plr.export.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,25 +15,30 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import br.com.zipext.plr.enums.EnumXlsEspecificasCells;
 import br.com.zipext.plr.enums.EnumXlsGeraisCells;
 import br.com.zipext.plr.enums.EnumXlsIdCells;
 import br.com.zipext.plr.enums.EnumXlsSection;
 import br.com.zipext.plr.export.FileExport;
 import br.com.zipext.plr.model.ColaboradorCargoModel;
+import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
 import br.com.zipext.plr.model.ColaboradorMetaGeralModel;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.MetaGeralModel;
 import br.com.zipext.plr.utils.PLRUtils;
 
 public class XlsFileExport extends FileExport {
-
+	
 	private Workbook workbook;
+	
+	double sumPontuacaoTotal = 0;
+	
+	public XlsFileExport(String templatePath) {
+		this.initWorkbook(templatePath);
+	}
 	
 	public ByteArrayInputStream processXlsForColaborador(ColaboradorModel colaboradorModel) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		if (this.workbook == null) {
-			this.initWorkbook();
-		}
 		
 		this.writeContent(colaboradorModel);
 		
@@ -42,9 +50,9 @@ public class XlsFileExport extends FileExport {
 				new ByteArrayInputStream(out.toByteArray());
 	}
 	
-	public Workbook initWorkbook() {
+	public Workbook initWorkbook(String templatePath) {
 		try {
-			this.workbook = WorkbookFactory.create(getFileInputStream("/opt/plr/templates/TEMPLATE_METAS.xlsx"));
+			this.workbook = WorkbookFactory.create(getFileInputStream(templatePath));
 		} catch (EncryptedDocumentException | IOException e) {
 			e.printStackTrace();
 		}
@@ -113,6 +121,50 @@ public class XlsFileExport extends FileExport {
 				bonus.setCellValue(metaGeral.getBonus() != null ? (metaGeral.getBonus().doubleValue() / 100) : 0);
 				observacao.setCellValue(metaGeral.getObservacao() != null ? metaGeral.getObservacao() : "N/I");
 			}
+			
+			List<ColaboradorMetaEspecificaModel> quantitativas = colaborador.getColaboradoresMetasEspecificas().stream()
+																			.filter(m -> m.getPk().getMetaEspecifica().getId().equals(1L))
+																			.collect(Collectors.toList());
+			List<ColaboradorMetaEspecificaModel> projetos = colaborador.getColaboradoresMetasEspecificas().stream()
+					.filter(m -> m.getPk().getMetaEspecifica().getId().equals(2L))
+					.collect(Collectors.toList());
+			
+			if (!quantitativas.isEmpty()) {
+				this.fillMetasEspecificas(quantitativas, EnumXlsSection.QUANTITATIVAS, metaSheet);
+			}
+			
+			if (!projetos.isEmpty()) {
+				this.fillMetasEspecificas(projetos, EnumXlsSection.PROJETOS, metaSheet);
+			}
+			
+			metaSheet.getRow(EnumXlsSection.PONTUACAO.getRowNum()).getCell(EnumXlsEspecificasCells.PONTUACAO.getColIndex())
+																  .setCellValue(this.sumPontuacaoTotal / 100);
+			
 		}
+	}
+	
+	private void fillMetasEspecificas(List<ColaboradorMetaEspecificaModel> itens, EnumXlsSection section, Sheet sheet) {
+		int rowNum = section.getRowNum() + 2;
+		double sumPesos = 0;
+		Cell sumPesosCell = sheet.getRow(rowNum).getCell(EnumXlsEspecificasCells.SUMPESOS.getColIndex());
+		for (ColaboradorMetaEspecificaModel item: itens) {
+			Row row = sheet.getRow(rowNum);
+			
+			row.getCell(EnumXlsEspecificasCells.SEQUENCIA.getColIndex()).setCellValue(item.getPk().getSequencia());
+			row.getCell(EnumXlsEspecificasCells.DESCRICAO.getColIndex()).setCellValue(item.getDescricao() != null ? item.getDescricao() : "");
+			row.getCell(EnumXlsEspecificasCells.FREQUENCIA.getColIndex()).setCellValue(item.getFrequenciaMedicao());
+			row.getCell(EnumXlsEspecificasCells.PESOS.getColIndex()).setCellValue(item.getPeso().doubleValue() / 100);
+			row.getCell(EnumXlsEspecificasCells.META.getColIndex()).setCellValue(item.getMeta() != null ? item.getMeta() : "");
+			row.getCell(EnumXlsEspecificasCells.OBSERVACOES.getColIndex()).setCellValue(item.getObservacao() != null ? item.getObservacao() : "");
+			row.getCell(EnumXlsEspecificasCells.PRAZOS.getColIndex()).setCellValue(item.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
+			
+			sumPesos += item.getPeso().doubleValue();
+			rowNum++;
+			
+		}
+		
+		sumPesosCell.setCellValue(sumPesos / 100);
+		
+		this.sumPontuacaoTotal += sumPesos;
 	}
 }

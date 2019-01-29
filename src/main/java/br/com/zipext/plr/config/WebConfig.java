@@ -1,28 +1,28 @@
 package br.com.zipext.plr.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import br.com.zipext.plr.enums.EnumProperty;
+import br.com.zipext.plr.service.PropertyService;
+
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 	
-	@Value("${app.frontend.ext.ip}")
-	private String frontEndAddressExt;
-	
-	@Value("${app.frontend.int.ip}")
-	private String frontEndAddressInt;
+	@Autowired
+	private PropertyService propertyService;
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/colaboradores/**")
-			.allowedOrigins(this.frontEndAddressInt, this.frontEndAddressExt)
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/metaEspecifica/**")
-			.allowedOrigins(this.frontEndAddressInt, this.frontEndAddressExt)
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 	}
 }

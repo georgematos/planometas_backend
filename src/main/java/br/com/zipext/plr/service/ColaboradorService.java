@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.export.impl.XlsFileExport;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.repository.ColaboradorRepository;
@@ -18,9 +19,11 @@ public class ColaboradorService {
 	@Autowired
 	private ColaboradorRepository repository;
 	
+	@Autowired
+	private PropertyService propertyService;
 	
 	public ByteArrayInputStream export(ColaboradorModel colaborador) throws IOException {
-		XlsFileExport export = new XlsFileExport();
+		XlsFileExport export = new XlsFileExport(this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_PATH));
 		return
 				export.processXlsForColaborador(colaborador);
 	}

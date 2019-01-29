@@ -21,4 +21,26 @@ public enum EnumXlsGeraisCells {
 	public int getColIndex() {
 		return this.colIndex;
 	}
+	
+	public static EnumXlsGeraisCells getBonusIndexForMeta(int idMeta) {
+		EnumXlsGeraisCells cell = null;
+		switch (idMeta) {
+		case 1:
+			cell = BON_EBITDA;
+			break;
+		case 2:
+			cell = BON_INDIV;
+			break;
+		case 3:
+			cell = BON_PARTIC;
+			break;
+		case 4:
+			cell = BON_PERFOR;
+			break;
+		default:
+			break;
+		}
+		
+		return cell;
+	} 
 }
