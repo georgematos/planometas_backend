@@ -70,6 +70,7 @@ public class XlsFileExport extends FileExport {
 		Row indivRow = metaSheet.getRow(EnumXlsSection.INDIVIDUAL.getRowNum());
 		Row partRow = metaSheet.getRow(EnumXlsSection.PARTICIPACAO.getRowNum());
 		Row perfRow = metaSheet.getRow(EnumXlsSection.PERFORMANCE.getRowNum());
+		Row metaExtraRow = metaSheet.getRow(EnumXlsSection.EXTRA.getRowNum());
 		
 		Cell nome = identRow.getCell(EnumXlsIdCells.NOME.getColIndex());
 		Cell matricula = identRow.getCell(EnumXlsIdCells.MATRICULA.getColIndex());
@@ -114,6 +115,11 @@ public class XlsFileExport extends FileExport {
 					observacao = perfRow.getCell(EnumXlsGeraisCells.OBS_PERFOR.getColIndex());
 					
 					break;
+				case 5:
+					bonus = metaExtraRow.getCell(EnumXlsGeraisCells.BON_EXTRA.getColIndex());
+					observacao = metaExtraRow.getCell(EnumXlsGeraisCells.OBS_EXTRA.getColIndex());
+					
+					break;
 				default:
 					break;
 				}
@@ -123,10 +129,13 @@ public class XlsFileExport extends FileExport {
 			}
 			
 			List<ColaboradorMetaEspecificaModel> quantitativas = colaborador.getColaboradoresMetasEspecificas().stream()
-																			.filter(m -> m.getPk().getMetaEspecifica().getId().equals(1L))
-																			.collect(Collectors.toList());
+					.filter(m -> m.getPk().getMetaEspecifica().getId().equals(1L))
+					.sorted((m1, m2) -> m1.getPk().getSequencia().compareTo(m2.getPk().getSequencia()))
+					.collect(Collectors.toList());
+			
 			List<ColaboradorMetaEspecificaModel> projetos = colaborador.getColaboradoresMetasEspecificas().stream()
 					.filter(m -> m.getPk().getMetaEspecifica().getId().equals(2L))
+					.sorted((m1, m2) -> m1.getPk().getSequencia().compareTo(m2.getPk().getSequencia()))
 					.collect(Collectors.toList());
 			
 			if (!quantitativas.isEmpty()) {

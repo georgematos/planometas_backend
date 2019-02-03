@@ -7,9 +7,10 @@ public enum EnumXlsSection {
 	INDIVIDUAL(8),
 	PARTICIPACAO(9),
 	PERFORMANCE(10),
-	QUANTITATIVAS(12),
-	PROJETOS(25),
-	PONTUACAO(32);
+	EXTRA(11),
+	QUANTITATIVAS(13),
+	PROJETOS(28),
+	PONTUACAO(37);
 	
 	private int rowNum;
 	

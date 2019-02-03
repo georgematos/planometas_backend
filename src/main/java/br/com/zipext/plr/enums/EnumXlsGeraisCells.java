@@ -10,7 +10,9 @@ public enum EnumXlsGeraisCells {
 	BON_PARTIC(7),
 	OBS_PARTIC(8),
 	BON_PERFOR(7),
-	OBS_PERFOR(8);
+	OBS_PERFOR(8),
+	BON_EXTRA(7),
+	OBS_EXTRA(8);
 	
 	private int colIndex;
 	
