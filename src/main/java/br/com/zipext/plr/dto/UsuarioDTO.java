@@ -19,7 +19,7 @@ public class UsuarioDTO {
 	public UsuarioDTO(ColaboradorModel colaborador) {
 		this.login = colaborador.getMatricula();
 		this.password = colaborador.getMatricula();
-		this.password = colaborador.getNome();
+		this.nome = colaborador.getNome();
 		this.inPrimeiroAcesso = EnumSimNao.SIM.getCodigo();
 	}
 	
