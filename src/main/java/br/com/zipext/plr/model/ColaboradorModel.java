@@ -3,6 +3,7 @@ package br.com.zipext.plr.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -28,6 +29,9 @@ public class ColaboradorModel {
 	
 	@Column(name = "DT_DESLIGAMENTO")
 	private LocalDate dataDesligamento;
+
+	@OneToMany(mappedBy = "colaborador", cascade = CascadeType.ALL)
+	private Set<UsuarioModel> usuarios;
 	
 	@OneToMany(mappedBy = "pk.colaborador")
 	private Set<ColaboradorCargoModel> colaboradoresCargos;
@@ -106,6 +110,14 @@ public class ColaboradorModel {
 
 	public void setColaboradoresMetasEspecificas(Set<ColaboradorMetaEspecificaModel> colaboradoresMetasEspecificas) {
 		this.colaboradoresMetasEspecificas = colaboradoresMetasEspecificas;
+	}
+
+	public Set<UsuarioModel> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(Set<UsuarioModel> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 	@Override
