@@ -5,11 +5,13 @@ import org.springframework.beans.BeanUtils;
 import br.com.zipext.plr.enums.EnumSimNao;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.UsuarioModel;
+import br.com.zipext.plr.utils.PLRUtils;
 
 public class UsuarioDTO {
 	
 	private String login;
-	private String password;
+	private String hash;
+	private String phrase;
 	private String nome;
 	private String matricula;
 	private Character inPrimeiroAcesso;
@@ -18,7 +20,7 @@ public class UsuarioDTO {
 	
 	public UsuarioDTO(ColaboradorModel colaborador) {
 		this.login = colaborador.getMatricula();
-		this.password = colaborador.getMatricula();
+		this.hash = colaborador.getMatricula();
 		this.nome = colaborador.getNome();
 		this.inPrimeiroAcesso = EnumSimNao.SIM.getCodigo();
 	}
@@ -27,6 +29,8 @@ public class UsuarioDTO {
 		this.login = usuario.getLogin();
 		this.inPrimeiroAcesso = usuario.getInPrimeiroAcesso();
 		this.matricula = usuario.getColaborador().getMatricula();
+		this.hash = usuario.getHash();
+		this.phrase = PLRUtils.genPhrase(usuario.getColaborador().getNome(), Long.valueOf(usuario.getColaborador().getMatricula()));
 	}
 	
 	public UsuarioModel getModel() {
@@ -45,12 +49,12 @@ public class UsuarioDTO {
 		this.login = login;
 	}
 	
-	public String getPassword() {
-		return password;
+	public String getHash() {
+		return hash;
 	}
-	
-	public void setPassword(String password) {
-		this.password = password;
+
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	public String getNome() {
@@ -76,13 +80,21 @@ public class UsuarioDTO {
 	public void setInPrimeiroAcesso(Character inPrimeiroAcesso) {
 		this.inPrimeiroAcesso = inPrimeiroAcesso;
 	}
+	
+	public String getPhrase() {
+		return phrase;
+	}
+
+	public void setPhrase(String phrase) {
+		this.phrase = phrase;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
 	}
 
@@ -95,15 +107,15 @@ public class UsuarioDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		UsuarioDTO other = (UsuarioDTO) obj;
+		if (hash == null) {
+			if (other.hash != null)
+				return false;
+		} else if (!hash.equals(other.hash))
+			return false;
 		if (login == null) {
 			if (other.login != null)
 				return false;
 		} else if (!login.equals(other.login))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
 			return false;
 		return true;
 	}

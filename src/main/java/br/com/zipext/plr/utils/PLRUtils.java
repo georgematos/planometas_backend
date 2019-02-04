@@ -20,4 +20,15 @@ public class PLRUtils {
 		return
 				now.format(formatter);
 	}
+	
+	public static String genPhrase(String tokenA, long tokenB) {
+		String phrase = "";
+		if (tokenB % 2 == 0) {
+			phrase = tokenA.split(" ")[0].concat(String.valueOf(tokenB));
+		} else {
+			int len = tokenA.split(" ").length;
+			phrase = tokenA.split(" ")[len - 1].concat(String.valueOf(tokenB));
+		}
+		return phrase;
+	}
 }

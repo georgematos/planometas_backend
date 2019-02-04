@@ -19,6 +19,7 @@ public class UsuarioService {
 	@Autowired
 	private ColaboradorService colaboradorService;
 	
+	@Transactional(readOnly = true)
 	public UsuarioModel findByLogin(String login) {
 		return
 				this.repository.findByLogin(login);
@@ -28,19 +29,18 @@ public class UsuarioService {
 	public UsuarioModel processLogin(UsuarioModel model) {
 		UsuarioModel result = this.findByLogin(model.getLogin());
 		ColaboradorModel colaborador = this.colaboradorService.findByMatricula(model.getLogin());
-		if (result == null && colaborador == null) {
-			return
-					null;
-		} else if (result != null && !result.getPassword().equals(model.getPassword())) {
-			return
-					null;
-		} else if (result == null) {
-			UsuarioDTO dto = new UsuarioDTO(colaborador);
-			UsuarioModel newUser = dto.getModel();
-			newUser.setColaborador(colaborador);
-			return
-					this.save(newUser);
-		} else {
+		if (result == null) {
+			if (colaborador ==  null) {
+				return null;
+			} else {
+				UsuarioDTO dto = new UsuarioDTO(colaborador);
+				UsuarioModel newUser = dto.getModel();
+				newUser.setColaborador(colaborador);
+				
+				return	
+						this.save(newUser);
+			}
+		}  else {
 			return
 					result;
 		}

@@ -16,10 +16,10 @@ public class UsuarioModel {
 	@Column(name = "CD_LOGIN")
 	private String login;
 	
-	@Column(name = "DS_PASSWORD")
-	private String password;
+	@Column(name = "DS_HASH")
+	private String hash;
 	
-	@Column(name = "DS_LOGIN")
+	@Column(name = "DS_NOME")
 	private String nome;
 	
 	@Column(name = "IN_PRIMEIRO_ACESSO")
@@ -44,14 +44,6 @@ public class UsuarioModel {
 
 	public void setLogin(String login) {
 		this.login = login;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getNome() {
@@ -86,12 +78,20 @@ public class UsuarioModel {
 		this.inPrimeiroAcesso = inPrimeiroAcesso;
 	}
 
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
 	}
 
@@ -104,15 +104,15 @@ public class UsuarioModel {
 		if (getClass() != obj.getClass())
 			return false;
 		UsuarioModel other = (UsuarioModel) obj;
+		if (hash == null) {
+			if (other.hash != null)
+				return false;
+		} else if (!hash.equals(other.hash))
+			return false;
 		if (login == null) {
 			if (other.login != null)
 				return false;
 		} else if (!login.equals(other.login))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
 			return false;
 		return true;
 	}
