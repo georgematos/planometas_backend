@@ -27,10 +27,11 @@ public class UsuarioDTO {
 	
 	public UsuarioDTO(UsuarioModel usuario) {
 		this.login = usuario.getLogin();
+		this.nome = usuario.getNome();
 		this.inPrimeiroAcesso = usuario.getInPrimeiroAcesso();
 		this.matricula = usuario.getColaborador().getMatricula();
 		this.hash = usuario.getHash();
-		this.phrase = PLRUtils.genPhrase(usuario.getColaborador().getNome(), Long.valueOf(usuario.getColaborador().getMatricula()));
+		this.phrase = PLRUtils.genPhrase(usuario.getColaborador().getNome(), Long.valueOf(usuario.getColaborador().getMatricula()));			
 	}
 	
 	public UsuarioModel getModel() {

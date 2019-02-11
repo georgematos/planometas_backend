@@ -36,6 +36,12 @@ public class ColaboradorMetaEspecificaService {
 				this.repository.findByMatricula(matricula);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<ColaboradorMetaEspecificaModel> findByResponsavel(String loginResponsavel) {
+		return
+				this.repository.findByResponsavel(loginResponsavel);
+	}
+	
 	public ColaboradorMetaEspecificaModel save(ColaboradorModel colaboradorModel, MetaEspecificaModel metaEspecifica, Integer sequencia) {
 		return
 				this.save(new ColaboradorMetaEspecificaModel(colaboradorModel, metaEspecifica, sequencia));

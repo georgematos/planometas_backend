@@ -2,6 +2,7 @@ package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.BeanUtils;
@@ -28,6 +29,8 @@ public class MetasDTO {
 	private BigDecimal bonus;
 	private BigDecimal valor;
 	private BigDecimal peso;
+	private String dataInclusao;
+	private String responsavel;
 	
 	public MetasDTO() {}
 	
@@ -43,9 +46,12 @@ public class MetasDTO {
 	public MetasDTO(ColaboradorMetaEspecificaModel model) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
+			this.id = model.getPk().getMetaEspecifica().getId();
  			this.prazo = model.getPrazo() != null ? 
 					model.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)) : "";
-			this.id = model.getPk().getMetaEspecifica().getId();
+			this.dataInclusao = model.getDataInclusao() != null ?
+					model.getDataInclusao().toLocalDate().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_DB)) : "";
+			this.responsavel = model.getResponsavel();
 			this.observacao = model.getObservacao();
 			this.sequencia = model.getPk().getSequencia();
 		}
@@ -59,6 +65,7 @@ public class MetasDTO {
 		model.setPk(new ColaboradorMetaEspecificaModelPK(new ColaboradorModel(matricula), new MetaEspecificaModel(this.id), this.sequencia));
 		try {
 			model.setPrazo(LocalDate.parse(this.prazo.substring(0, 10), DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
+			model.setDataInclusao(LocalDateTime.now());
 		} catch (Exception e1) {
 			model.setPrazo(LocalDate.now());
 		}
@@ -152,5 +159,21 @@ public class MetasDTO {
 
 	public void setPossuiMetaGeral(String possuiMetaGeral) {
 		this.possuiMetaGeral = possuiMetaGeral;
+	}
+
+	public String getDataInclusao() {
+		return dataInclusao;
+	}
+
+	public void setDataInclusao(String dataInclusao) {
+		this.dataInclusao = dataInclusao;
+	}
+
+	public String getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(String responsavel) {
+		this.responsavel = responsavel;
 	}
 }

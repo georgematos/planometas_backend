@@ -33,4 +33,6 @@ public interface ColaboradorMetaEspecificaRepository extends JpaRepository<Colab
 			+ " join fetch model.pk.colaborador colab"
 			+ " where colab.matricula = :matricula" )
 	public List<ColaboradorMetaEspecificaModel> findByMatricula(@Param("matricula") String matricula);
+	
+	public List<ColaboradorMetaEspecificaModel> findByResponsavel(String loginResponsavel);
 }

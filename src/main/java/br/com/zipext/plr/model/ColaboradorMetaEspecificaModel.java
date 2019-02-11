@@ -3,6 +3,7 @@ package br.com.zipext.plr.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -36,6 +37,12 @@ public class ColaboradorMetaEspecificaModel {
 
 	@Column(name = "DT_PRAZO")
 	private LocalDate prazo;
+	
+	@Column(name = "DT_INC")
+	private LocalDateTime dataInclusao;
+	
+	@Column(name = "CD_LOGIN_INC")
+	private String responsavel;
 	
 	public ColaboradorMetaEspecificaModel() {}
 		
@@ -146,5 +153,21 @@ public class ColaboradorMetaEspecificaModel {
 
 	public void setPrazo(LocalDate prazo) {
 		this.prazo = prazo;
+	}
+
+	public String getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(String responsavel) {
+		this.responsavel = responsavel;
+	}
+
+	public LocalDateTime getDataInclusao() {
+		return dataInclusao;
+	}
+
+	public void setDataInclusao(LocalDateTime dataInclusao) {
+		this.dataInclusao = dataInclusao;
 	}
 }
