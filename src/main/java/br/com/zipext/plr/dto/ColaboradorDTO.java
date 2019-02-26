@@ -2,6 +2,7 @@ package br.com.zipext.plr.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
@@ -13,6 +14,8 @@ import br.com.zipext.plr.model.ColaboradorCargoModel;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
 import br.com.zipext.plr.model.ColaboradorMetaGeralModel;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.HistoricoMetaEspecificaModel;
+import br.com.zipext.plr.model.HistoricoModel;
 import br.com.zipext.plr.model.MetaEspecificaModel;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -52,6 +55,37 @@ public class ColaboradorDTO {
 				metasEspecificas.stream().filter(meta -> meta.getPk().getMetaEspecifica().equals(new MetaEspecificaModel(2L)))
 						.forEach(meta -> this.metasProjetos.add(new MetasDTO(meta)));
 			}	
+		}
+	}
+	
+	public ColaboradorDTO(ColaboradorModel model, Long filterVersion) {
+		if (model != null) {
+			BeanUtils.copyProperties(model, this);
+			this.cargo = new CargoDTO((ColaboradorCargoModel) model.getColaboradoresCargos().toArray()[0]);
+			this.metasGerais = new ArrayList<>();
+			this.metasProjetos = new ArrayList<>();
+			this.metasQuantitativas = new ArrayList<>();
+			
+
+			Set<ColaboradorMetaGeralModel> metasGerais = model.getColaboradoresMetasGerais();
+			if (metasGerais != null && !metasGerais.isEmpty()) {
+				metasGerais.forEach(meta -> this.metasGerais.add(new MetasDTO(meta)));
+			}
+			
+			Optional<HistoricoModel> optHistorico = model.getHistorico().stream().filter(hist -> hist.getVersao().equals(filterVersion)).findFirst();
+			if (optHistorico.isPresent()) {
+				HistoricoModel historico = optHistorico.get();
+				
+				
+				Set<HistoricoMetaEspecificaModel> metasEspecificas = historico.getHistoricoMetaEspecifica();
+				if (metasEspecificas != null && !metasEspecificas.isEmpty()) {
+					metasEspecificas.stream().filter(meta -> meta.getPk().getColaboradorMetaEspecifica().getPk().getMetaEspecifica().equals(new MetaEspecificaModel(1L)))
+							.forEach(meta -> this.metasQuantitativas.add(new MetasDTO(meta.getPk().getColaboradorMetaEspecifica())));
+					
+					metasEspecificas.stream().filter(meta -> meta.getPk().getColaboradorMetaEspecifica().getPk().getMetaEspecifica().equals(new MetaEspecificaModel(2L)))
+							.forEach(meta -> this.metasProjetos.add(new MetasDTO(meta.getPk().getColaboradorMetaEspecifica())));
+				}	
+			}
 		}
 	}
 	

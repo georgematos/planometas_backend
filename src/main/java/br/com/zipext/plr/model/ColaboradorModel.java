@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "CAD_COLABORADOR", schema = "BET_PLR")
@@ -33,6 +34,9 @@ public class ColaboradorModel {
 	@OneToMany(mappedBy = "colaborador", cascade = CascadeType.ALL)
 	private Set<UsuarioModel> usuarios;
 	
+	@OneToMany(mappedBy = "colaborador")
+	private Set<HistoricoModel> historico;
+	
 	@OneToMany(mappedBy = "pk.colaborador")
 	private Set<ColaboradorCargoModel> colaboradoresCargos;
 	
@@ -41,6 +45,9 @@ public class ColaboradorModel {
 
 	@OneToMany(mappedBy = "pk.colaborador")
 	private Set<ColaboradorMetaEspecificaModel> colaboradoresMetasEspecificas;
+	
+	@Transient
+	private HistoricoModel historicoExport;
 	
 	public ColaboradorModel() {}
 	
@@ -118,6 +125,22 @@ public class ColaboradorModel {
 
 	public void setUsuarios(Set<UsuarioModel> usuarios) {
 		this.usuarios = usuarios;
+	}
+	
+	public Set<HistoricoModel> getHistorico() {
+		return historico;
+	}
+
+	public void setHistorico(Set<HistoricoModel> historico) {
+		this.historico = historico;
+	}
+	
+	public HistoricoModel getHistoricoExport() {
+		return historicoExport;
+	}
+
+	public void setHistoricoExport(HistoricoModel historicoExport) {
+		this.historicoExport = historicoExport;
 	}
 
 	@Override

@@ -29,6 +29,9 @@ public class ColaboradorMetaEspecificaModel {
 	@Column(name = "DS_FREQUENCIA_MED")
 	private String frequenciaMedicao;
 	
+	@Column(name = "DS_TIPO_META")
+	private String tipoMeta;
+	
 	@Column(name = "DS_DESCRICAO")
 	private String descricao;
 
@@ -169,5 +172,23 @@ public class ColaboradorMetaEspecificaModel {
 
 	public void setDataInclusao(LocalDateTime dataInclusao) {
 		this.dataInclusao = dataInclusao;
+	}
+
+	public String getTipoMeta() {
+		return tipoMeta;
+	}
+
+	public void setTipoMeta(String tipoMeta) {
+		this.tipoMeta = tipoMeta;
+	}
+	
+	public Integer getSequencia() {
+		return
+				this.pk.getSequencia();
+	}
+	
+	public Long getIdMeta() {
+		return
+				this.pk.getMetaEspecifica().getId();
 	}
 }

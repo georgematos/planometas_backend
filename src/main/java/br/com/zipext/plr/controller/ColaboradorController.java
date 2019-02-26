@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zipext.plr.dto.ColaboradorDTO;
@@ -33,9 +34,17 @@ public class ColaboradorController {
 	}
 	
 	@GetMapping("/{matricula}")
-	public ResponseEntity<ColaboradorDTO> findColaborador(@PathVariable("matricula") String matricula) {
+	public ResponseEntity<ColaboradorDTO> findColaborador(@PathVariable("matricula") String matricula, 
+			@RequestParam(name = "filterVersion", required = false) Long filterVersion) {
 		ColaboradorModel model = this.service.findByMatricula(matricula);
-		return new ResponseEntity<>(new ColaboradorDTO(model), HttpStatus.OK);
+		ColaboradorDTO dto;
+		if (filterVersion != null) {
+			dto = new ColaboradorDTO(model, filterVersion);
+		} else {
+			dto = new ColaboradorDTO(model);
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{matricula}/export")

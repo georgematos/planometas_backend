@@ -21,6 +21,7 @@ public class MetasDTO {
 	private Long id;
 	private Integer sequencia;
 	private String frequenciaMedicao;
+	private String tipoMeta;
 	private String meta;
 	private String prazo;
 	private String observacao;
@@ -175,5 +176,13 @@ public class MetasDTO {
 
 	public void setResponsavel(String responsavel) {
 		this.responsavel = responsavel;
+	}
+
+	public String getTipoMeta() {
+		return tipoMeta;
+	}
+
+	public void setTipoMeta(String tipoMeta) {
+		this.tipoMeta = tipoMeta;
 	}
 }

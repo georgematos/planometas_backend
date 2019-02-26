@@ -2,7 +2,7 @@ package br.com.zipext.plr.enums;
 
 public enum EnumXlsLogoCells {
 
-	EXPORT_DATE(2);
+	NUM_DOC(11);
 	
 	private int index;
 	

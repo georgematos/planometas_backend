@@ -27,5 +27,8 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/usuarios/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
+		registry.addMapping("/historico/**")
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 	}
 }

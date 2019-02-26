@@ -18,12 +18,15 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import br.com.zipext.plr.enums.EnumXlsEspecificasCells;
 import br.com.zipext.plr.enums.EnumXlsGeraisCells;
 import br.com.zipext.plr.enums.EnumXlsIdCells;
+import br.com.zipext.plr.enums.EnumXlsLogoCells;
 import br.com.zipext.plr.enums.EnumXlsSection;
 import br.com.zipext.plr.export.FileExport;
 import br.com.zipext.plr.model.ColaboradorCargoModel;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
 import br.com.zipext.plr.model.ColaboradorMetaGeralModel;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.HistoricoMetaEspecificaModel;
+import br.com.zipext.plr.model.HistoricoModel;
 import br.com.zipext.plr.model.MetaGeralModel;
 import br.com.zipext.plr.utils.PLRUtils;
 
@@ -63,6 +66,9 @@ public class XlsFileExport extends FileExport {
 	
 	public void writeContent(ColaboradorModel colaborador) {
 		Sheet metaSheet = this.workbook.getSheet(PLRUtils.XLS_SHEET_NAME);
+		
+		//Header
+		Row header = metaSheet.getRow(EnumXlsSection.LOGO.getRowNum());
 		
 		//Identificação
 		Row identRow = metaSheet.getRow(EnumXlsSection.ID.getRowNum());
@@ -128,27 +134,59 @@ public class XlsFileExport extends FileExport {
 				observacao.setCellValue(metaGeral.getObservacao() != null ? metaGeral.getObservacao() : "N/I");
 			}
 			
-			List<ColaboradorMetaEspecificaModel> quantitativas = colaborador.getColaboradoresMetasEspecificas().stream()
-					.filter(m -> m.getPk().getMetaEspecifica().getId().equals(1L))
-					.sorted((m1, m2) -> m1.getPk().getSequencia().compareTo(m2.getPk().getSequencia()))
-					.collect(Collectors.toList());
-			
-			List<ColaboradorMetaEspecificaModel> projetos = colaborador.getColaboradoresMetasEspecificas().stream()
-					.filter(m -> m.getPk().getMetaEspecifica().getId().equals(2L))
-					.sorted((m1, m2) -> m1.getPk().getSequencia().compareTo(m2.getPk().getSequencia()))
-					.collect(Collectors.toList());
-			
-			if (!quantitativas.isEmpty()) {
-				this.fillMetasEspecificas(quantitativas, EnumXlsSection.QUANTITATIVAS, metaSheet);
-			}
-			
-			if (!projetos.isEmpty()) {
-				this.fillMetasEspecificas(projetos, EnumXlsSection.PROJETOS, metaSheet);
+			HistoricoModel historico = colaborador.getHistoricoExport();
+			if (historico == null) {
+				this.processMetasEspecificas(colaborador, metaSheet);
+			} else {
+				this.processMetasEspecificasFromHistorico(historico, metaSheet);
+				header.getCell(EnumXlsLogoCells.NUM_DOC.getIndex()).setCellValue("Nº: " + historico.getId());
 			}
 			
 			metaSheet.getRow(EnumXlsSection.PONTUACAO.getRowNum()).getCell(EnumXlsEspecificasCells.PONTUACAO.getColIndex())
 																  .setCellValue(this.sumPontuacaoTotal / 100);
 			
+		}
+	}
+	
+	public void processMetasEspecificasFromHistorico(HistoricoModel historico, Sheet metaSheet) {
+		List<HistoricoMetaEspecificaModel> quantitativas = historico.getHistoricoMetaEspecifica()
+				.stream()
+				.filter(m -> m.getPk().getColaboradorMetaEspecifica().getIdMeta().equals(1L))
+				.sorted((m1, m2) -> m1.getPk().getColaboradorMetaEspecifica().getSequencia().compareTo(m2.getPk().getColaboradorMetaEspecifica().getSequencia()))
+				.collect(Collectors.toList());
+		
+		List<HistoricoMetaEspecificaModel> projetos = historico.getHistoricoMetaEspecifica().stream()
+				.filter(m -> m.getPk().getColaboradorMetaEspecifica().getIdMeta().equals(2L))
+				.sorted((m1, m2) -> m1.getPk().getColaboradorMetaEspecifica().getSequencia().compareTo(m2.getPk().getColaboradorMetaEspecifica().getSequencia()))
+				.collect(Collectors.toList());
+		
+		if (!quantitativas.isEmpty()) {
+			this.fillMetasEspecificasFromHistorico(quantitativas, EnumXlsSection.QUANTITATIVAS, metaSheet);
+		}
+		
+		if (!projetos.isEmpty()) {
+			this.fillMetasEspecificasFromHistorico(projetos, EnumXlsSection.PROJETOS, metaSheet);
+		}
+	}
+	
+	public void processMetasEspecificas(ColaboradorModel colaborador, Sheet metaSheet) {
+		List<ColaboradorMetaEspecificaModel> quantitativas = colaborador.getColaboradoresMetasEspecificas()
+				.stream()
+				.filter(m -> m.getIdMeta().equals(1L))
+				.sorted((m1, m2) -> m1.getSequencia().compareTo(m2.getSequencia()))
+				.collect(Collectors.toList());
+		
+		List<ColaboradorMetaEspecificaModel> projetos = colaborador.getColaboradoresMetasEspecificas().stream()
+				.filter(m -> m.getIdMeta().equals(2L))
+				.sorted((m1, m2) -> m1.getSequencia().compareTo(m2.getSequencia()))
+				.collect(Collectors.toList());
+		
+		if (!quantitativas.isEmpty()) {
+			this.fillMetasEspecificas(quantitativas, EnumXlsSection.QUANTITATIVAS, metaSheet);
+		}
+		
+		if (!projetos.isEmpty()) {
+			this.fillMetasEspecificas(projetos, EnumXlsSection.PROJETOS, metaSheet);
 		}
 	}
 	
@@ -159,7 +197,32 @@ public class XlsFileExport extends FileExport {
 		for (ColaboradorMetaEspecificaModel item: itens) {
 			Row row = sheet.getRow(rowNum);
 			
-			row.getCell(EnumXlsEspecificasCells.SEQUENCIA.getColIndex()).setCellValue(item.getPk().getSequencia());
+			row.getCell(EnumXlsEspecificasCells.SEQUENCIA.getColIndex()).setCellValue(item.getSequencia());
+			row.getCell(EnumXlsEspecificasCells.DESCRICAO.getColIndex()).setCellValue(item.getDescricao() != null ? item.getDescricao() : "");
+			row.getCell(EnumXlsEspecificasCells.FREQUENCIA.getColIndex()).setCellValue(item.getFrequenciaMedicao());
+			row.getCell(EnumXlsEspecificasCells.PESOS.getColIndex()).setCellValue(item.getPeso().doubleValue() / 100);
+			row.getCell(EnumXlsEspecificasCells.META.getColIndex()).setCellValue(item.getMeta() != null ? item.getMeta() : "");
+			row.getCell(EnumXlsEspecificasCells.OBSERVACOES.getColIndex()).setCellValue(item.getObservacao() != null ? item.getObservacao() : "");
+			row.getCell(EnumXlsEspecificasCells.PRAZOS.getColIndex()).setCellValue(item.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
+			
+			sumPesos += item.getPeso().doubleValue();
+			rowNum++;
+			
+		}
+		
+		sumPesosCell.setCellValue(sumPesos / 100);
+		
+		this.sumPontuacaoTotal += sumPesos;
+	}
+	
+	private void fillMetasEspecificasFromHistorico(List<HistoricoMetaEspecificaModel> itens, EnumXlsSection section, Sheet sheet) {
+		int rowNum = section.getRowNum() + 2;
+		double sumPesos = 0;
+		Cell sumPesosCell = sheet.getRow(rowNum).getCell(EnumXlsEspecificasCells.SUMPESOS.getColIndex());
+		for (HistoricoMetaEspecificaModel item: itens) {
+			Row row = sheet.getRow(rowNum);
+			
+			row.getCell(EnumXlsEspecificasCells.SEQUENCIA.getColIndex()).setCellValue(item.getPk().getColaboradorMetaEspecifica().getSequencia());
 			row.getCell(EnumXlsEspecificasCells.DESCRICAO.getColIndex()).setCellValue(item.getDescricao() != null ? item.getDescricao() : "");
 			row.getCell(EnumXlsEspecificasCells.FREQUENCIA.getColIndex()).setCellValue(item.getFrequenciaMedicao());
 			row.getCell(EnumXlsEspecificasCells.PESOS.getColIndex()).setCellValue(item.getPeso().doubleValue() / 100);

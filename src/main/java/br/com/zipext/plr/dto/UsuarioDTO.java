@@ -34,6 +34,11 @@ public class UsuarioDTO {
 		this.phrase = PLRUtils.genPhrase(usuario.getColaborador().getNome(), Long.valueOf(usuario.getColaborador().getMatricula()));			
 	}
 	
+	public UsuarioDTO(String login, String nome) {
+		this.login = login;
+		this.nome = nome;
+	}
+	
 	public UsuarioModel getModel() {
 		UsuarioModel model = new UsuarioModel();
 		BeanUtils.copyProperties(this, model);
@@ -41,7 +46,7 @@ public class UsuarioDTO {
 		return
 				model;
 	}
-
+	
 	public String getLogin() {
 		return login;
 	}
