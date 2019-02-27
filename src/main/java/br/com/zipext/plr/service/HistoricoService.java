@@ -79,6 +79,11 @@ public class HistoricoService {
 				this.repository.save(model);
 	}
 	
+	@Transactional(readOnly = false)
+	public void update(HistoricoModel historicoModel) {
+		this.repository.update(historicoModel.getId(), historicoModel.getSituacao(), historicoModel.getComentario());
+	}
+	
 	private ColaboradorModel filterVersion(ColaboradorModel colaborador, Long version) {
 		Optional<HistoricoModel> historico = colaborador.getHistorico().stream().filter(hist -> hist.getVersao().equals(version)).findFirst();
 		if (historico.isPresent()) {

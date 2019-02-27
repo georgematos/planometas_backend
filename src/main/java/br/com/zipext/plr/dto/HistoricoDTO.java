@@ -66,6 +66,18 @@ public class HistoricoDTO {
 		return
 				model;
 	}
+	
+	public HistoricoModel obterModelFromDTOSimples() {
+		HistoricoModel model = new HistoricoModel();
+		
+		BeanUtils.copyProperties(this, model);
+		model.setColaborador(new ColaboradorModel(this.matricula));
+		model.setResponsavel(new UsuarioModel(this.matriculaResponsavel));
+		
+		return
+				model;
+		
+	}
 
 	public Long getId() {
 		return id;

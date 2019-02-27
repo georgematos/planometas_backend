@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,5 +57,11 @@ public class HistoricoController {
 	@PostMapping
 	public ResponseEntity<HistoricoDTO> geraHistorico(@RequestBody HistoricoDTO dto) {
 		return new ResponseEntity<>(new HistoricoDTO(this.service.geraHistorico(dto.obterModelFromDTO())), HttpStatus.OK);
+	}
+	
+	@PutMapping
+	public ResponseEntity<Void> atualizaHistorico(@RequestBody HistoricoDTO dto) {
+		this.service.update(dto.obterModelFromDTOSimples());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
