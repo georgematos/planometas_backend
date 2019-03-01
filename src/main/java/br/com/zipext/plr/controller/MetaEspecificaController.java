@@ -23,6 +23,7 @@ import br.com.zipext.plr.dto.MetasResumoDTO;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
 import br.com.zipext.plr.model.MetaEspecificaMensalModel;
 import br.com.zipext.plr.service.ColaboradorMetaEspecificaService;
+import br.com.zipext.plr.service.HistoricoMetaMensalService;
 import br.com.zipext.plr.service.MetaEspecificaMensalService;
 
 @RestController
@@ -35,6 +36,9 @@ public class MetaEspecificaController {
 	@Autowired
 	private MetaEspecificaMensalService metaMensalService;
 	
+	@Autowired
+	private HistoricoMetaMensalService historicoMetaMensalService;
+	
 	@GetMapping("/colaborador/{matricula}")
 	public ResponseEntity<List<MetasResumoDTO>> findMetasCadastradasBy(@PathVariable("matricula") String matricula) {
 		Set<MetasResumoDTO> results = this.service.findByResponsavel(matricula).stream()
@@ -46,8 +50,14 @@ public class MetaEspecificaController {
 	@GetMapping("/colaborador/{matricula}/mensal")
 	public ResponseEntity<List<MetaEspecificaMensalDTO>> 
 		findMetasMensais(@PathVariable("matricula") String matricula, @RequestParam(name = "idMeta", required = true) Long idMeta, 
-			@RequestParam(name = "sequencia", required = true) Integer sequencia) {
-		return new ResponseEntity<>(this.metaMensalService.findByFilter(idMeta, matricula, sequencia).stream().map(MetaEspecificaMensalDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+			@RequestParam(name = "sequencia", required = true) Integer sequencia, @RequestParam(name = "filterVersion", required = false) Long filterVersion) {
+		List<MetaEspecificaMensalDTO> dtos = new ArrayList<>();
+		if (filterVersion != null) {
+			dtos = this.historicoMetaMensalService.findByFilter(idMeta, matricula, sequencia, filterVersion).stream().map(MetaEspecificaMensalDTO::new).collect(Collectors.toList());
+		} else {
+			dtos = this.metaMensalService.findByFilter(idMeta, matricula, sequencia).stream().map(MetaEspecificaMensalDTO::new).collect(Collectors.toList());
+		}
+		return new ResponseEntity<>(dtos.stream().collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
 	@PostMapping("/colaborador/{matricula}")

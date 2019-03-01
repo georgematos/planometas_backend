@@ -16,8 +16,10 @@ import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.export.impl.XlsFileExport;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.HistoricoMetaEspecificaMensalModel;
 import br.com.zipext.plr.model.HistoricoMetaEspecificaModel;
 import br.com.zipext.plr.model.HistoricoModel;
+import br.com.zipext.plr.model.MetaEspecificaMensalModel;
 import br.com.zipext.plr.model.UsuarioModel;
 import br.com.zipext.plr.repository.HistoricoRepository;
 
@@ -29,6 +31,9 @@ public class HistoricoService {
 	
 	@Autowired
 	private ColaboradorMetaEspecificaService colabMetaEspecificaService;
+	
+	@Autowired
+	private MetaEspecificaMensalService metaMensalService;
 	
 	@Autowired
 	private PropertyService propertyService;
@@ -59,6 +64,15 @@ public class HistoricoService {
 			
 			model.setHistoricoMetaEspecifica(historicoMetaEspecifica);
 		}
+		
+		List<MetaEspecificaMensalModel> metasMensais = this.metaMensalService.findByMatricula(model.getColaborador().getMatricula());
+		if (!metasMensais.isEmpty()) {
+			Set<HistoricoMetaEspecificaMensalModel> historicoMetaMensal = new HashSet<>();
+			metasMensais.forEach(m -> historicoMetaMensal.add(new HistoricoMetaEspecificaMensalModel(model, m)));
+			
+			model.setHistoricoMetaEspecificaMensal(historicoMetaMensal);
+		}
+		
 		
 		model.setVersao(this.getVersion(model.getColaborador()) + 1);
 

@@ -20,4 +20,8 @@ public interface MetaEspecificaMensalRepository extends JpaRepository<MetaEspeci
 	public List<MetaEspecificaMensalModel> findByFilter(@Param("idMeta") Long idMeta,
 			@Param("matricula") String matricula,
 			@Param("sequencia") Integer sequencia);
+	
+	@Query("select model from MetaEspecificaMensalModel model "
+			+ "where model.pk.colaboradorMetaEspecifica.pk.colaborador.matricula = :matricula ")
+	public List<MetaEspecificaMensalModel> findByMatricula(@Param("matricula") String matricula);
 }

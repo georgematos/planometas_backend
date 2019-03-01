@@ -28,9 +28,9 @@ public class HistoricoMetaEspecificaMensalModel {
 	
 	public HistoricoMetaEspecificaMensalModel() {}
 	
-	public HistoricoMetaEspecificaMensalModel(MetaEspecificaMensalModel metaEspecificaMensal) {
+	public HistoricoMetaEspecificaMensalModel(HistoricoModel historico, MetaEspecificaMensalModel metaEspecificaMensal) {
 		BeanUtils.copyProperties(metaEspecificaMensal, this);
-		this.pk = new HistoricoMetaEspecificaMensalPK(metaEspecificaMensal);
+		this.pk = new HistoricoMetaEspecificaMensalPK(historico, metaEspecificaMensal);
 	}
 	
 	@Embeddable
@@ -45,9 +45,14 @@ public class HistoricoMetaEspecificaMensalModel {
 		@JoinColumn(name = "CD_MES")
 		private MetaEspecificaMensalModel metaEspecificaMensal;
 		
+		@ManyToOne
+		@JoinColumn(name = "CD_HISTORICO")
+		private HistoricoModel historico;
+		
 		public HistoricoMetaEspecificaMensalPK() {}
 		
-		public HistoricoMetaEspecificaMensalPK(MetaEspecificaMensalModel metaEspecificaMensal) {
+		public HistoricoMetaEspecificaMensalPK(HistoricoModel historico, MetaEspecificaMensalModel metaEspecificaMensal) {
+			this.historico = historico;
 			this.metaEspecificaMensal = metaEspecificaMensal;
 		}
 
@@ -57,6 +62,14 @@ public class HistoricoMetaEspecificaMensalModel {
 
 		public void setMetaEspecificaMensal(MetaEspecificaMensalModel metaEspecificaMensal) {
 			this.metaEspecificaMensal = metaEspecificaMensal;
+		}
+
+		public HistoricoModel getHistorico() {
+			return historico;
+		}
+
+		public void setHistorico(HistoricoModel historico) {
+			this.historico = historico;
 		}
 	}
 

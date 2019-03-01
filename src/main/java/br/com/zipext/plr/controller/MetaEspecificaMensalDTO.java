@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.HistoricoMetaEspecificaMensalModel;
 import br.com.zipext.plr.model.MesModel;
 import br.com.zipext.plr.model.MetaEspecificaMensalModel;
 import br.com.zipext.plr.model.MetaEspecificaMensalModel.MetaEspecificaMensalPK;
@@ -36,6 +37,16 @@ public class MetaEspecificaMensalDTO {
 		this.numMes = model.getPk().getMes().getNumMes();
 		this.matricula = model.getPk().getColaboradorMetaEspecifica().getPk().getColaborador().getMatricula();
 		this.sequencia = model.getPk().getColaboradorMetaEspecifica().getPk().getSequencia();
+	}
+	
+	public MetaEspecificaMensalDTO(HistoricoMetaEspecificaMensalModel historico) {
+		BeanUtils.copyProperties(historico, this);
+		MesModel mes = historico.getPk().getMetaEspecificaMensal().getPk().getMes();
+		this.idMeta = historico.getPk().getMetaEspecificaMensal().getPk().getColaboradorMetaEspecifica().getIdMeta();
+		this.numMes = mes.getNumMes();
+		this.mes = mes.getMes();
+		this.matricula = historico.getPk().getMetaEspecificaMensal().getPk().getColaboradorMetaEspecifica().getPk().getColaborador().getMatricula();
+		this.sequencia = historico.getPk().getMetaEspecificaMensal().getPk().getColaboradorMetaEspecifica().getSequencia();
 	}
 	
 	public MetaEspecificaMensalModel obterModelFromDTO() {

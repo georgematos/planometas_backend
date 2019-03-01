@@ -54,6 +54,9 @@ public class HistoricoModel {
 	
 	@OneToMany(mappedBy = "pk.historico", cascade = CascadeType.ALL)
 	private Set<HistoricoMetaEspecificaModel> historicoMetaEspecifica;
+
+	@OneToMany(mappedBy = "pk.historico", cascade = CascadeType.ALL)
+	private Set<HistoricoMetaEspecificaMensalModel> historicoMetaEspecificaMensal;
 	
 	public HistoricoModel() {}
 	
@@ -139,5 +142,13 @@ public class HistoricoModel {
 
 	public void setSituacao(Character situacao) {
 		this.situacao = situacao;
+	}
+
+	public Set<HistoricoMetaEspecificaMensalModel> getHistoricoMetaEspecificaMensal() {
+		return historicoMetaEspecificaMensal;
+	}
+
+	public void setHistoricoMetaEspecificaMensal(Set<HistoricoMetaEspecificaMensalModel> historicoMetaEspecificaMensal) {
+		this.historicoMetaEspecificaMensal = historicoMetaEspecificaMensal;
 	}
 }

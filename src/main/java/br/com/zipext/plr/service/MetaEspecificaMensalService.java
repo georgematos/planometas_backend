@@ -22,6 +22,12 @@ public class MetaEspecificaMensalService {
 				this.repository.findByFilter(idMeta, matricula, sequencia);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<MetaEspecificaMensalModel> findByMatricula(String matricula) {	
+		return
+				this.repository.findByMatricula(matricula);
+	}
+	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void saveAll(List<MetaEspecificaMensalModel> models) {
 		this.repository.saveAll(models);

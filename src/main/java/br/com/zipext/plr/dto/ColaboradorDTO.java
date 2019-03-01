@@ -22,6 +22,7 @@ import br.com.zipext.plr.model.MetaEspecificaModel;
 public class ColaboradorDTO {
 	
 	private Long id;
+	private Long numDoc;
 	private String nome;
 	private String descricao;
 	private String matricula;
@@ -75,7 +76,7 @@ public class ColaboradorDTO {
 			Optional<HistoricoModel> optHistorico = model.getHistorico().stream().filter(hist -> hist.getVersao().equals(filterVersion)).findFirst();
 			if (optHistorico.isPresent()) {
 				HistoricoModel historico = optHistorico.get();
-				
+				this.numDoc = historico.getId();
 				
 				Set<HistoricoMetaEspecificaModel> metasEspecificas = historico.getHistoricoMetaEspecifica();
 				if (metasEspecificas != null && !metasEspecificas.isEmpty()) {
@@ -167,5 +168,13 @@ public class ColaboradorDTO {
 
 	public void setMetasQuantitativas(List<MetasDTO> metasQuantitativas) {
 		this.metasQuantitativas = metasQuantitativas;
+	}
+
+	public Long getNumDoc() {
+		return numDoc;
+	}
+
+	public void setNumDoc(Long numDoc) {
+		this.numDoc = numDoc;
 	}
 }
