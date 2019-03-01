@@ -1,5 +1,6 @@
 package br.com.zipext.plr.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,12 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.zipext.plr.dto.MetasDTO;
 import br.com.zipext.plr.dto.MetasResumoDTO;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
+import br.com.zipext.plr.model.MetaEspecificaMensalModel;
 import br.com.zipext.plr.service.ColaboradorMetaEspecificaService;
+import br.com.zipext.plr.service.MetaEspecificaMensalService;
 
 @RestController
 @RequestMapping("/metaEspecifica")
@@ -27,6 +31,9 @@ public class MetaEspecificaController {
 
 	@Autowired
 	private ColaboradorMetaEspecificaService service;
+	
+	@Autowired
+	private MetaEspecificaMensalService metaMensalService;
 	
 	@GetMapping("/colaborador/{matricula}")
 	public ResponseEntity<List<MetasResumoDTO>> findMetasCadastradasBy(@PathVariable("matricula") String matricula) {
@@ -36,11 +43,30 @@ public class MetaEspecificaController {
 		return new ResponseEntity<>(results.stream().collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
+	@GetMapping("/colaborador/{matricula}/mensal")
+	public ResponseEntity<List<MetaEspecificaMensalDTO>> 
+		findMetasMensais(@PathVariable("matricula") String matricula, @RequestParam(name = "idMeta", required = true) Long idMeta, 
+			@RequestParam(name = "sequencia", required = true) Integer sequencia) {
+		return new ResponseEntity<>(this.metaMensalService.findByFilter(idMeta, matricula, sequencia).stream().map(MetaEspecificaMensalDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+	}
+	
 	@PostMapping("/colaborador/{matricula}")
 	public ResponseEntity<Void> save(@RequestBody MetasDTO dto, @PathVariable("matricula") String matricula) {
 		ColaboradorMetaEspecificaModel model = dto.getMetasForColaborador(matricula);
 		
 		this.service.save(model);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/colaborador/{matricula}/mensal")
+	public ResponseEntity<Void> 
+		saveMetasMensais(@RequestBody List<MetaEspecificaMensalDTO> dtos) {
+		
+		List<MetaEspecificaMensalModel> models = new ArrayList<>();
+		dtos.forEach(dto -> models.add(dto.obterModelFromDTO()));
+		
+		this.metaMensalService.saveAll(models);
+		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
