@@ -2,6 +2,7 @@ package br.com.zipext.plr.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,7 @@ public class HistoricoService {
 		
 		List<MetaEspecificaMensalModel> metasMensais = this.metaMensalService.findByMatricula(model.getColaborador().getMatricula());
 		if (!metasMensais.isEmpty()) {
-			Set<HistoricoMetaEspecificaMensalModel> historicoMetaMensal = new HashSet<>();
+			List<HistoricoMetaEspecificaMensalModel> historicoMetaMensal = new ArrayList<>();
 			metasMensais.forEach(m -> historicoMetaMensal.add(new HistoricoMetaEspecificaMensalModel(model, m)));
 			
 			model.setHistoricoMetaEspecificaMensal(historicoMetaMensal);

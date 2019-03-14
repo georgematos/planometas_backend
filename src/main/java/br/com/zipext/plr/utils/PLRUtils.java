@@ -11,8 +11,6 @@ public class PLRUtils {
 	
 	public static final String DATE_PATTERN_FILE = "yyyyMMdd";
 	
-	public static final String XLS_SHEET_NAME = "FOLHA METAS";
-	
 	public static String today() {
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN_FILE);

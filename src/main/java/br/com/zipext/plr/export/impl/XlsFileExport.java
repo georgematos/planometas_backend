@@ -15,18 +15,24 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import br.com.zipext.plr.enums.EnumTipoMeta;
 import br.com.zipext.plr.enums.EnumXlsEspecificasCells;
 import br.com.zipext.plr.enums.EnumXlsGeraisCells;
 import br.com.zipext.plr.enums.EnumXlsIdCells;
 import br.com.zipext.plr.enums.EnumXlsLogoCells;
+import br.com.zipext.plr.enums.EnumXlsMensaisCells;
+import br.com.zipext.plr.enums.EnumXlsMensaisSection;
 import br.com.zipext.plr.enums.EnumXlsSection;
+import br.com.zipext.plr.enums.EnumXlsSheets;
 import br.com.zipext.plr.export.FileExport;
 import br.com.zipext.plr.model.ColaboradorCargoModel;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;
 import br.com.zipext.plr.model.ColaboradorMetaGeralModel;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.HistoricoMetaEspecificaMensalModel;
 import br.com.zipext.plr.model.HistoricoMetaEspecificaModel;
 import br.com.zipext.plr.model.HistoricoModel;
+import br.com.zipext.plr.model.MetaEspecificaMensalModel;
 import br.com.zipext.plr.model.MetaGeralModel;
 import br.com.zipext.plr.utils.PLRUtils;
 
@@ -65,8 +71,7 @@ public class XlsFileExport extends FileExport {
 	}
 	
 	public void writeContent(ColaboradorModel colaborador) {
-		Sheet metaSheet = this.workbook.getSheet(PLRUtils.XLS_SHEET_NAME);
-		
+		Sheet metaSheet = this.workbook.getSheet(EnumXlsSheets.METAS.getNome());
 		//Header
 		Row header = metaSheet.getRow(EnumXlsSection.LOGO.getRowNum());
 		
@@ -145,6 +150,7 @@ public class XlsFileExport extends FileExport {
 			metaSheet.getRow(EnumXlsSection.PONTUACAO.getRowNum()).getCell(EnumXlsEspecificasCells.PONTUACAO.getColIndex())
 																  .setCellValue(this.sumPontuacaoTotal / 100);
 			
+			this.workbook.setForceFormulaRecalculation(true);
 		}
 	}
 	
@@ -192,6 +198,7 @@ public class XlsFileExport extends FileExport {
 	
 	private void fillMetasEspecificas(List<ColaboradorMetaEspecificaModel> itens, EnumXlsSection section, Sheet sheet) {
 		int rowNum = section.getRowNum() + 2;
+		int metaIndex = 1;
 		double sumPesos = 0;
 		Cell sumPesosCell = sheet.getRow(rowNum).getCell(EnumXlsEspecificasCells.SUMPESOS.getColIndex());
 		for (ColaboradorMetaEspecificaModel item: itens) {
@@ -205,8 +212,13 @@ public class XlsFileExport extends FileExport {
 			row.getCell(EnumXlsEspecificasCells.OBSERVACOES.getColIndex()).setCellValue(item.getObservacao() != null ? item.getObservacao() : "");
 			row.getCell(EnumXlsEspecificasCells.PRAZOS.getColIndex()).setCellValue(item.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 			
+			if (!item.getMetasMensais().isEmpty()) {
+				this.fillMetasEspecificasMensais(item, metaIndex);
+			}
+			
 			sumPesos += item.getPeso().doubleValue();
 			rowNum++;
+			metaIndex++;
 			
 		}
 		
@@ -217,6 +229,7 @@ public class XlsFileExport extends FileExport {
 	
 	private void fillMetasEspecificasFromHistorico(List<HistoricoMetaEspecificaModel> itens, EnumXlsSection section, Sheet sheet) {
 		int rowNum = section.getRowNum() + 2;
+		int metaIndex = 1;
 		double sumPesos = 0;
 		Cell sumPesosCell = sheet.getRow(rowNum).getCell(EnumXlsEspecificasCells.SUMPESOS.getColIndex());
 		for (HistoricoMetaEspecificaModel item: itens) {
@@ -230,13 +243,88 @@ public class XlsFileExport extends FileExport {
 			row.getCell(EnumXlsEspecificasCells.OBSERVACOES.getColIndex()).setCellValue(item.getObservacao() != null ? item.getObservacao() : "");
 			row.getCell(EnumXlsEspecificasCells.PRAZOS.getColIndex()).setCellValue(item.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 			
+			if (!item.getPk().getHistorico().getHistoricoMetaEspecificaMensal().isEmpty()) {
+				this.fillMetasEspecificasMensaisFromHistorico(item, metaIndex);
+			}
+			
 			sumPesos += item.getPeso().doubleValue();
 			rowNum++;
-			
+			metaIndex++;
 		}
 		
 		sumPesosCell.setCellValue(sumPesos / 100);
 		
 		this.sumPontuacaoTotal += sumPesos;
+	}
+	
+	private void fillMetasEspecificasMensais(ColaboradorMetaEspecificaModel item, int metaIndex) {
+		Sheet sheet = this.workbook.getSheet(String.valueOf(EnumTipoMeta.forId(item.getIdMeta().intValue()).getAbv()).concat(String.valueOf(metaIndex)));
+		
+		Row resumoMeta = sheet.getRow(EnumXlsMensaisSection.RESUMO_META.getRowNum());
+		Row planejadasRow = sheet.getRow(EnumXlsMensaisSection.METAS_PLANEJADAS.getRowNum());
+		Row acumuladasRow = sheet.getRow(EnumXlsMensaisSection.METAS_REALIZADAS.getRowNum());
+		Row aggPlanejadasRow = sheet.getRow(EnumXlsMensaisSection.AGG_PLANEJADAS.getRowNum());
+		Row aggRealizadasRow = sheet.getRow(EnumXlsMensaisSection.AGG_REALIZADAS.getRowNum());
+		
+		resumoMeta.getCell(EnumXlsMensaisCells.SEQUENCIA_META.getColIndex()).setCellValue("Meta : " + metaIndex);
+		resumoMeta.getCell(EnumXlsMensaisCells.DESCRICAO_META.getColIndex()).setCellValue(item.getDescricao());
+		
+		List<MetaEspecificaMensalModel> metasMensais = item.getMetasMensais();
+		
+		for (MetaEspecificaMensalModel itm : metasMensais) {
+			double meta = itm.getValorMeta() != null ? itm.getValorMeta().doubleValue() : 0;
+			double realizado = itm.getValorMeta() != null ? itm.getValorRealizado().doubleValue() : 0;
+			
+			planejadasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(meta);
+			acumuladasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(realizado);
+		}
+		
+		double avgMensalPlan = metasMensais.stream().mapToDouble(m -> m.getValorMetaAsDouble()).average().orElse(0);
+		double avgMensalRealizado = metasMensais.stream().mapToDouble(m -> m.getValorRealizadoAsDouble()).average().orElse(0);
+		double sumMensalPlan = metasMensais.stream().mapToDouble(m -> m.getValorMetaAsDouble()).sum();
+		double sumMensalRealizado = metasMensais.stream().mapToDouble(m -> m.getValorRealizadoAsDouble()).sum();
+		
+		aggPlanejadasRow.getCell(EnumXlsMensaisCells.AGG_SUM.getColIndex()).setCellValue(sumMensalPlan);
+		aggPlanejadasRow.getCell(EnumXlsMensaisCells.AGG_AVG.getColIndex()).setCellValue(avgMensalPlan);
+		aggRealizadasRow.getCell(EnumXlsMensaisCells.AGG_SUM.getColIndex()).setCellValue(sumMensalRealizado);
+		aggRealizadasRow.getCell(EnumXlsMensaisCells.AGG_AVG.getColIndex()).setCellValue(avgMensalRealizado);
+	}
+	
+	private void fillMetasEspecificasMensaisFromHistorico(HistoricoMetaEspecificaModel item, int metaIndex) {
+		Sheet sheet = this.workbook.getSheet(String.valueOf(EnumTipoMeta
+				.forId(item.getPk().getColaboradorMetaEspecifica().getIdMeta().intValue())
+				.getAbv())
+				.concat(String.valueOf(metaIndex)));
+		
+		Row resumoMeta = sheet.getRow(EnumXlsMensaisSection.RESUMO_META.getRowNum());
+		Row planejadasRow = sheet.getRow(EnumXlsMensaisSection.METAS_PLANEJADAS.getRowNum());
+		Row acumuladasRow = sheet.getRow(EnumXlsMensaisSection.METAS_REALIZADAS.getRowNum());
+		Row aggPlanejadasRow = sheet.getRow(EnumXlsMensaisSection.AGG_PLANEJADAS.getRowNum());
+		Row aggRealizadasRow = sheet.getRow(EnumXlsMensaisSection.AGG_REALIZADAS.getRowNum());
+		
+		resumoMeta.getCell(EnumXlsMensaisCells.SEQUENCIA_META.getColIndex()).setCellValue("Meta : " + metaIndex);
+		resumoMeta.getCell(EnumXlsMensaisCells.DESCRICAO_META.getColIndex()).setCellValue(item.getDescricao());
+		
+		List<HistoricoMetaEspecificaMensalModel> metasMensais = item.getPk().getHistorico().getHistoricoMetaEspecificaMensal()
+				.stream().filter(p -> p.getPk().getMetaEspecificaMensal().getPk().getColaboradorMetaEspecifica().equals(item.getPk().getColaboradorMetaEspecifica()))
+				.collect(Collectors.toList());
+		
+		for (HistoricoMetaEspecificaMensalModel itm : metasMensais) {
+			double meta = itm.getValorMeta() != null ? itm.getValorMeta().doubleValue() : 0;
+			double realizado = itm.getValorMeta() != null ? itm.getValorRealizado().doubleValue() : 0;
+			
+			planejadasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(meta);
+			acumuladasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(realizado);
+		}
+		
+		double avgMensalPlan = metasMensais.stream().mapToDouble(m -> m.getValorMetaAsDouble()).average().orElse(0);
+		double avgMensalRealizado = metasMensais.stream().mapToDouble(m -> m.getValorRealizadoAsDouble()).average().orElse(0);
+		double sumMensalPlan = metasMensais.stream().mapToDouble(m -> m.getValorMetaAsDouble()).sum();
+		double sumMensalRealizado = metasMensais.stream().mapToDouble(m -> m.getValorRealizadoAsDouble()).sum();
+		
+		aggPlanejadasRow.getCell(EnumXlsMensaisCells.AGG_SUM.getColIndex()).setCellValue(sumMensalPlan);
+		aggPlanejadasRow.getCell(EnumXlsMensaisCells.AGG_AVG.getColIndex()).setCellValue(avgMensalPlan);
+		aggRealizadasRow.getCell(EnumXlsMensaisCells.AGG_SUM.getColIndex()).setCellValue(sumMensalRealizado);
+		aggRealizadasRow.getCell(EnumXlsMensaisCells.AGG_AVG.getColIndex()).setCellValue(avgMensalRealizado);
 	}
 }

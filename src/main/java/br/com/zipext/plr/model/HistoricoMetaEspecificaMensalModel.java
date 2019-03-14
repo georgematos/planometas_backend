@@ -96,4 +96,16 @@ public class HistoricoMetaEspecificaMensalModel {
 	public void setValorRealizado(BigDecimal valorRealizado) {
 		this.valorRealizado = valorRealizado;
 	}
+	
+	public Integer getNumMes() {
+		return this.pk.getMetaEspecificaMensal().getNumMes();
+	}
+	
+	public double getValorMetaAsDouble() {
+		return this.valorMeta != null ? this.valorMeta.doubleValue() : 0.0;
+	}
+	
+	public double getValorRealizadoAsDouble() {
+		return this.valorRealizado != null ? this.valorRealizado.doubleValue() : 0.0;
+	}
 }

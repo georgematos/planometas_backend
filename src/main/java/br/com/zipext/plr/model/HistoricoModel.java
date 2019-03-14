@@ -2,6 +2,7 @@ package br.com.zipext.plr.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -56,7 +57,7 @@ public class HistoricoModel {
 	private Set<HistoricoMetaEspecificaModel> historicoMetaEspecifica;
 
 	@OneToMany(mappedBy = "pk.historico", cascade = CascadeType.ALL)
-	private Set<HistoricoMetaEspecificaMensalModel> historicoMetaEspecificaMensal;
+	private List<HistoricoMetaEspecificaMensalModel> historicoMetaEspecificaMensal;
 	
 	public HistoricoModel() {}
 	
@@ -144,11 +145,11 @@ public class HistoricoModel {
 		this.situacao = situacao;
 	}
 
-	public Set<HistoricoMetaEspecificaMensalModel> getHistoricoMetaEspecificaMensal() {
+	public List<HistoricoMetaEspecificaMensalModel> getHistoricoMetaEspecificaMensal() {
 		return historicoMetaEspecificaMensal;
 	}
 
-	public void setHistoricoMetaEspecificaMensal(Set<HistoricoMetaEspecificaMensalModel> historicoMetaEspecificaMensal) {
+	public void setHistoricoMetaEspecificaMensal(List<HistoricoMetaEspecificaMensalModel> historicoMetaEspecificaMensal) {
 		this.historicoMetaEspecificaMensal = historicoMetaEspecificaMensal;
 	}
 }

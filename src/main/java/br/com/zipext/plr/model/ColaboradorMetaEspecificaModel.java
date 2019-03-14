@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -11,6 +12,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -46,6 +48,9 @@ public class ColaboradorMetaEspecificaModel {
 	
 	@Column(name = "CD_LOGIN_INC")
 	private String responsavel;
+	
+	@OneToMany(mappedBy = "pk.colaboradorMetaEspecifica")
+	private List<MetaEspecificaMensalModel> metasMensais;
 	
 	public ColaboradorMetaEspecificaModel() {}
 		
@@ -99,6 +104,43 @@ public class ColaboradorMetaEspecificaModel {
 
 		public void setSequencia(Integer sequencia) {
 			this.sequencia = sequencia;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((colaborador == null) ? 0 : colaborador.hashCode());
+			result = prime * result + ((metaEspecifica == null) ? 0 : metaEspecifica.hashCode());
+			result = prime * result + ((sequencia == null) ? 0 : sequencia.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ColaboradorMetaEspecificaModelPK other = (ColaboradorMetaEspecificaModelPK) obj;
+			if (colaborador == null) {
+				if (other.colaborador != null)
+					return false;
+			} else if (!colaborador.equals(other.colaborador))
+				return false;
+			if (metaEspecifica == null) {
+				if (other.metaEspecifica != null)
+					return false;
+			} else if (!metaEspecifica.equals(other.metaEspecifica))
+				return false;
+			if (sequencia == null) {
+				if (other.sequencia != null)
+					return false;
+			} else if (!sequencia.equals(other.sequencia))
+				return false;
+			return true;
 		}
 	}
 
@@ -190,5 +232,38 @@ public class ColaboradorMetaEspecificaModel {
 	public Long getIdMeta() {
 		return
 				this.pk.getMetaEspecifica().getId();
+	}
+
+	public List<MetaEspecificaMensalModel> getMetasMensais() {
+		return metasMensais;
+	}
+
+	public void setMetasMensais(List<MetaEspecificaMensalModel> metasMensais) {
+		this.metasMensais = metasMensais;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pk == null) ? 0 : pk.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ColaboradorMetaEspecificaModel other = (ColaboradorMetaEspecificaModel) obj;
+		if (pk == null) {
+			if (other.pk != null)
+				return false;
+		} else if (!pk.equals(other.pk))
+			return false;
+		return true;
 	}
 }

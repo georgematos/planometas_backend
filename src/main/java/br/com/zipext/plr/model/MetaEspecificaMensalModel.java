@@ -76,7 +76,7 @@ public class MetaEspecificaMensalModel {
 	public void setPk(MetaEspecificaMensalPK pk) {
 		this.pk = pk;
 	}
-
+	
 	public BigDecimal getValorMeta() {
 		return valorMeta;
 	}
@@ -91,5 +91,17 @@ public class MetaEspecificaMensalModel {
 
 	public void setValorRealizado(BigDecimal valorRealizado) {
 		this.valorRealizado = valorRealizado;
+	}
+	
+	public double getValorMetaAsDouble() {
+		return this.valorMeta != null ? this.valorMeta.doubleValue() : 0;
+	}
+	
+	public double getValorRealizadoAsDouble() {
+		return this.valorRealizado != null ? this.valorRealizado.doubleValue() : 0;
+	}
+	
+	public Integer getNumMes() {
+		return this.pk.getMes().getNumMes();
 	}
 }
