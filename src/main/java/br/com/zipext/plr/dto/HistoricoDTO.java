@@ -35,6 +35,8 @@ public class HistoricoDTO {
 	private String inicioVigencia;
 	
 	private String fimVigencia;
+
+	private String base64Img;
 	
 	private UsuarioDTO responsavel;
 	
@@ -50,6 +52,7 @@ public class HistoricoDTO {
 			this.inicioVigencia = model.getInicioVigencia().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS));
 			this.fimVigencia = model.getFimVigencia().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS));
 			this.descSituacao = EnumSituacao.forValue(this.situacao.toString()).getDescricao();
+			this.base64Img = model.getBase64Img();
 		}
 	}
 	
@@ -173,5 +176,13 @@ public class HistoricoDTO {
 
 	public void setNomeColaborador(String nomeColaborador) {
 		this.nomeColaborador = nomeColaborador;
+	}
+
+	public String getBase64Img() {
+		return base64Img;
+	}
+
+	public void setBase64Img(String base64Img) {
+		this.base64Img = base64Img;
 	}
 }

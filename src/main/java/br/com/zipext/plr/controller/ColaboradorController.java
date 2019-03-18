@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,5 +57,14 @@ public class ColaboradorController {
 		headers.add("Content-Disposition", "attachment; filename=" + model.getNome() + "_" + PLRUtils.today() + ".xlsx");
 		
 		return new ResponseEntity<>(new InputStreamResource(this.service.export(model)), headers, HttpStatus.OK);
+	}
+	
+	@PostMapping("/{matricula}/anexaFoto")
+	public ResponseEntity<Void> anexarImagem(@RequestBody ColaboradorDTO dto) {
+		ColaboradorModel colaborador = this.service.findByMatricula(dto.getMatricula());
+		colaborador.setBase64Img(dto.getBase64Img());
+		
+		this.service.save(colaborador);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

@@ -45,6 +45,9 @@ public class HistoricoModel {
 	@Column(name = "DT_INC")
 	private LocalDateTime dataInclusao;
 	
+	@Column(name = "DS_BASE64_IMG")
+	private String base64Img;
+	
 	@ManyToOne
 	@JoinColumn(name = "CD_LOGIN_INC")
 	private UsuarioModel responsavel;
@@ -151,5 +154,13 @@ public class HistoricoModel {
 
 	public void setHistoricoMetaEspecificaMensal(List<HistoricoMetaEspecificaMensalModel> historicoMetaEspecificaMensal) {
 		this.historicoMetaEspecificaMensal = historicoMetaEspecificaMensal;
+	}
+
+	public String getBase64Img() {
+		return base64Img;
+	}
+
+	public void setBase64Img(String base64Img) {
+		this.base64Img = base64Img;
 	}
 }

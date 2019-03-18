@@ -26,6 +26,7 @@ public class ColaboradorDTO {
 	private String nome;
 	private String descricao;
 	private String matricula;
+	private String base64Img;
 	private Character situacao;
 	
 	private CargoDTO cargo;
@@ -77,6 +78,7 @@ public class ColaboradorDTO {
 			if (optHistorico.isPresent()) {
 				HistoricoModel historico = optHistorico.get();
 				this.numDoc = historico.getId();
+				this.base64Img = historico.getBase64Img();
 				
 				Set<HistoricoMetaEspecificaModel> metasEspecificas = historico.getHistoricoMetaEspecifica();
 				if (metasEspecificas != null && !metasEspecificas.isEmpty()) {
@@ -97,7 +99,7 @@ public class ColaboradorDTO {
 		
 		return model;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -176,5 +178,13 @@ public class ColaboradorDTO {
 
 	public void setNumDoc(Long numDoc) {
 		this.numDoc = numDoc;
+	}
+
+	public String getBase64Img() {
+		return base64Img;
+	}
+
+	public void setBase64Img(String base64Img) {
+		this.base64Img = base64Img;
 	}
 }

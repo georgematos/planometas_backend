@@ -74,9 +74,7 @@ public class HistoricoService {
 			model.setHistoricoMetaEspecificaMensal(historicoMetaMensal);
 		}
 		
-		
 		model.setVersao(this.getVersion(model.getColaborador()) + 1);
-
 		
 		return 
 				this.save(model);

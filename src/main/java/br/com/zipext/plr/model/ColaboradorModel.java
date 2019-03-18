@@ -31,6 +31,9 @@ public class ColaboradorModel {
 	@Column(name = "DT_DESLIGAMENTO")
 	private LocalDate dataDesligamento;
 
+	@Column(name = "DS_BASE64_IMG")
+	private String base64Img;
+	
 	@OneToMany(mappedBy = "colaborador", cascade = CascadeType.ALL)
 	private Set<UsuarioModel> usuarios;
 	
@@ -141,6 +144,14 @@ public class ColaboradorModel {
 
 	public void setHistoricoExport(HistoricoModel historicoExport) {
 		this.historicoExport = historicoExport;
+	}
+	
+	public String getBase64Img() {
+		return base64Img;
+	}
+
+	public void setBase64Img(String base64Img) {
+		this.base64Img = base64Img;
 	}
 
 	@Override
