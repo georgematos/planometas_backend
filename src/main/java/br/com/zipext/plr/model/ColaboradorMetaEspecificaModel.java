@@ -22,9 +22,6 @@ public class ColaboradorMetaEspecificaModel {
 	@EmbeddedId
 	private ColaboradorMetaEspecificaModelPK pk;
 	
-	@Column(name = "DS_META")
-	private String meta;
-
 	@Column(name = "DS_OBSERVACAO")
 	private String observacao;
 	
@@ -37,6 +34,9 @@ public class ColaboradorMetaEspecificaModel {
 	@Column(name = "DS_DESCRICAO")
 	private String descricao;
 
+	@Column(name = "VAL_META")
+	private BigDecimal valMeta;
+	
 	@Column(name = "QT_PESO")
 	private BigDecimal peso;
 
@@ -152,12 +152,12 @@ public class ColaboradorMetaEspecificaModel {
 		this.pk = pk;
 	}
 
-	public String getMeta() {
-		return meta;
+	public BigDecimal getValMeta() {
+		return valMeta;
 	}
 
-	public void setMeta(String meta) {
-		this.meta = meta;
+	public void setValMeta(BigDecimal valMeta) {
+		this.valMeta = valMeta;
 	}
 
 	public String getObservacao() {

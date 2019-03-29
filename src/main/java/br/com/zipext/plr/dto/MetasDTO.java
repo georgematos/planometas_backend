@@ -30,6 +30,7 @@ public class MetasDTO {
 	private BigDecimal bonus;
 	private BigDecimal valor;
 	private BigDecimal peso;
+	private BigDecimal valMeta;
 	private String dataInclusao;
 	private String responsavel;
 	
@@ -184,5 +185,13 @@ public class MetasDTO {
 
 	public void setTipoMeta(String tipoMeta) {
 		this.tipoMeta = tipoMeta;
+	}
+
+	public BigDecimal getValMeta() {
+		return valMeta;
+	}
+
+	public void setValMeta(BigDecimal valMeta) {
+		this.valMeta = valMeta;
 	}
 }

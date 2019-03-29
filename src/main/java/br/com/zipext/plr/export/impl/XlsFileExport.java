@@ -208,7 +208,7 @@ public class XlsFileExport extends FileExport {
 			row.getCell(EnumXlsEspecificasCells.DESCRICAO.getColIndex()).setCellValue(item.getDescricao() != null ? item.getDescricao() : "");
 			row.getCell(EnumXlsEspecificasCells.FREQUENCIA.getColIndex()).setCellValue(item.getFrequenciaMedicao());
 			row.getCell(EnumXlsEspecificasCells.PESOS.getColIndex()).setCellValue(item.getPeso().doubleValue() / 100);
-			row.getCell(EnumXlsEspecificasCells.META.getColIndex()).setCellValue(item.getMeta() != null ? item.getMeta() : "");
+			row.getCell(EnumXlsEspecificasCells.META.getColIndex()).setCellValue(item.getValMeta() != null ? item.getValMeta().doubleValue() : 0);
 			row.getCell(EnumXlsEspecificasCells.OBSERVACOES.getColIndex()).setCellValue(item.getObservacao() != null ? item.getObservacao() : "");
 			row.getCell(EnumXlsEspecificasCells.PRAZOS.getColIndex()).setCellValue(item.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 			
@@ -239,7 +239,7 @@ public class XlsFileExport extends FileExport {
 			row.getCell(EnumXlsEspecificasCells.DESCRICAO.getColIndex()).setCellValue(item.getDescricao() != null ? item.getDescricao() : "");
 			row.getCell(EnumXlsEspecificasCells.FREQUENCIA.getColIndex()).setCellValue(item.getFrequenciaMedicao());
 			row.getCell(EnumXlsEspecificasCells.PESOS.getColIndex()).setCellValue(item.getPeso().doubleValue() / 100);
-			row.getCell(EnumXlsEspecificasCells.META.getColIndex()).setCellValue(item.getMeta() != null ? item.getMeta() : "");
+			row.getCell(EnumXlsEspecificasCells.META.getColIndex()).setCellValue(item.getValMeta() != null ? item.getValMeta().doubleValue() : 0);
 			row.getCell(EnumXlsEspecificasCells.OBSERVACOES.getColIndex()).setCellValue(item.getObservacao() != null ? item.getObservacao() : "");
 			row.getCell(EnumXlsEspecificasCells.PRAZOS.getColIndex()).setCellValue(item.getPrazo().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 			
