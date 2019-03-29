@@ -273,7 +273,7 @@ public class XlsFileExport extends FileExport {
 		
 		for (MetaEspecificaMensalModel itm : metasMensais) {
 			double meta = itm.getValorMeta() != null ? itm.getValorMeta().doubleValue() : 0;
-			double realizado = itm.getValorMeta() != null ? itm.getValorRealizado().doubleValue() : 0;
+			double realizado = itm.getValorRealizado() != null ? itm.getValorRealizado().doubleValue() : 0;
 			
 			planejadasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(meta);
 			acumuladasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(realizado);
@@ -311,7 +311,7 @@ public class XlsFileExport extends FileExport {
 		
 		for (HistoricoMetaEspecificaMensalModel itm : metasMensais) {
 			double meta = itm.getValorMeta() != null ? itm.getValorMeta().doubleValue() : 0;
-			double realizado = itm.getValorMeta() != null ? itm.getValorRealizado().doubleValue() : 0;
+			double realizado = itm.getValorRealizado() != null ? itm.getValorRealizado().doubleValue() : 0;
 			
 			planejadasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(meta);
 			acumuladasRow.getCell(EnumXlsMensaisCells.forMes(itm.getNumMes()).getColIndex()).setCellValue(realizado);
