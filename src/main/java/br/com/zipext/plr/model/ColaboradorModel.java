@@ -34,6 +34,12 @@ public class ColaboradorModel {
 	@Column(name = "DS_BASE64_IMG")
 	private String base64Img;
 	
+	@Column(name = "IN_DIRETORIA")
+	private Character isDiretoria;
+	
+	@Column(name = "DS_UNIDADE")
+	private String unidade;
+	
 	@OneToMany(mappedBy = "colaborador", cascade = CascadeType.ALL)
 	private Set<UsuarioModel> usuarios;
 	
@@ -152,6 +158,22 @@ public class ColaboradorModel {
 
 	public void setBase64Img(String base64Img) {
 		this.base64Img = base64Img;
+	}
+
+	public Character getIsDiretoria() {
+		return isDiretoria;
+	}
+
+	public void setIsDiretoria(Character isDiretoria) {
+		this.isDiretoria = isDiretoria;
+	}
+
+	public String getUnidade() {
+		return unidade;
+	}
+
+	public void setUnidade(String unidade) {
+		this.unidade = unidade;
 	}
 
 	@Override

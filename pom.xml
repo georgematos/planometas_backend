@@ -5,7 +5,7 @@
 
 	<groupId>br.com.zipext</groupId>
 	<artifactId>plr-api</artifactId>
-	<version>1.5.2</version>
+	<version>1.5.3</version>
 	<packaging>war</packaging>
 
 	<name>plr</name>
@@ -86,6 +86,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<jvmArguments>
+						-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8005
+					</jvmArguments>
+				</configuration>
 			</plugin>
 		</plugins>
 		<finalName>${project.artifactId}</finalName>

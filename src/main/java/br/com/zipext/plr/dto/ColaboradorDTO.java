@@ -28,6 +28,7 @@ public class ColaboradorDTO {
 	private String matricula;
 	private String base64Img;
 	private Character situacao;
+	private Character possuiMetaExtra;
 	
 	private CargoDTO cargo;
 	private List<MetasDTO> metasGerais;
@@ -39,6 +40,7 @@ public class ColaboradorDTO {
 	public ColaboradorDTO(ColaboradorModel model) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
+			this.possuiMetaExtra = model.getIsDiretoria();
 			this.cargo = new CargoDTO((ColaboradorCargoModel) model.getColaboradoresCargos().toArray()[0]);
 			this.metasGerais = new ArrayList<>();
 			this.metasProjetos = new ArrayList<>();
@@ -63,6 +65,7 @@ public class ColaboradorDTO {
 	public ColaboradorDTO(ColaboradorModel model, Long filterVersion) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
+			this.possuiMetaExtra = model.getIsDiretoria();
 			this.cargo = new CargoDTO((ColaboradorCargoModel) model.getColaboradoresCargos().toArray()[0]);
 			this.metasGerais = new ArrayList<>();
 			this.metasProjetos = new ArrayList<>();
@@ -186,5 +189,13 @@ public class ColaboradorDTO {
 
 	public void setBase64Img(String base64Img) {
 		this.base64Img = base64Img;
+	}
+
+	public Character getPossuiMetaExtra() {
+		return possuiMetaExtra;
+	}
+
+	public void setPossuiMetaExtra(Character possuiMetaExtra) {
+		this.possuiMetaExtra = possuiMetaExtra;
 	}
 }
