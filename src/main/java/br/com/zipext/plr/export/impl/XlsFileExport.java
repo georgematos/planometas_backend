@@ -132,11 +132,16 @@ public class XlsFileExport extends FileExport {
 					
 					break;
 				default:
-					break;
+					continue;
 				}
 				
-				bonus.setCellValue(metaGeral.getBonus() != null ? (metaGeral.getBonus().doubleValue() / 100) : 0);
-				observacao.setCellValue(metaGeral.getObservacao() != null ? metaGeral.getObservacao() : "N/I");
+				if (bonus != null) {
+					bonus.setCellValue(metaGeral.getBonus() != null ? (metaGeral.getBonus().doubleValue() / 100) : 0);
+				}
+				
+				if (observacao != null) {
+					observacao.setCellValue(metaGeral.getObservacao() != null ? metaGeral.getObservacao() : "N/I");
+				}
 			}
 			
 			HistoricoModel historico = colaborador.getHistoricoExport();
