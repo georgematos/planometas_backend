@@ -54,7 +54,7 @@ public class ColaboradorController {
 		ColaboradorModel model = this.service.findByMatricula(matricula);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Disposition", "attachment; filename=" + model.getNome() + "_" + PLRUtils.today() + ".xlsx");
+		headers.add("Content-Disposition", "attachment; filename=" + model.getMatricula() + "_" + model.getNome() + "_" + PLRUtils.today() + ".xlsx");
 		
 		return new ResponseEntity<>(new InputStreamResource(this.service.export(model)), headers, HttpStatus.OK);
 	}

@@ -3,6 +3,7 @@ package br.com.zipext.plr.export.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,6 @@ import br.com.zipext.plr.model.HistoricoMetaEspecificaMensalModel;
 import br.com.zipext.plr.model.HistoricoMetaEspecificaModel;
 import br.com.zipext.plr.model.HistoricoModel;
 import br.com.zipext.plr.model.MetaEspecificaMensalModel;
-import br.com.zipext.plr.model.MetaGeralModel;
 import br.com.zipext.plr.utils.PLRUtils;
 
 public class XlsFileExport extends FileExport {
@@ -77,11 +77,6 @@ public class XlsFileExport extends FileExport {
 		
 		//Identificação
 		Row identRow = metaSheet.getRow(EnumXlsSection.ID.getRowNum());
-		Row ebitdaRow = metaSheet.getRow(EnumXlsSection.IBTIDA.getRowNum());
-		Row indivRow = metaSheet.getRow(EnumXlsSection.INDIVIDUAL.getRowNum());
-		Row partRow = metaSheet.getRow(EnumXlsSection.PARTICIPACAO.getRowNum());
-		Row perfRow = metaSheet.getRow(EnumXlsSection.PERFORMANCE.getRowNum());
-		Row metaExtraRow = metaSheet.getRow(EnumXlsSection.EXTRA.getRowNum());
 		
 		Cell nome = identRow.getCell(EnumXlsIdCells.NOME.getColIndex());
 		Cell matricula = identRow.getCell(EnumXlsIdCells.MATRICULA.getColIndex());
@@ -97,51 +92,29 @@ public class XlsFileExport extends FileExport {
 		
 		Set<ColaboradorMetaGeralModel> metasGerais = colaborador.getColaboradoresMetasGerais();
 		if (metasGerais != null && !metasGerais.isEmpty()) {
+			int metaGeralIndex = EnumXlsSection.GERAIS.getRowNum();
 			for (ColaboradorMetaGeralModel metaGeral : metasGerais) {
-				Cell val = null;
-				Cell bonus = null;
-				Cell observacao = null;
-				MetaGeralModel m = metaGeral.getPk().getMetaGeral();
-				switch (m.getId().intValue()) {
-				case 1:
-					val = ebitdaRow.getCell(EnumXlsGeraisCells.VAL_EBITDA.getColIndex());
-					bonus = ebitdaRow.getCell(EnumXlsGeraisCells.BON_EBITDA.getColIndex());
-					observacao = ebitdaRow.getCell(EnumXlsGeraisCells.OBS_EBITDA.getColIndex());
-					
-					val.setCellValue(metaGeral.getValor() != null ? metaGeral.getValor().doubleValue() : 0);
-					
-					break;
-				case 2:
-					bonus = indivRow.getCell(EnumXlsGeraisCells.BON_INDIV.getColIndex());
-					observacao = indivRow.getCell(EnumXlsGeraisCells.OBS_INDIV.getColIndex());
-					
-					break;
-				case 3:
-					bonus = partRow.getCell(EnumXlsGeraisCells.BON_PARTIC.getColIndex());
-					observacao = partRow.getCell(EnumXlsGeraisCells.OBS_PARTIC.getColIndex());
-					
-					break;
-				case 4:
-					bonus = perfRow.getCell(EnumXlsGeraisCells.BON_PERFOR.getColIndex());
-					observacao = perfRow.getCell(EnumXlsGeraisCells.OBS_PERFOR.getColIndex());
-					
-					break;
-				case 5:
-					bonus = metaExtraRow.getCell(EnumXlsGeraisCells.BON_EXTRA.getColIndex());
-					observacao = metaExtraRow.getCell(EnumXlsGeraisCells.OBS_EXTRA.getColIndex());
-					
-					break;
-				default:
-					continue;
+				Row geralRow = metaSheet.getRow(metaGeralIndex);
+				
+				BigDecimal valor = metaGeral.getValor();
+				BigDecimal bonus = metaGeral.getBonus();
+				if (valor != null) {
+					geralRow.getCell(EnumXlsGeraisCells.VALOR.getColIndex()).setCellValue(metaGeral.getValor().doubleValue());
+				} else {
+					geralRow.getCell(EnumXlsGeraisCells.VALOR.getColIndex()).setCellValue("-");
 				}
 				
 				if (bonus != null) {
-					bonus.setCellValue(metaGeral.getBonus() != null ? (metaGeral.getBonus().doubleValue() / 100) : 0);
+					geralRow.getCell(EnumXlsGeraisCells.BONUS.getColIndex()).setCellValue(metaGeral.getBonus().doubleValue() + " %");
+				} else {
+					geralRow.getCell(EnumXlsGeraisCells.BONUS.getColIndex()).setCellValue("-");
 				}
 				
-				if (observacao != null) {
-					observacao.setCellValue(metaGeral.getObservacao() != null ? metaGeral.getObservacao() : "N/I");
-				}
+				geralRow.getCell(EnumXlsGeraisCells.CIFRA.getColIndex()).setCellValue("R$");
+				geralRow.getCell(EnumXlsGeraisCells.DESCRICAO.getColIndex()).setCellValue(metaGeral.getPk().getMetaGeral().getNome());
+				geralRow.getCell(EnumXlsGeraisCells.OBS.getColIndex()).setCellValue(metaGeral.getObservacao() != null ? metaGeral.getObservacao() : "-");
+				
+				metaGeralIndex ++;
 			}
 			
 			HistoricoModel historico = colaborador.getHistoricoExport();

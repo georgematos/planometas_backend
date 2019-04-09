@@ -3,14 +3,10 @@ package br.com.zipext.plr.enums;
 public enum EnumXlsSection {
 	LOGO(0),
 	ID(3),
-	IBTIDA(6),
-	INDIVIDUAL(8),
-	PARTICIPACAO(9),
-	PERFORMANCE(10),
-	EXTRA(11),
-	QUANTITATIVAS(13),
-	PROJETOS(28),
-	PONTUACAO(37);
+	GERAIS(6),
+	QUANTITATIVAS(17),
+	PROJETOS(39),
+	PONTUACAO(55);
 	
 	private int rowNum;
 	
