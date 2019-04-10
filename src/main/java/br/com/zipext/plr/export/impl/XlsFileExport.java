@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -90,8 +89,10 @@ public class XlsFileExport extends FileExport {
 		cargo.setCellValue(carg.getPk().getCargo().getNome());
 		diretoria.setCellValue(carg.getPk().getCargo().getDiretoria().getNome());
 		
-		Set<ColaboradorMetaGeralModel> metasGerais = colaborador.getColaboradoresMetasGerais();
+		List<ColaboradorMetaGeralModel> metasGerais = colaborador.getColaboradoresMetasGerais().stream().collect(Collectors.toList());
 		if (metasGerais != null && !metasGerais.isEmpty()) {
+			metasGerais.sort((m1, m2) -> m1.getMetaGeral().getSequencia().compareTo(m2.getMetaGeral().getSequencia()));
+			
 			int metaGeralIndex = EnumXlsSection.GERAIS.getRowNum();
 			for (ColaboradorMetaGeralModel metaGeral : metasGerais) {
 				Row geralRow = metaSheet.getRow(metaGeralIndex);

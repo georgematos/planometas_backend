@@ -25,6 +25,9 @@ public class MetaGeralModel {
 	@Column(name = "IN_SITUACAO")
 	private Character situacao;
 	
+	@Column(name = "NU_SEQUENCIA")
+	private Integer sequencia;
+	
 	@OneToMany(mappedBy = "pk.metaGeral")
 	private Set<ColaboradorMetaGeralModel> colaboradoresMetas;
 	
@@ -72,6 +75,14 @@ public class MetaGeralModel {
 
 	public void setColaboradoresMetas(Set<ColaboradorMetaGeralModel> colaboradoresMetas) {
 		this.colaboradoresMetas = colaboradoresMetas;
+	}
+	
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
 	}
 
 	@Override

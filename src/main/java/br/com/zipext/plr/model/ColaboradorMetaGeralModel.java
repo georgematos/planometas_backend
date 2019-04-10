@@ -101,4 +101,12 @@ public class ColaboradorMetaGeralModel {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+	
+	public MetaGeralModel getMetaGeral() {
+		return this.pk.getMetaGeral();
+	}
+	
+	public ColaboradorModel getColaborador() {
+		return this.pk.getColaborador();
+	}
 }
