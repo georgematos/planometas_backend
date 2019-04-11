@@ -3,8 +3,7 @@ package br.com.zipext.plr.enums;
 public enum EnumXlsGeraisCells {
 
 	DESCRICAO(1),
-	CIFRA(5),
-	VALOR(6),
+	VALOR(5),
 	BONUS(7),
 	OBS(9);
 	

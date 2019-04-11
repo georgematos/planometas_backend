@@ -111,7 +111,6 @@ public class XlsFileExport extends FileExport {
 					geralRow.getCell(EnumXlsGeraisCells.BONUS.getColIndex()).setCellValue("-");
 				}
 				
-				geralRow.getCell(EnumXlsGeraisCells.CIFRA.getColIndex()).setCellValue("R$");
 				geralRow.getCell(EnumXlsGeraisCells.DESCRICAO.getColIndex()).setCellValue(metaGeral.getPk().getMetaGeral().getNome());
 				geralRow.getCell(EnumXlsGeraisCells.OBS.getColIndex()).setCellValue(metaGeral.getObservacao() != null ? metaGeral.getObservacao() : "-");
 				
