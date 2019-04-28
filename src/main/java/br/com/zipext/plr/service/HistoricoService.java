@@ -57,6 +57,12 @@ public class HistoricoService {
 				this.repository.findByColaborador(new ColaboradorModel(matricula));
 	}
 	
+	@Transactional(readOnly = true)
+	public HistoricoModel findHistoricoByColaboradorAndVersao(ColaboradorModel colaborador, Long versao) {
+		return
+				this.repository.findByColaboradorAndVersao(colaborador, versao);
+	}
+	
 	public HistoricoModel geraHistorico(HistoricoModel model) {
 		List<ColaboradorMetaEspecificaModel> metas = this.colabMetaEspecificaService.findByMatricula(model.getColaborador().getMatricula());
 		if (!metas.isEmpty()) {

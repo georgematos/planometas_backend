@@ -31,9 +31,6 @@ public class ColaboradorModel {
 	@Column(name = "DT_DESLIGAMENTO")
 	private LocalDate dataDesligamento;
 
-	@Column(name = "DS_BASE64_IMG")
-	private String base64Img;
-	
 	@Column(name = "IN_DIRETORIA")
 	private Character isDiretoria;
 	
@@ -152,14 +149,6 @@ public class ColaboradorModel {
 		this.historicoExport = historicoExport;
 	}
 	
-	public String getBase64Img() {
-		return base64Img;
-	}
-
-	public void setBase64Img(String base64Img) {
-		this.base64Img = base64Img;
-	}
-
 	public Character getIsDiretoria() {
 		return isDiretoria;
 	}

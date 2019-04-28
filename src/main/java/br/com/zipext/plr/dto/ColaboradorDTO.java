@@ -65,12 +65,12 @@ public class ColaboradorDTO {
 	public ColaboradorDTO(ColaboradorModel model, Long filterVersion) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
+			
 			this.possuiMetaExtra = model.getIsDiretoria();
 			this.cargo = new CargoDTO((ColaboradorCargoModel) model.getColaboradoresCargos().toArray()[0]);
 			this.metasGerais = new ArrayList<>();
 			this.metasProjetos = new ArrayList<>();
 			this.metasQuantitativas = new ArrayList<>();
-			
 
 			Set<ColaboradorMetaGeralModel> metasGerais = model.getColaboradoresMetasGerais();
 			if (metasGerais != null && !metasGerais.isEmpty()) {

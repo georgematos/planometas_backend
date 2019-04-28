@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.HistoricoDTO;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.HistoricoModel;
 import br.com.zipext.plr.service.ColaboradorService;
 import br.com.zipext.plr.service.HistoricoService;
 import br.com.zipext.plr.utils.PLRUtils;
@@ -64,6 +65,15 @@ public class HistoricoController {
 	@PutMapping
 	public ResponseEntity<Void> atualizaHistorico(@RequestBody HistoricoDTO dto) {
 		this.service.update(dto.obterModelFromDTOSimples());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/{matricula}/anexaFoto")
+	public ResponseEntity<Void> anexarImagem(@PathVariable("matricula") String matricula, @RequestBody HistoricoDTO dto) {
+		HistoricoModel colaborador = this.service.findHistoricoByColaboradorAndVersao(new ColaboradorModel(matricula), dto.getVersao());
+		colaborador.setBase64Img(dto.getBase64Img());
+		
+		this.service.save(colaborador);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

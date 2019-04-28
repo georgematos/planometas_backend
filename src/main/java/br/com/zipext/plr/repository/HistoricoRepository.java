@@ -21,6 +21,8 @@ public interface HistoricoRepository extends JpaRepository<HistoricoModel, Long>
 	
 	public List<HistoricoModel> findByResponsavel(UsuarioModel responsavel);
 	
+	public HistoricoModel findByColaboradorAndVersao(ColaboradorModel colaborador, Long versao);
+	
 	@Modifying
 	@Query("update HistoricoModel model "
 		+ "set model.situacao = :situacao, model.comentario = :comentario "
