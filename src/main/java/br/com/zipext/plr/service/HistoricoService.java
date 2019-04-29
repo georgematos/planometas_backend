@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,12 @@ public class HistoricoService {
 	
 	@Autowired
 	private PropertyService propertyService;
+	
+	@Modifying
+	@Transactional(readOnly = false)
+	public void deleteHistoricoById(Long id) {
+		this.repository.deleteById(id);
+	}
 	
 	public ByteArrayInputStream export(ColaboradorModel colaborador, Long version) throws IOException {
 		XlsFileExport export = new XlsFileExport(this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_PATH));

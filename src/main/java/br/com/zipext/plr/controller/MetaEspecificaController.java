@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.zipext.plr.dto.MetaEspecificaMensalDTO;
 import br.com.zipext.plr.dto.MetasDTO;
 import br.com.zipext.plr.dto.MetasResumoDTO;
 import br.com.zipext.plr.model.ColaboradorMetaEspecificaModel;

@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,6 +75,13 @@ public class HistoricoController {
 		colaborador.setBase64Img(dto.getBase64Img());
 		
 		this.service.save(colaborador);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{idHistorico}/colaborador/{matricula}")
+	public ResponseEntity<Void> deleteHistoricVersion(@PathVariable("matricula") String matricula, @PathVariable("idHistorico") Long id) {
+		
+		this.service.deleteHistoricoById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

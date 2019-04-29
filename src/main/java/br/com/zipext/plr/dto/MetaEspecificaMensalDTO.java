@@ -1,4 +1,4 @@
-package br.com.zipext.plr.controller;
+package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
 
