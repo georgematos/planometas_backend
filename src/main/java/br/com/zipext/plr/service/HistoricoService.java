@@ -32,6 +32,12 @@ public class HistoricoService {
 	private HistoricoRepository repository;
 	
 	@Autowired
+	private HistoricoMetaMensalService histMetaMensalService;
+	
+	@Autowired
+	private HistoricoMetaEspecificaService histMetaEspecificaService;
+	
+	@Autowired
 	private ColaboradorMetaEspecificaService colabMetaEspecificaService;
 	
 	@Autowired
@@ -43,6 +49,9 @@ public class HistoricoService {
 	@Modifying
 	@Transactional(readOnly = false)
 	public void deleteHistoricoById(Long id) {
+		this.histMetaMensalService.deleteByIdHistorico(id);
+		this.histMetaEspecificaService.deleteByIdHistorico(id);
+		
 		this.repository.deleteById(id);
 	}
 	
