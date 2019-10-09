@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.zipext.plr.dto.UsuarioDTO;
-import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.UsuarioModel;
 import br.com.zipext.plr.repository.UsuarioRepository;
 
@@ -15,9 +13,10 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository repository;
-	
+
+	/*
 	@Autowired
-	private ColaboradorService colaboradorService;
+	private ColaboradorService colaboradorService;*/
 	
 	@Transactional(readOnly = true)
 	public UsuarioModel findByLogin(String login) {
@@ -25,7 +24,12 @@ public class UsuarioService {
 				this.repository.findByLogin(login);
 	}
 	
+	public UsuarioModel processLogin(UsuarioModel model) {
+		return
+				new UsuarioModel();
+	}
 	
+	/*
 	public UsuarioModel processLogin(UsuarioModel model) {
 		UsuarioModel result = this.findByLogin(model.getLogin());
 		ColaboradorModel colaborador = this.colaboradorService.findByMatricula(model.getLogin());
@@ -44,7 +48,7 @@ public class UsuarioService {
 			return
 					result;
 		}
-	}
+	}*/
 	
 	@Transactional(propagation = Propagation.REQUIRED)
 	public UsuarioModel save(UsuarioModel model) {
@@ -53,11 +57,16 @@ public class UsuarioService {
 	}
 	
 	public UsuarioModel update(UsuarioModel model) {
+		return new UsuarioModel("000000");	
+	}
+	
+	/*
+	public UsuarioModel update(UsuarioModel model) {
 		ColaboradorModel colaborador = this.colaboradorService.findByMatricula(model.getLogin());
 		model.setColaborador(colaborador);
 		model.setNome(colaborador.getNome());
 		
 		return
 				this.save(model);
-	}
+	}*/
 }
