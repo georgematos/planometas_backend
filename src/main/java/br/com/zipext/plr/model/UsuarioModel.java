@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "CAD_LOGIN", schema = "BET_PLR")
+@Table(schema = "AUTH", name = "CAD_LOGIN")
 public class UsuarioModel {
 
 	@Id

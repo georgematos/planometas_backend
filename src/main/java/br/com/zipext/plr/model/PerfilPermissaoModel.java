@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema = "BET_PLR", name = "ASS_PERFIL_PERMISSAO")
+@Table(schema = "AUTH", name = "ASS_PERFIL_PERMISSAO")
 public class PerfilPermissaoModel {
 
 	@EmbeddedId
