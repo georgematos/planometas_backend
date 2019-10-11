@@ -3,6 +3,8 @@ package br.com.zipext.plr.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -23,12 +25,9 @@ public class UsuarioModel {
 	@Column(name = "IN_PRIMEIRO_ACESSO")
 	private Character inPrimeiroAcesso;
 	
-	/*
 	@ManyToOne
 	@JoinColumn(name = "CD_MATRICULA")
-	private ColaboradorModel colaborador;*/
-	@Column(name = "CD_MATRICULA")
-	private String colaborador;
+	private ColaboradorModel colaborador;
 	
 	@Transient
 	private Character resetPassword;
@@ -55,11 +54,11 @@ public class UsuarioModel {
 		this.nome = nome;
 	}
 
-	public String getColaborador() {
+	public ColaboradorModel getColaborador() {
 		return colaborador;
 	}
 
-	public void setColaborador(String colaborador) {
+	public void setColaborador(ColaboradorModel colaborador) {
 		this.colaborador = colaborador;
 	}
 
