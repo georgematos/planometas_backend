@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -12,6 +15,8 @@ import javax.persistence.Table;
 public class EquivalenciaModel {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cadEquivalenciaSeq")
+	@SequenceGenerator(schema = "METAS", name = "cadEquivalenciaSeq", sequenceName = "cad_equivalencia_seq", allocationSize = 1)
 	@Column(name = "CD_EQUIVALENCIA")
 	private Long id;
 	

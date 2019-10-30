@@ -12,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import br.com.zipext.plr.enums.EnumSituacao;
-
 @Entity
 @Table(schema = "METAS", name = "CAD_META")
 public class MetasModel {
@@ -31,7 +29,7 @@ public class MetasModel {
 	public String observacao;
 	
 	@Column(name = "FL_ATIVO")
-	public EnumSituacao situacao;
+	public String situacao;
 	
 	@Column(name = "FL_QUANTI_QUALI")
 	public String isQuantitativa;
@@ -49,7 +47,7 @@ public class MetasModel {
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_FREQ_MEDICAO")
-	public FrequenciaMedicao frequenciaMedicao;
+	public FrequenciaMedicaoModel frequenciaMedicao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_TIPO_MEDICAO")
@@ -89,11 +87,11 @@ public class MetasModel {
 		this.observacao = observacao;
 	}
 
-	public EnumSituacao getSituacao() {
+	public String getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(EnumSituacao situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 
@@ -129,11 +127,11 @@ public class MetasModel {
 		this.formula = formula;
 	}
 
-	public FrequenciaMedicao getFrequenciaMedicao() {
+	public FrequenciaMedicaoModel getFrequenciaMedicao() {
 		return frequenciaMedicao;
 	}
 
-	public void setFrequenciaMedicao(FrequenciaMedicao frequenciaMedicao) {
+	public void setFrequenciaMedicao(FrequenciaMedicaoModel frequenciaMedicao) {
 		this.frequenciaMedicao = frequenciaMedicao;
 	}
 

@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.zipext.plr.enums.EnumSituacao;
-
 @Entity
 @Table(schema = "CORPORATIVO" ,name = "CAD_COLABORADOR")
 public class ColaboradorModel {
@@ -31,8 +29,8 @@ public class ColaboradorModel {
 	@Column(name = "FL_SIT_ELEGIVEL")
 	private String elegivel;
 	
-	@Column(name = "FL_SIT_CADASTO")
-	private EnumSituacao situacao;
+	@Column(name = "FL_SIT_CADASTRO")
+	private String situacao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_DIRETORIA")
@@ -88,11 +86,11 @@ public class ColaboradorModel {
 		this.elegivel = elegivel;
 	}
 
-	public EnumSituacao getSituacao() {
+	public String getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(EnumSituacao situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 

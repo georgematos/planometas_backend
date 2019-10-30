@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +17,8 @@ import javax.persistence.Table;
 public class PerfilModel {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cadPerfilSeq")
+	@SequenceGenerator(schema = "AUTH", name = "cadPerfilSeq", sequenceName = "cad_perfil_seq", allocationSize = 1)
 	@Column(name = "CD_PERFIL")
 	private Long id;
 	

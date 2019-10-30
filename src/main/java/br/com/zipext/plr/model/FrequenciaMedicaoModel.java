@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(schema = "METAS", name = "CAD_FREQ_MEDICAO")
-public class FrequenciaMedicao {
+public class FrequenciaMedicaoModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cadFreqMedicaoSeq")
@@ -21,9 +21,9 @@ public class FrequenciaMedicao {
 	@Column(name = "DS_FREQUENCIA_MEDICAO")
 	private String descricao;
 
-	public FrequenciaMedicao() {}
+	public FrequenciaMedicaoModel() {}
 	
-	public FrequenciaMedicao(Long id) {
+	public FrequenciaMedicaoModel(Long id) {
 		this.id = id;
 	}
 	
@@ -60,7 +60,7 @@ public class FrequenciaMedicao {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FrequenciaMedicao other = (FrequenciaMedicao) obj;
+		FrequenciaMedicaoModel other = (FrequenciaMedicaoModel) obj;
 		if (descricao == null) {
 			if (other.descricao != null)
 				return false;

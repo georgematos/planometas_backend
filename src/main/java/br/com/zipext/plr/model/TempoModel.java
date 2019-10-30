@@ -19,13 +19,13 @@ public class TempoModel {
 	private String descricao;
 	
 	@Column(name = "NU_ANO")
-	private Long ano;
+	private Integer ano;
 	
 	@Column(name = "NU_MES")
-	private Long mes;
+	private Integer  mes;
 	
 	@Column(name = "NU_DIA")
-	private Long dia;
+	private Integer dia;
 	
 	@Column(name = "DT_TEMPO")
 	private LocalDate data;
@@ -52,27 +52,27 @@ public class TempoModel {
 		this.descricao = descricao;
 	}
 
-	public Long getAno() {
+	public Integer getAno() {
 		return ano;
 	}
 
-	public void setAno(Long ano) {
+	public void setAno(Integer ano) {
 		this.ano = ano;
 	}
 
-	public Long getMes() {
+	public Integer getMes() {
 		return mes;
 	}
 
-	public void setMes(Long mes) {
+	public void setMes(Integer mes) {
 		this.mes = mes;
 	}
 
-	public Long getDia() {
+	public Integer getDia() {
 		return dia;
 	}
 
-	public void setDia(Long dia) {
+	public void setDia(Integer dia) {
 		this.dia = dia;
 	}
 

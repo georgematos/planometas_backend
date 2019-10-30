@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +17,8 @@ import javax.persistence.Table;
 public class PermissaoModel {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cadPermissaoSeq")
+	@SequenceGenerator(schema = "AUTH", name = "cadPermissaoSeq", sequenceName = "cad_permissao_sequence", allocationSize = 1)
 	@Column(name = "CD_PERMISSAO")
 	private Long id;
 

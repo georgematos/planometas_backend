@@ -13,8 +13,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema = "METAS", name = "FAT_FOLHA_META_MENSAL")
-public class FolhaMetaMensal {
+@Table(schema = "FAT", name = "FAT_META_MENSAL")
+public class FolhaMetaMensalModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fatFolhaMetaMensalSeq")
@@ -22,11 +22,12 @@ public class FolhaMetaMensal {
 	@Column(name = "CD_LANCAMENTO")
 	private Long id;
 	
-	@Column(name = "FLG_TIPO_META")
-	private String tipoMeta;
-	
 	@Column(name = "VAL_META")
 	private BigDecimal valorMeta;
+	
+
+	@Column(name = "VAL_REAL")
+	private BigDecimal valorReal;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_META")
@@ -35,6 +36,12 @@ public class FolhaMetaMensal {
 	@ManyToOne
 	@JoinColumn(name = "SKY_TEMPO")
 	private TempoModel prazo;
+	
+	public FolhaMetaMensalModel() {}
+	
+	public FolhaMetaMensalModel(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;
@@ -44,13 +51,6 @@ public class FolhaMetaMensal {
 		this.id = id;
 	}
 
-	public String getTipoMeta() {
-		return tipoMeta;
-	}
-
-	public void setTipoMeta(String tipoMeta) {
-		this.tipoMeta = tipoMeta;
-	}
 
 	public BigDecimal getValorMeta() {
 		return valorMeta;
@@ -58,6 +58,14 @@ public class FolhaMetaMensal {
 
 	public void setValorMeta(BigDecimal valorMeta) {
 		this.valorMeta = valorMeta;
+	}
+	
+	public BigDecimal getValorReal() {
+		return valorReal;
+	}
+
+	public void setValorReal(BigDecimal valorReal) {
+		this.valorReal = valorReal;
 	}
 
 	public MetasModel getMeta() {
@@ -92,7 +100,7 @@ public class FolhaMetaMensal {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FolhaMetaMensal other = (FolhaMetaMensal) obj;
+		FolhaMetaMensalModel other = (FolhaMetaMensalModel) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

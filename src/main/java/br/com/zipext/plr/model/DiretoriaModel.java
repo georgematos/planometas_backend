@@ -2,14 +2,19 @@ package br.com.zipext.plr.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema = "CORPORATIVO", name = "CD_DIRETORIA")
+@Table(schema = "CORPORATIVO", name = "CAD_DIRETORIA")
 public class DiretoriaModel {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cadDiretoriaSeq")
+	@SequenceGenerator(schema = "CORPORATIVO", name = "cadDiretoriaSeq",  sequenceName = "cad_diretoria_seq", allocationSize = 1)
 	@Column(name = "CD_DIRETORIA")
 	private Long id;
 	

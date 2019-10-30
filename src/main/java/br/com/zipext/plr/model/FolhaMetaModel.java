@@ -1,5 +1,7 @@
 package br.com.zipext.plr.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,10 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import br.com.zipext.plr.enums.EnumSituacao;
 
 @Entity
 @Table(schema = "METAS", name = "CAD_FOLHA_META")
@@ -23,7 +24,7 @@ public class FolhaMetaModel {
 	private Long id;
 	
 	@Column(name = "FL_ATIVO")
-	private EnumSituacao situacao;
+	private String situacao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_MATRICULA")
@@ -37,9 +38,22 @@ public class FolhaMetaModel {
 	@JoinColumn(name = "SKY_FIM_VIGENCIA")
 	private TempoModel fimVigencia;
 	
+	/*
 	@ManyToOne
 	@JoinColumn(name = "CD_RESPONSAVEL_CADASTRO")
-	private UsuarioModel responsavel;
+	private UsuarioModel responsavel;*/
+	
+	@Column(name = "CD_RESPONSAVEL_CADASTRO")
+	private String responsavel;
+	
+	@OneToMany(mappedBy = "folhaMeta")
+	private List<FolhaMetaItemModel> folhaMetaItems;
+	
+	public FolhaMetaModel() {}
+	
+	public FolhaMetaModel(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;
@@ -49,11 +63,11 @@ public class FolhaMetaModel {
 		this.id = id;
 	}
 
-	public EnumSituacao getSituacao() {
+	public String getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(EnumSituacao situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 
@@ -81,12 +95,20 @@ public class FolhaMetaModel {
 		this.fimVigencia = fimVigencia;
 	}
 
-	public UsuarioModel getResponsavel() {
+	public String getResponsavel() {
 		return responsavel;
 	}
 
-	public void setResponsavel(UsuarioModel responsavel) {
+	public void setResponsavel(String responsavel) {
 		this.responsavel = responsavel;
+	}
+
+	public List<FolhaMetaItemModel> getFolhaMetaItems() {
+		return folhaMetaItems;
+	}
+
+	public void setFolhaMetaItems(List<FolhaMetaItemModel> folhaMetaItems) {
+		this.folhaMetaItems = folhaMetaItems;
 	}
 
 	@Override
