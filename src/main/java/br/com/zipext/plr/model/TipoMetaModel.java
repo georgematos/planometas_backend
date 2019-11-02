@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import br.com.zipext.plr.enums.EnumSimNao;
+
 @Entity
 @Table(schema = "METAS" ,name = "CAD_TIPO_META")
 public class TipoMetaModel {
@@ -23,6 +25,9 @@ public class TipoMetaModel {
 	
 	@Column(name = "DS_TIPO_META_ABV")
 	private String abreviacao;
+	
+	@Column(name = "FL_EXIB_RESTRITA")
+	private String isMetaRestrita;
 	
 	public TipoMetaModel() {}
 	
@@ -52,6 +57,18 @@ public class TipoMetaModel {
 
 	public void setAbreviacao(String abreviacao) {
 		this.abreviacao = abreviacao;
+	}
+	
+	public String getIsMetaRestrita() {
+		return isMetaRestrita;
+	}
+
+	public void setIsMetaRestrita(String isMetaRestrita) {
+		this.isMetaRestrita = isMetaRestrita;
+	}
+	
+	public boolean isMetaRestrita() {
+		return this.isMetaRestrita != EnumSimNao.SIM.getCodigoToString();
 	}
 
 	@Override

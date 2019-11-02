@@ -2,6 +2,7 @@ package br.com.zipext.plr.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -76,7 +77,17 @@ public class FolhaMetaAnualModel {
 	public void setDesempenho(BigDecimal desempenho) {
 		this.desempenho = desempenho;
 	}
-
+	
+	public BigDecimal calcDesempenho() {
+		return 
+				this.valorRealizado.divide(this.valorMeta, 4, RoundingMode.CEILING).multiply(new BigDecimal(100));
+	}
+	
+	public boolean isMetaRestrita() {
+		return
+				this.pk.getMeta().getTipoMeta().isMetaRestrita();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

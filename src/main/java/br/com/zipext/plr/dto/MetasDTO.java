@@ -16,6 +16,8 @@ public class MetasDTO {
 	
 	public String situacao;
 	
+	public String prazo;
+	
 	public String isQuantitativa;
 	
 	public BigDecimal valor;
@@ -25,6 +27,8 @@ public class MetasDTO {
 	public TipoMedicaoDTO tipoMedicao;
 	
 	public TipoMetaDTO tipoMeta;
+	
+	public FormulaDTO formula;
 
 	public MetasDTO() {}
 	
@@ -41,6 +45,12 @@ public class MetasDTO {
 		if (model.getFrequenciaMedicao() != null) {
 			this.frequenciaMedicao = new FrequenciaMedicaoDTO(model.getFrequenciaMedicao());
 		}
+		
+		if (model.getFormula() != null) {
+			this.formula = new FormulaDTO(model.getFormula());
+		}
+		
+		this.prazo = model.getPrazo().getDescricao();
 	}
 
 	public Long getId() {
@@ -113,5 +123,21 @@ public class MetasDTO {
 
 	public void setTipoMeta(TipoMetaDTO tipoMeta) {
 		this.tipoMeta = tipoMeta;
+	}
+
+	public String getPrazo() {
+		return prazo;
+	}
+
+	public void setPrazo(String prazo) {
+		this.prazo = prazo;
+	}
+
+	public FormulaDTO getFormula() {
+		return formula;
+	}
+
+	public void setFormula(FormulaDTO formula) {
+		this.formula = formula;
 	}
 }

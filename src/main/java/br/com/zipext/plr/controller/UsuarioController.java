@@ -21,10 +21,11 @@ public class UsuarioController {
 	private UsuarioService service;
 	
 	@PostMapping("/login")
-	public ResponseEntity<Object> login(@RequestBody UsuarioDTO dto) {
+	public ResponseEntity<Object> login(@RequestBody UsuarioDTO dto) throws Exception {
 		UsuarioModel usuario = this.service.processLogin(dto.getModel());
 		if (usuario == null) {
-			return new ResponseEntity<>("Login inválido! ", HttpStatus.NOT_FOUND);
+			//return new ResponseEntity<>("Login inválido! ", HttpStatus.NOT_FOUND);
+			throw new Exception("Usuário não encontrado!");
 		} else {
 			return new ResponseEntity<>(new UsuarioDTO(usuario), HttpStatus.OK);
 		}

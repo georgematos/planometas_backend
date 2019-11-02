@@ -22,6 +22,11 @@ public class PerfilPermissaoModel {
 		this.pk = new PerfilPermissaoPK(perfil, permissao);
 	}
 	
+	public boolean isPerfilReadOnly() {
+		return
+				this.pk.getPermissao().getPermissao().equals('R');
+	}
+	
 	@Embeddable
 	public static class PerfilPermissaoPK implements Serializable {
 		

@@ -35,6 +35,12 @@ public class FolhaMetaService {
 				this.repository.findByColaborador(colaborador);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<FolhaMetaModel> findByResponsavel(ColaboradorModel responsavel) {
+		return
+				this.repository.findByResponsavel(responsavel);
+	}
+	
 	@Transactional(readOnly = false)
 	public FolhaMetaModel save(FolhaMetaModel folhaMeta) {
 		return

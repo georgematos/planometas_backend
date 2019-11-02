@@ -19,4 +19,9 @@ public enum EnumSimNao {
 	public String getDescricao() {
 		return descricao;
 	}
+	
+	public String getCodigoToString() {
+		return
+				String.valueOf(codigo);
+	}
 }

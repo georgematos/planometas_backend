@@ -13,4 +13,5 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 	
 	public List<FolhaMetaModel> findByColaborador(ColaboradorModel colaborador);
 
+	public List<FolhaMetaModel> findByResponsavel(ColaboradorModel responsavel);
 }

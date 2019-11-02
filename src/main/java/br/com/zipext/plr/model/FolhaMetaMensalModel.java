@@ -1,6 +1,7 @@
 package br.com.zipext.plr.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -62,6 +63,19 @@ public class FolhaMetaMensalModel {
 	
 	public BigDecimal getValorReal() {
 		return valorReal;
+	}
+	
+	public BigDecimal getValorPorcentagem() {
+		if (this.valorReal != null && (this.valorMeta != null && !this.valorMeta.equals(BigDecimal.ZERO))) {
+			return 
+					this.valorReal.divide(this.valorMeta, 4, RoundingMode.CEILING).multiply(new BigDecimal(100));
+		} else if (this.valorMeta != null && !this.valorMeta.equals(BigDecimal.ZERO)) {
+			return
+					new BigDecimal(100);
+		} else {
+			return
+					null;
+		}
 	}
 
 	public void setValorReal(BigDecimal valorReal) {

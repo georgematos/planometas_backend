@@ -14,6 +14,8 @@ public class FolhaMetaItemDTO {
 	
 	private Long id;
 	
+	private FolhaMetaDTO folhaMeta;
+	
 	private Integer sequencia;
 	
 	private BigDecimal peso;
@@ -26,16 +28,22 @@ public class FolhaMetaItemDTO {
 	
 	public FolhaMetaItemDTO() {}
 	
-	public FolhaMetaItemDTO(FolhaMetaItemModel model, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais) {
+	public FolhaMetaItemDTO(FolhaMetaItemModel model, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
 		BeanUtils.copyProperties(model, this);
 		this.meta = new MetasDTO(model.getMeta());
+		this.folhaMeta = new FolhaMetaDTO(model.getFolhaMeta());
 		if (folhaMetaAnual != null) {
 			this.desempenho = folhaMetaAnual.getDesempenho();			
 		}
-
+		
 		this.viewMetasMensais = new ArrayList<>();
-		this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("REAL", folhaMetaAnual, folhaMetasMensais));
-		this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("META", folhaMetaAnual, folhaMetasMensais));
+		if (folhaMetaAnual != null) {
+			this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("REAL", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
+			this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("META", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
+			if (!(folhaMetaAnual.isMetaRestrita() && isPerfilReadOnly)) {
+				this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("%", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
+			}
+		}
 	}
 
 	public Long getId() {
@@ -85,6 +93,14 @@ public class FolhaMetaItemDTO {
 	public void setDesempenho(BigDecimal desempenho) {
 		this.desempenho = desempenho;
 	}
+	
+	public FolhaMetaDTO getFolhaMeta() {
+		return folhaMeta;
+	}
+
+	public void setFolhaMeta(FolhaMetaDTO folhaMeta) {
+		this.folhaMeta = folhaMeta;
+	}
 
 	public static class ViewFolhaMetaMensalDTO {
 		
@@ -105,40 +121,75 @@ public class FolhaMetaItemDTO {
 		
 		public ViewFolhaMetaMensalDTO() {}
 		
-		public ViewFolhaMetaMensalDTO(String tipoMeta, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais) {
+		public ViewFolhaMetaMensalDTO(String tipoMeta, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
 			this.tipoMeta = tipoMeta;
-			this.pivotListMensaisToObject(folhaMetaAnual, folhaMetasMensais);
+			this.pivotListMensaisToObject(folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly);
 		}
 		
-		public void pivotListMensaisToObject(FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais) {
+		public void pivotListMensaisToObject(FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
+			boolean isMetaRestrita = folhaMetaAnual.isMetaRestrita() && isPerfilReadOnly;
+			FolhaMetaMensalModel fmJan = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(1)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmFev = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(2)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmMar = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(3)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmAbr = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(4)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmMai = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(5)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmJun = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(6)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmJul = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(7)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmAgo = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(8)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmSet = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(9)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmOut = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(10)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmNov = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(11)).findFirst().orElse(new FolhaMetaMensalModel());
+			FolhaMetaMensalModel fmDez = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(12)).findFirst().orElse(new FolhaMetaMensalModel());
+			
 			if (tipoMeta.equalsIgnoreCase("REAL")) {
-				this.valJan = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(1)).findFirst().get(). getValorReal();
-				this.valFev = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(2)).findFirst().get().getValorReal();
-				this.valMar = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(3)).findFirst().get().getValorReal();
-				this.valAbr = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(4)).findFirst().get().getValorReal();
-				this.valMai = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(5)).findFirst().get().getValorReal();
-				this.valJun = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(6)).findFirst().get().getValorReal();
-				this.valJul = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(7)).findFirst().get().getValorReal();
-				this.valAgo = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(8)).findFirst().get().getValorReal();
-				this.valSet = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(9)).findFirst().get().getValorReal();
-				this.valOut = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(10)).findFirst().get().getValorReal();
-				this.valNov = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(11)).findFirst().get().getValorReal();
-				this.valDez = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(12)).findFirst().get().getValorReal();
-				this.sumMeta = folhaMetaAnual != null ? folhaMetaAnual.getValorRealizado() : BigDecimal.ZERO;
+				this.valJan = isMetaRestrita ? fmJan.getValorPorcentagem() : fmJan.getValorReal();
+				this.valFev = isMetaRestrita ? fmFev.getValorPorcentagem() : fmFev.getValorReal();
+				this.valMar = isMetaRestrita ? fmMar.getValorPorcentagem() : fmMar.getValorReal();
+				this.valAbr = isMetaRestrita ? fmAbr.getValorPorcentagem() : fmAbr.getValorReal();
+				this.valMai = isMetaRestrita ? fmMai.getValorPorcentagem() : fmMai.getValorReal();
+				this.valJun = isMetaRestrita ? fmJun.getValorPorcentagem() : fmJun.getValorReal();
+				this.valJul = isMetaRestrita ? fmJul.getValorPorcentagem() : fmJul.getValorReal();
+				this.valAgo = isMetaRestrita ? fmAgo.getValorPorcentagem() : fmAgo.getValorReal();
+				this.valSet = isMetaRestrita ? fmSet.getValorPorcentagem() : fmSet.getValorReal();
+				this.valOut = isMetaRestrita ? fmOut.getValorPorcentagem() : fmOut.getValorReal();
+				this.valNov = isMetaRestrita ? fmNov.getValorPorcentagem() : fmNov.getValorReal();
+				this.valDez = isMetaRestrita ? fmDez.getValorPorcentagem() : fmDez.getValorReal();
+				
+				this.sumMeta = isMetaRestrita ? folhaMetaAnual.getValorPercentAtingido() : folhaMetaAnual.getValorRealizado();
+			} else if (tipoMeta.equalsIgnoreCase("%")) {
+				this.valJan = fmJan.getValorPorcentagem();
+				this.valFev = fmFev.getValorPorcentagem();
+				this.valMar = fmMar.getValorPorcentagem();
+				this.valAbr = fmAbr.getValorPorcentagem();
+				this.valMai = fmMai.getValorPorcentagem();
+				this.valJun = fmJun.getValorPorcentagem();
+				this.valJul = fmJul.getValorPorcentagem();
+				this.valAgo = fmAgo.getValorPorcentagem();
+				this.valSet = fmSet.getValorPorcentagem();
+				this.valOut = fmOut.getValorPorcentagem();
+				this.valNov = fmNov.getValorPorcentagem();
+				this.valDez = fmDez.getValorPorcentagem();
+				
+				this.sumMeta = folhaMetaAnual.getValorPercentAtingido();
 			} else {
-				this.valJan = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(1)).findFirst().get().getValorMeta();
-				this.valFev = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(2)).findFirst().get().getValorMeta();
-				this.valMar = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(3)).findFirst().get().getValorMeta();
-				this.valAbr = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(4)).findFirst().get().getValorMeta();
-				this.valMai = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(5)).findFirst().get().getValorMeta();
-				this.valJun = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(6)).findFirst().get().getValorMeta();
-				this.valJul = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(7)).findFirst().get().getValorMeta();
-				this.valAgo = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(8)).findFirst().get().getValorMeta();
-				this.valSet = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(9)).findFirst().get().getValorMeta();
-				this.valOut = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(10)).findFirst().get().getValorMeta();
-				this.valNov = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(11)).findFirst().get().getValorMeta();
-				this.valDez = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(12)).findFirst().get().getValorMeta();
-				this.sumMeta = folhaMetaAnual != null ? folhaMetaAnual.getValorMeta() : BigDecimal.ZERO;
+				this.valJan = isMetaRestrita ? new BigDecimal(100) : fmJan.getValorMeta();
+				this.valFev = isMetaRestrita ? new BigDecimal(100) : fmFev.getValorMeta();
+				this.valMar = isMetaRestrita ? new BigDecimal(100) : fmMar.getValorMeta();
+				this.valAbr = isMetaRestrita ? new BigDecimal(100) : fmAbr.getValorMeta();
+				this.valMai = isMetaRestrita ? new BigDecimal(100) : fmMai.getValorMeta();
+				this.valJun = isMetaRestrita ? new BigDecimal(100) : fmJun.getValorMeta();
+				this.valJul = isMetaRestrita ? new BigDecimal(100) : fmJul.getValorMeta();
+				this.valAgo = isMetaRestrita ? new BigDecimal(100) : fmAgo.getValorMeta();
+				this.valSet = isMetaRestrita ? new BigDecimal(100) : fmSet.getValorMeta();
+				this.valOut = isMetaRestrita ? new BigDecimal(100) : fmOut.getValorMeta();
+				this.valNov = isMetaRestrita ? new BigDecimal(100) : fmNov.getValorMeta();
+				this.valDez = isMetaRestrita ? new BigDecimal(100) : fmDez.getValorMeta();
+				
+				this.sumMeta = isMetaRestrita ? new BigDecimal(100) : folhaMetaAnual.getValorMeta();
+			}
+			
+			if (isMetaRestrita) {
+				this.tipoMeta = this.tipoMeta.concat(" (%)");
 			}
 		}
 

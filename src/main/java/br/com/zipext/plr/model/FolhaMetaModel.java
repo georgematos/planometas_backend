@@ -38,13 +38,9 @@ public class FolhaMetaModel {
 	@JoinColumn(name = "SKY_FIM_VIGENCIA")
 	private TempoModel fimVigencia;
 	
-	/*
 	@ManyToOne
 	@JoinColumn(name = "CD_RESPONSAVEL_CADASTRO")
-	private UsuarioModel responsavel;*/
-	
-	@Column(name = "CD_RESPONSAVEL_CADASTRO")
-	private String responsavel;
+	private ColaboradorModel responsavel;
 	
 	@OneToMany(mappedBy = "folhaMeta")
 	private List<FolhaMetaItemModel> folhaMetaItems;
@@ -95,11 +91,11 @@ public class FolhaMetaModel {
 		this.fimVigencia = fimVigencia;
 	}
 
-	public String getResponsavel() {
+	public ColaboradorModel getResponsavel() {
 		return responsavel;
 	}
 
-	public void setResponsavel(String responsavel) {
+	public void setResponsavel(ColaboradorModel responsavel) {
 		this.responsavel = responsavel;
 	}
 

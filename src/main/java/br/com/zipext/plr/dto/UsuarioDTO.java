@@ -2,7 +2,10 @@ package br.com.zipext.plr.dto;
 
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.enums.EnumSimNao;
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.UsuarioModel;
+import br.com.zipext.plr.utils.PLRUtils;
 
 public class UsuarioDTO {
 	
@@ -15,21 +18,20 @@ public class UsuarioDTO {
 	
 	public UsuarioDTO() {}
 	
-	/*
 	public UsuarioDTO(ColaboradorModel colaborador) {
 		this.login = colaborador.getMatricula();
 		this.hash = colaborador.getMatricula();
 		this.nome = colaborador.getNome();
 		this.inPrimeiroAcesso = EnumSimNao.SIM.getCodigo();
-	}*/
+	}
 	
 	public UsuarioDTO(UsuarioModel usuario) {
 		this.login = usuario.getLogin();
 		this.nome = usuario.getNome();
 		this.inPrimeiroAcesso = usuario.getInPrimeiroAcesso();
-		//this.matricula = usuario.getColaborador().getMatricula();
+		this.matricula = usuario.getColaborador().getMatricula();
 		this.hash = usuario.getHash();
-		//this.phrase = PLRUtils.genPhrase(usuario.getColaborador().getNome(), Long.valueOf(usuario.getColaborador().getMatricula()));			
+		this.phrase = PLRUtils.genPhrase(usuario.getColaborador().getNome(), Long.valueOf(usuario.getColaborador().getMatricula()));			
 	}
 	
 	public UsuarioDTO(String login, String nome) {
