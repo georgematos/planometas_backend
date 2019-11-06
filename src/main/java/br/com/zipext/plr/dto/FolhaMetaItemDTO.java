@@ -1,6 +1,7 @@
 package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class FolhaMetaItemDTO {
 	
 	private BigDecimal desempenho;
 	
+	private BigDecimal pontuacao;
+	
 	private MetasDTO meta;
 	
 	private List<ViewFolhaMetaMensalDTO> viewMetasMensais;
@@ -33,7 +36,8 @@ public class FolhaMetaItemDTO {
 		this.meta = new MetasDTO(model.getMeta());
 		this.folhaMeta = new FolhaMetaDTO(model.getFolhaMeta());
 		if (folhaMetaAnual != null) {
-			this.desempenho = folhaMetaAnual.getDesempenho();			
+			this.desempenho = folhaMetaAnual.getDesempenho();
+			this.pontuacao = this.desempenho.multiply(model.getPeso()).divide(new BigDecimal(100), 4, RoundingMode.CEILING);
 		}
 		
 		this.viewMetasMensais = new ArrayList<>();
@@ -64,6 +68,14 @@ public class FolhaMetaItemDTO {
 
 	public BigDecimal getPeso() {
 		return peso;
+	}
+	
+	public BigDecimal getPontuacao() {
+		return pontuacao;
+	}
+
+	public void setPontuacao(BigDecimal pontuacao) {
+		this.pontuacao = pontuacao;
 	}
 
 	public void setPeso(BigDecimal peso) {
