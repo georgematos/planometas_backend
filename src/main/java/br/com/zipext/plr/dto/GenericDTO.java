@@ -1,11 +1,19 @@
 package br.com.zipext.plr.dto;
 
+import org.springframework.beans.BeanUtils;
+
 public class GenericDTO {
 	
 	private Long id;
 	private String nome;
 	private String descricao;
 	private Situacao situacao;
+	
+	public GenericDTO() {}
+	
+	public GenericDTO(Object model) {
+		BeanUtils.copyProperties(model, this);
+	}
 	
 	public Long getId() {
 		return id;

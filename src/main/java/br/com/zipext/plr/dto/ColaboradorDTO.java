@@ -1,10 +1,21 @@
 package br.com.zipext.plr.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.model.CargoModel;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.DiretoriaModel;
+import br.com.zipext.plr.model.FilialModel;
+import br.com.zipext.plr.model.TimeModel;
 
 public class ColaboradorDTO {
+	
+	private boolean isNewColaborador;
 	
 	private String matricula;
 	
@@ -12,11 +23,19 @@ public class ColaboradorDTO {
 	
 	private String situacao;
 	
+	private String elegivel;
+	
+	private String dataAdmissao;
+	
+	private String dataDemissao;
+	
 	private CargoDTO cargo;
 	
 	private DiretoriaDTO diretoria;
 	
 	private TimeDTO time;
+	
+	private GenericDTO filial;
 	
 	public ColaboradorDTO() {}
 	
@@ -25,6 +44,44 @@ public class ColaboradorDTO {
 		this.cargo = new CargoDTO(model.getCargo());
 		this.diretoria = new DiretoriaDTO(model.getDiretoria());
 		this.time = new TimeDTO(model.getTime());
+		this.filial = new GenericDTO(model.getFilial());
+		
+		this.dataAdmissao = model.getDataAdmissao() != null ? model.getDataAdmissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+		this.dataDemissao = model.getDataDemissao() != null ? model.getDataDemissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+	}
+	
+	public ColaboradorModel obterModel() {
+		ColaboradorModel model = new ColaboradorModel();
+		BeanUtils.copyProperties(this, model);
+		
+		if (this.cargo != null) {
+			model.setCargo(new CargoModel(this.cargo.getId()));
+		}
+		
+		if (this.diretoria != null) {
+			model.setDiretoria(new DiretoriaModel(this.diretoria.getId()));
+		}
+		
+		if (this.filial != null) {
+			model.setFilial(new FilialModel(this.filial.getId()));
+		}
+		
+		if (this.time != null) {
+			model.setTime(new TimeModel(this.time.getCodigo()));
+		}
+		
+		if (StringUtils.isNotBlank(this.dataAdmissao)) {
+			model.setDataAdmissao(LocalDate.parse(this.dataAdmissao.substring(0, 10), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		}
+		
+		if (StringUtils.isNotBlank(this.dataDemissao)) {
+			model.setDataDemissao(LocalDate.parse(this.dataDemissao.substring(0, 10), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		}
+		
+		model.setInclusao(LocalDateTime.now());
+		model.setResponsavelInclusao("SISTEMA");
+		
+		return model;
 	}
 
 	public String getMatricula() {
@@ -75,6 +132,46 @@ public class ColaboradorDTO {
 		this.situacao = situacao;
 	}
 	
+	public GenericDTO getFilial() {
+		return filial;
+	}
+
+	public void setFilial(GenericDTO filial) {
+		this.filial = filial;
+	}
+	
+	public String getElegivel() {
+		return elegivel;
+	}
+
+	public void setElegivel(String elegivel) {
+		this.elegivel = elegivel;
+	}
+	
+	public String getDataAdmissao() {
+		return dataAdmissao;
+	}
+
+	public void setDataAdmissao(String dataAdmissao) {
+		this.dataAdmissao = dataAdmissao;
+	}
+
+	public String getDataDemissao() {
+		return dataDemissao;
+	}
+
+	public void setDataDemissao(String dataDemissao) {
+		this.dataDemissao = dataDemissao;
+	}
+	
+	public boolean isNewColaborador() {
+		return isNewColaborador;
+	}
+
+	public void setNewColaborador(boolean isNewColaborador) {
+		this.isNewColaborador = isNewColaborador;
+	}
+
 	public DiretoriaDTO getDiretoriaOrElse() {
 		if (this.diretoria != null) {
 			return

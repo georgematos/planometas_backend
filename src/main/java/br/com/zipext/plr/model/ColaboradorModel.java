@@ -1,13 +1,18 @@
 package br.com.zipext.plr.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import br.com.zipext.plr.converter.LocalDateTimeConverter;
+
 
 @Entity
 @Table(schema = "CORPORATIVO" ,name = "CAD_COLABORADOR")
@@ -31,6 +36,13 @@ public class ColaboradorModel {
 	
 	@Column(name = "FL_SIT_CADASTRO")
 	private String situacao;
+	
+	@Column(name = "DT_INC")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime inclusao;
+    
+    @Column(name = "CD_LOGIN_INC")
+    private String responsavelInclusao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_DIRETORIA")
@@ -132,6 +144,22 @@ public class ColaboradorModel {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public LocalDateTime getInclusao() {
+		return inclusao;
+	}
+
+	public void setInclusao(LocalDateTime inclusao) {
+		this.inclusao = inclusao;
+	}
+
+	public String getResponsavelInclusao() {
+		return responsavelInclusao;
+	}
+
+	public void setResponsavelInclusao(String responsavelInclusao) {
+		this.responsavelInclusao = responsavelInclusao;
 	}
 
 	@Override

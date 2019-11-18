@@ -1,4 +1,4 @@
-package br.com.zipext.plr.controller;
+package br.com.zipext.plr.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

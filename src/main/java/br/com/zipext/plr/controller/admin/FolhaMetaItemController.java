@@ -1,4 +1,4 @@
-package br.com.zipext.plr.controller;
+package br.com.zipext.plr.controller.admin;
 
 import java.util.ArrayList;
 import java.util.List;
