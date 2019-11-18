@@ -1,5 +1,7 @@
 package br.com.zipext.plr.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,12 @@ public class ColaboradorService {
 
 	@Autowired
 	private ColaboradorRepository repository;
+	
+	@Transactional(readOnly = true)
+	public List<ColaboradorModel> findByFilter(String matricula, String nome, String situacao, String cargo, String diretoria, String time) {
+		return 
+				this.repository.findByFilter(matricula, nome, situacao, cargo, diretoria, time);
+	}
 	
 	@Transactional(readOnly = true)
 	public ColaboradorModel findByMatricula(String matricula) {
