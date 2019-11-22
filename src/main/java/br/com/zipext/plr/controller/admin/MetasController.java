@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,5 +40,18 @@ public class MetasController {
 				StringUtils.isNoneBlank(formula) ? formula.toUpperCase() : null, 
 				StringUtils.isNoneBlank(frequenciaMedicao) ? frequenciaMedicao.toUpperCase() : null);
 		return new ResponseEntity<>(models.stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+	}
+	
+	@PostMapping
+	public ResponseEntity<MetasDTO> save(@RequestBody MetasDTO dto) throws Exception {
+		MetasModel metaExistente = this.service.findByDescricaoAndSituacao(dto.getDescricao(), dto.getSituacao());
+		if (metaExistente != null) {
+			if (dto.getId() == null || !metaExistente.getId().equals(dto.getId())) {
+				throw new Exception("Já existe uma meta ativa cadastrada com esse nome! ");
+			}
+		}
+		
+		MetasModel meta = this.service.save(dto.obterModel());
+		return new ResponseEntity<MetasDTO>(new MetasDTO(meta), HttpStatus.OK);
 	}
 }

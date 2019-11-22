@@ -3,6 +3,8 @@ package br.com.zipext.plr.utils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class PLRUtils {
 
 	public static final String DATE_PATTERN_JS = "dd/MM/yyyy";
@@ -11,12 +13,26 @@ public class PLRUtils {
 	
 	public static final String DATE_PATTERN_FILE = "yyyyMMdd";
 	
-	public static String today() {
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN_FILE);
+	public static Long getSkyTempoFromStringDate(String stringDate) {
+		if (!StringUtils.isNotBlank(stringDate)) {
+			return
+					-1L;
+		}
+
+		String result;
+		try {
+			String[] stringArrayDate = stringDate.split("/");
+			String dia = stringArrayDate[0];
+			String mes = stringArrayDate[1];
+			String ano = stringArrayDate[2];
+
+			result = ano.concat(mes).concat(dia);
+		} catch (Exception e1) {
+			result = "-1";
+		}
 		
 		return
-				now.format(formatter);
+				Long.parseLong(result);
 	}
 	
 	public static String genPhrase(String tokenA, long tokenB) {
@@ -28,5 +44,13 @@ public class PLRUtils {
 			phrase = tokenA.split(" ")[len - 1].concat(String.valueOf(tokenB));
 		}
 		return phrase;
+	}
+	
+	public static String today() {
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN_FILE);
+		
+		return
+				now.format(formatter);
 	}
 }

@@ -15,4 +15,12 @@ public class PLRUtilsTest {
 		assertThat(phrase).isNotBlank();
 		assertThat(phrase).isEqualTo("Pokemon901");
 	}
+	
+	@Test
+	public void testSkyTempoConverter() {
+		String date = "21/11/2019";
+		Long skyTempo = PLRUtils.getSkyTempoFromStringDate(date);
+		
+		assertThat(skyTempo).isEqualTo(20191121);
+	}
 }

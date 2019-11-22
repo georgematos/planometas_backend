@@ -48,5 +48,18 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/times/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET");
+		registry.addMapping("/formulas/**")
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET");
+		registry.addMapping("/tiposmeta/**")
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET");
+		registry.addMapping("/tiposmedicao/**")
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET");
+		registry.addMapping("/frequenciasmedicao/**")
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET");
+	
 	}
 }

@@ -12,6 +12,8 @@ import br.com.zipext.plr.model.MetasModel;
 @Repository
 public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 
+	public MetasModel findByDescricaoAndSituacao(String descricao, String situacao);
+	
 	@Query("select model from MetasModel model "
 		 + "join fetch model.formula formula "
 		 + "join fetch model.tipoMeta tipoMeta "

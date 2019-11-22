@@ -16,6 +16,12 @@ public class MetasService {
 	private MetasRepository repository;
 	
 	@Transactional(readOnly = true)
+	public MetasModel findByDescricaoAndSituacao(String descricao, String situacao) {
+		return
+				this.repository.findByDescricaoAndSituacao(descricao, situacao);
+	}
+	
+	@Transactional(readOnly = true)
 	public List<MetasModel> findByFilter(String meta, String situacao, String tipoMedicao, String tipoMeta, String formula, String frequenciaMedicao) {
 		return 
 				this.repository.findByFilter(meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);

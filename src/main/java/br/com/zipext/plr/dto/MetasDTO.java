@@ -1,14 +1,24 @@
 package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.model.FormulaModel;
+import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TempoModel;
+import br.com.zipext.plr.model.TipoMedicaoModel;
+import br.com.zipext.plr.model.TipoMetaModel;
+import br.com.zipext.plr.utils.PLRUtils;
 
 public class MetasDTO {
 	
 	public Long id;
+	
+	private boolean isNewMeta;
 
 	public String descricao;
 	
@@ -51,6 +61,38 @@ public class MetasDTO {
 		}
 		
 		this.prazo = model.getPrazo().getDescricao();
+	}
+	
+	public MetasModel obterModel() {
+		MetasModel model  = new MetasModel();
+
+		BeanUtils.copyProperties(this, model);
+		if (this.formula != null) {
+			model.setFormula(new FormulaModel(this.formula.getId()));
+		}
+		
+		if (this.frequenciaMedicao != null) {
+			model.setFrequenciaMedicao(new FrequenciaMedicaoModel(this.frequenciaMedicao.getId()));
+		}
+		
+		if (this.tipoMeta!= null) {
+			model.setTipoMeta(new TipoMetaModel(this.tipoMeta.getId()));
+		}
+		
+		if (this.tipoMedicao != null) {
+			model.setTipoMedicao(new TipoMedicaoModel(this.tipoMedicao.getId()));
+		}
+		
+		if (StringUtils.isNotBlank(this.prazo)) {
+			model.setPrazo(new TempoModel(PLRUtils.getSkyTempoFromStringDate(this.prazo)));
+		}
+		
+		model.setInclusao(LocalDateTime.now());
+		model.setResponsavelInclusao("SISTEMA");
+		
+		return
+				model;
+		
 	}
 
 	public Long getId() {
@@ -139,5 +181,13 @@ public class MetasDTO {
 
 	public void setFormula(FormulaDTO formula) {
 		this.formula = formula;
+	}
+
+	public boolean isNewMeta() {
+		return isNewMeta;
+	}
+
+	public void setNewMeta(boolean isNewMeta) {
+		this.isNewMeta = isNewMeta;
 	}
 }
