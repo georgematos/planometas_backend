@@ -21,6 +21,7 @@ dependency-reduced-pom.xml
 .classpath
 .project
 .settings/
+.properties
 
 # IntelliJ IDEA Files
 
