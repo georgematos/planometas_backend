@@ -1,8 +1,10 @@
 package br.com.zipext.plr.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.BeanUtils;
 
-import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.FolhaMetaModel;
 
 public class FolhaMetaDTO {
@@ -19,6 +21,8 @@ public class FolhaMetaDTO {
 	
 	private ColaboradorDTO responsavel;
 	
+	private List<FolhaMetaItemDTO> folhasMetaItem;
+	
 	public FolhaMetaDTO() {}
 	
 	public FolhaMetaDTO(FolhaMetaModel model) {
@@ -28,7 +32,8 @@ public class FolhaMetaDTO {
 		this.responsavel = new ColaboradorDTO(model.getResponsavel());	
 		this.inicioVigencia = model.getInicioVigencia().getDescricao();
 		this.fimVigencia = model.getFimVigencia().getDescricao();
-		this.situacao = EnumSituacao.forValue(model.getSituacao()).getDescricao();
+		this.situacao = model.getSituacao();
+		this.folhasMetaItem = model.getFolhaMetaItems().stream().map(FolhaMetaItemDTO::new).collect(Collectors.toList());
 	}
 
 	public Long getId() {
@@ -77,5 +82,13 @@ public class FolhaMetaDTO {
 
 	public void setResponsavel(ColaboradorDTO responsavel) {
 		this.responsavel = responsavel;
+	}
+
+	public List<FolhaMetaItemDTO> getFolhasMetaItem() {
+		return folhasMetaItem;
+	}
+
+	public void setFolhasMetaItem(List<FolhaMetaItemDTO> folhasMetaItem) {
+		this.folhasMetaItem = folhasMetaItem;
 	}
 }

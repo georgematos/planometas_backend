@@ -31,6 +31,11 @@ public class FolhaMetaItemDTO {
 	
 	public FolhaMetaItemDTO() {}
 	
+	public FolhaMetaItemDTO(FolhaMetaItemModel model) {
+		BeanUtils.copyProperties(model, this);
+		this.meta = new MetasDTO(model.getMeta());
+	}
+	
 	public FolhaMetaItemDTO(FolhaMetaItemModel model, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
 		BeanUtils.copyProperties(model, this);
 		this.meta = new MetasDTO(model.getMeta());
