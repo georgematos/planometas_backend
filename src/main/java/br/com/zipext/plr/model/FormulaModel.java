@@ -23,7 +23,10 @@ public class FormulaModel {
 	
 	@Column(name = "DS_FORMULA")
 	private String evalFormula;
-
+	
+	@Column(name = "FL_ATIVO")
+	private String situacao;
+	
 	public FormulaModel() {}
 	
 	public FormulaModel(Long id) {
@@ -52,6 +55,14 @@ public class FormulaModel {
 
 	public void setEvalFormula(String evalFormula) {
 		this.evalFormula = evalFormula;
+	}
+	
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
 	}
 
 	@Override

@@ -1,11 +1,18 @@
 package br.com.zipext.plr.dto;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
+import br.com.zipext.plr.model.TempoModel;
+import br.com.zipext.plr.utils.PLRUtils;
 
 public class FolhaMetaDTO {
 	
@@ -34,6 +41,52 @@ public class FolhaMetaDTO {
 		this.fimVigencia = model.getFimVigencia().getDescricao();
 		this.situacao = model.getSituacao();
 		this.folhasMetaItem = model.getFolhaMetaItems().stream().map(FolhaMetaItemDTO::new).collect(Collectors.toList());
+	}
+	
+	public FolhaMetaModel obterModel() {
+		FolhaMetaModel model = new FolhaMetaModel();
+		BeanUtils.copyProperties(this, model);
+		
+		if (StringUtils.isNotBlank(this.inicioVigencia)) {
+			model.setInicioVigencia(new TempoModel(PLRUtils.getSkyTempoFromStringDate(this.inicioVigencia)));
+		}
+		
+		if (StringUtils.isNoneBlank(this.fimVigencia)) {
+			model.setFimVigencia(new TempoModel(PLRUtils.getSkyTempoFromStringDate(this.fimVigencia)));
+		}
+		
+		if (this.colaborador != null) {
+			model.setColaborador(new ColaboradorModel(this.colaborador.getMatricula()));
+		}
+		
+		if (this.responsavel != null) {
+			model.setResponsavel(new ColaboradorModel(this.responsavel.getMatricula()));
+		}
+		
+		List<FolhaMetaItemModel> folhaMetaItems = new ArrayList<>();
+		this.folhasMetaItem.forEach(fmi -> {
+			FolhaMetaItemModel item = fmi.obterModel();
+			item.setFolhaMeta(model);
+			folhaMetaItems.add(fmi.obterModel());
+		});
+		
+		model.setInclusao(LocalDateTime.now());
+		model.setResponsavelInclusao("SISTEMA");
+		
+		return
+				model;
+	}
+	
+	public List<FolhaMetaItemModel> obterFolhaMetaItems(FolhaMetaModel model) {
+		List<FolhaMetaItemModel> folhaMetaItems = new ArrayList<>();
+		this.folhasMetaItem.forEach(fmi -> {
+			FolhaMetaItemModel item = fmi.obterModel();
+			item.setFolhaMeta(model);
+			folhaMetaItems.add(item);
+		});
+		
+		return
+				folhaMetaItems;
 	}
 
 	public Long getId() {

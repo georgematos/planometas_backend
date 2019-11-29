@@ -12,7 +12,9 @@ public class GenericDTO {
 	public GenericDTO() {}
 	
 	public GenericDTO(Object model) {
-		BeanUtils.copyProperties(model, this);
+		if (model != null) {
+			BeanUtils.copyProperties(model, this);
+		}
 	}
 	
 	public Long getId() {

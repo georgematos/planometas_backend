@@ -60,7 +60,9 @@ public class MetasDTO {
 			this.formula = new FormulaDTO(model.getFormula());
 		}
 		
-		this.prazo = model.getPrazo().getDescricao();
+		if (model.getPrazo() != null) {
+			this.prazo = model.getPrazo().getDescricao();
+		}
 	}
 	
 	public MetasModel obterModel() {

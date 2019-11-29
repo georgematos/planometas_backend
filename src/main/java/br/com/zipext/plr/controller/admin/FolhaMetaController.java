@@ -10,11 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.FolhaMetaDTO;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.FolhaMetaModel;
+import br.com.zipext.plr.service.FolhaMetaItemService;
 import br.com.zipext.plr.service.FolhaMetaService;
 import br.com.zipext.plr.utils.PLRUtils;
 
@@ -24,6 +28,9 @@ public class FolhaMetaController {
 
 	@Autowired
 	private FolhaMetaService service;
+	
+	@Autowired
+	private FolhaMetaItemService folhaMetaItemService;
 	
 	@GetMapping("/filter")
 	public ResponseEntity<List<FolhaMetaDTO>> findByFilter(
@@ -63,5 +70,17 @@ public class FolhaMetaController {
 				.collect(Collectors.toList());
 		
 		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
+	}
+	
+	@PostMapping
+	public ResponseEntity<FolhaMetaDTO> save(@RequestBody FolhaMetaDTO dto) {
+		if (dto.getId() != null) {
+			this.folhaMetaItemService.deleteByIdFolhaMeta(dto.getId());
+		}
+	
+		FolhaMetaModel model = this.service.save(dto.obterModel());
+		model.setFolhaMetaItems(this.folhaMetaItemService.saveAll(dto.obterFolhaMetaItems(model)));
+
+		return new ResponseEntity<FolhaMetaDTO>(new FolhaMetaDTO(model), HttpStatus.OK);
 	}
 }

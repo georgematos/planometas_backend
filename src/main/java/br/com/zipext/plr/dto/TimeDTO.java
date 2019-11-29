@@ -12,7 +12,9 @@ public class TimeDTO {
 	public TimeDTO() {}
 	
 	public TimeDTO(TimeModel model) {
-		BeanUtils.copyProperties(model, this);
+		if (model != null) {
+			BeanUtils.copyProperties(model, this);
+		}
 	}
 
 	public String getCodigo() {

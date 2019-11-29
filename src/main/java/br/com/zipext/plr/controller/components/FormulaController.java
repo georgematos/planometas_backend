@@ -23,6 +23,6 @@ public class FormulaController {
 	@GetMapping
 	public ResponseEntity<List<FormulaDTO>> findAll() {
 		return new ResponseEntity<>
-			(this.service.findAllByOrderByNomeAsc().stream().map(FormulaDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+			(this.service.findAllAtivosByOrderByNomeAsc().stream().map(FormulaDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
 }

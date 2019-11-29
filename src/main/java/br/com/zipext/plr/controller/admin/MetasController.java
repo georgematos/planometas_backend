@@ -25,6 +25,12 @@ public class MetasController {
 	@Autowired
 	private MetasService service;
 
+	@GetMapping
+	public ResponseEntity<List<MetasDTO>> findAll() {
+		return new ResponseEntity<>(
+				this.service.findAllAtivasByOrderByDescricaoAsc().stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+	}
+
 	@GetMapping("/filter")
 	public ResponseEntity<List<MetasDTO>> findByFilter(@RequestParam(name = "meta", required = false) String meta,
 			@RequestParam(name = "situacao", required = false) String situacao,

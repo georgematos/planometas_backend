@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.repository.FormulaRepository;
 
@@ -16,8 +17,8 @@ public class FormulaService {
 	private FormulaRepository repository;
 	
 	@Transactional(readOnly = true)
-	public List<FormulaModel> findAllByOrderByNomeAsc() {
+	public List<FormulaModel> findAllAtivosByOrderByNomeAsc() {
 		return
-				this.repository.findAllByOrderByNomeAsc();
+				this.repository.findAllAtivosByOrderByNomeAsc(EnumSituacao.ATIVO.getCodigo().toString());
 	}
 }

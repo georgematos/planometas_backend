@@ -13,7 +13,9 @@ public class DiretoriaDTO {
 	public DiretoriaDTO() {}
 	
 	public DiretoriaDTO(DiretoriaModel model) {
-		BeanUtils.copyProperties(model, this);
+		if (model != null) {
+			BeanUtils.copyProperties(model, this);
+		}
 	}
 
 	public Long getId() {

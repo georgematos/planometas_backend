@@ -1,8 +1,10 @@
 package br.com.zipext.plr.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import br.com.zipext.plr.converter.LocalDateTimeConverter;
 
 @Entity
 @Table(schema = "FAT", name = "FAT_FOLHA_META_ITEM")
@@ -35,6 +39,13 @@ public class FolhaMetaItemModel {
 	@ManyToOne
 	@JoinColumn(name = "CD_FOLHA_META")
 	private FolhaMetaModel folhaMeta;
+	
+	@Column(name = "DT_INC")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime inclusao;
+    
+    @Column(name = "CD_LOGIN_INC")
+    private String responsavelInclusao;
 	
 	public FolhaMetaItemModel() {}
 	
@@ -80,6 +91,22 @@ public class FolhaMetaItemModel {
 
 	public void setFolhaMeta(FolhaMetaModel folhaMeta) {
 		this.folhaMeta = folhaMeta;
+	}
+	
+	public LocalDateTime getInclusao() {
+		return inclusao;
+	}
+
+	public void setInclusao(LocalDateTime inclusao) {
+		this.inclusao = inclusao;
+	}
+
+	public String getResponsavelInclusao() {
+		return responsavelInclusao;
+	}
+
+	public void setResponsavelInclusao(String responsavelInclusao) {
+		this.responsavelInclusao = responsavelInclusao;
 	}
 
 	@Override

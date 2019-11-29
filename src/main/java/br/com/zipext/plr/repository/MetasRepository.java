@@ -12,6 +12,11 @@ import br.com.zipext.plr.model.MetasModel;
 @Repository
 public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 
+	@Query("select model from MetasModel model "
+		 + "where model.situacao = :situacao "
+		 + "order by model.descricao asc")
+	public List<MetasModel> findAllAtivasByOrderByDescricaoAsc(@Param("situacao") String situacao);
+	
 	public MetasModel findByDescricaoAndSituacao(String descricao, String situacao);
 	
 	@Query("select model from MetasModel model "

@@ -2,6 +2,7 @@ package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import org.springframework.beans.BeanUtils;
 import br.com.zipext.plr.model.FolhaMetaAnualModel;
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
+import br.com.zipext.plr.model.FolhaMetaModel;
+import br.com.zipext.plr.model.MetasModel;
 
 public class FolhaMetaItemDTO {
 	
@@ -53,6 +56,19 @@ public class FolhaMetaItemDTO {
 				this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("%", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
 			}
 		}
+	}
+	
+	public FolhaMetaItemModel obterModel() {
+		FolhaMetaItemModel model = new FolhaMetaItemModel();
+		
+		model.setPeso(this.peso);
+		model.setSequencia(this.sequencia);
+		model.setMeta(new MetasModel(this.meta.getId()));
+		model.setFolhaMeta(new FolhaMetaModel(this.folhaMeta.getId()));
+		model.setInclusao(LocalDateTime.now());
+		model.setResponsavelInclusao("SISTEMA");
+		
+		return model;
 	}
 
 	public Long getId() {

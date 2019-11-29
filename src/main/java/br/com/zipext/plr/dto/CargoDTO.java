@@ -12,7 +12,9 @@ public class CargoDTO {
 	public CargoDTO() {}
 	
 	public CargoDTO(CargoModel model) {
-		BeanUtils.copyProperties(model, this);
+		if (model != null) {
+			BeanUtils.copyProperties(model, this);
+		}
 	}
 
 	public Long getId() {
