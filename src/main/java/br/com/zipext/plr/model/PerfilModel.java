@@ -1,6 +1,7 @@
 package br.com.zipext.plr.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -34,6 +36,9 @@ public class PerfilModel {
 	@ManyToOne
 	@JoinColumn(name = "CD_LOGIN_INC")
 	private UsuarioModel responsavel;
+	
+	@OneToMany(mappedBy = "pk.perfil")
+	private List<PerfilInfoAcessoModel> perfisAcesso;
 
 	public PerfilModel() {}
 	
@@ -56,15 +61,6 @@ public class PerfilModel {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-	/*
-	public Character getSituacao() {
-		return situacao;
-	}
-
-	public void setSituacao(Character situacao) {
-		this.situacao = situacao;
-	}*/
 
 	public LocalDateTime getDataInclusao() {
 		return dataInclusao;
@@ -80,5 +76,46 @@ public class PerfilModel {
 
 	public void setResponsavel(UsuarioModel responsavel) {
 		this.responsavel = responsavel;
+	}
+	
+	public Character getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(Character situacao) {
+		this.situacao = situacao;
+	}
+
+	public List<PerfilInfoAcessoModel> getPerfisAcesso() {
+		return perfisAcesso;
+	}
+
+	public void setPerfisAcesso(List<PerfilInfoAcessoModel> perfisAcesso) {
+		this.perfisAcesso = perfisAcesso;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PerfilModel other = (PerfilModel) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }

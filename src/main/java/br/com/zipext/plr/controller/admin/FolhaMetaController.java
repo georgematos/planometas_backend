@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.FolhaMetaDTO;
+import br.com.zipext.plr.enums.EnumPerfil;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
+import br.com.zipext.plr.model.PerfilUsuarioModel;
+import br.com.zipext.plr.model.UsuarioModel;
 import br.com.zipext.plr.service.FolhaMetaItemService;
 import br.com.zipext.plr.service.FolhaMetaService;
+import br.com.zipext.plr.service.PerfilUsuarioService;
 import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
@@ -31,6 +35,9 @@ public class FolhaMetaController {
 	
 	@Autowired
 	private FolhaMetaItemService folhaMetaItemService;
+	
+	@Autowired
+	private PerfilUsuarioService perfilUsuarioService;
 	
 	@GetMapping("/filter")
 	public ResponseEntity<List<FolhaMetaDTO>> findByFilter(
@@ -54,25 +61,52 @@ public class FolhaMetaController {
 		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
 	}
 	
-	@GetMapping("/colaborador/{matricula}")
-	public ResponseEntity<List<FolhaMetaDTO>> findByColaborador(@PathVariable("matricula") String matricula) {
-		List<FolhaMetaDTO> dtos = this.service.findByColaborador(new ColaboradorModel(matricula)).stream()
+	@GetMapping("/colaborador/{matricula}/periodo/{periodoPLR}")
+	public ResponseEntity<List<FolhaMetaDTO>> findByColaborador(@PathVariable("matricula") String matricula, @PathVariable("periodoPLR") Long periodoPLR) {
+		List<FolhaMetaDTO> dtos = this.service.findByColaboradorAndVigencia(new ColaboradorModel(matricula),  PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()), 
+				PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
+				.stream()
 				.map(FolhaMetaDTO::new)
 				.collect(Collectors.toList());
 		
 		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
 	}
 	
-	@GetMapping("/responsavel/{matricula}")
-	public ResponseEntity<List<FolhaMetaDTO>> findByResponsavel(@PathVariable("matricula") String matricula) {
-		List<FolhaMetaDTO> dtos = this.service.findByResponsavel(new ColaboradorModel(matricula)).stream()
-				.map(FolhaMetaDTO::new)
-				.collect(Collectors.toList());
+	@GetMapping("/responsavel/{matricula}/periodo/{periodoPLR}")
+	public ResponseEntity<List<FolhaMetaDTO>> findByResponsavel(@PathVariable("matricula") String matricula, @PathVariable("periodoPLR") Long periodoPLR) {
+		List<FolhaMetaDTO> dtos = this.service.findByResponsavelAndVigencia(new ColaboradorModel(matricula), 
+				PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()), 
+				PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
+					.stream()
+					.map(FolhaMetaDTO::new)
+					.collect(Collectors.toList());
 		
 		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
 	}
 	
-	@PostMapping
+	@GetMapping("/pendentes/colaborador/{matricula}/periodo/{periodoPLR}")
+	public ResponseEntity<List<FolhaMetaDTO>> findPendentes(@PathVariable("matricula") String matricula, @PathVariable("periodoPLR") Long periodoPLR) {
+		PerfilUsuarioModel perfilUsuario = this.perfilUsuarioService.findByUsuario(new UsuarioModel(matricula));
+		List<FolhaMetaDTO> dtos;
+		if (perfilUsuario.getPk().getPerfil().getId().equals(EnumPerfil.ADMIN.getId())) {
+			dtos = this.service.findAllPendentesByVigencia(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()), 
+					PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
+						.stream()
+						.map(FolhaMetaDTO::new)
+						.collect(Collectors.toList());
+		} else {
+			dtos = this.service.findPendentesByColaboradorAndVigencia(new ColaboradorModel(matricula), 
+					PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()), 
+					PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
+						.stream()
+						.map(FolhaMetaDTO::new)
+						.collect(Collectors.toList());			
+		}
+		
+		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
+	}
+	
+	@PostMapping	
 	public ResponseEntity<FolhaMetaDTO> save(@RequestBody FolhaMetaDTO dto) {
 		if (dto.getId() != null) {
 			this.folhaMetaItemService.deleteByIdFolhaMeta(dto.getId());

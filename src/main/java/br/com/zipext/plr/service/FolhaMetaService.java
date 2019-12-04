@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
 import br.com.zipext.plr.repository.FolhaMetaRepository;
@@ -36,15 +37,27 @@ public class FolhaMetaService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findByColaborador(ColaboradorModel colaborador) {
+	public List<FolhaMetaModel> findByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia, Long fimVigencia) {
 		return
-				this.repository.findByColaborador(colaborador);
+				this.repository.findByColaboradorAndVigencia(colaborador, inicioVigencia, fimVigencia, EnumSituacao.ATIVO.getCodigo().toString());
 	}
 	
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findByResponsavel(ColaboradorModel responsavel) {
+	public List<FolhaMetaModel> findByResponsavelAndVigencia(ColaboradorModel responsavel, Long inicioVigencia, Long fimVigencia) {
+		return 
+				this.repository.findByResponsavelAndVigencia(responsavel, inicioVigencia, fimVigencia, EnumSituacao.ATIVO.getCodigo().toString());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<FolhaMetaModel> findPendentesByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia, Long fimVigencia) {
 		return
-				this.repository.findByResponsavel(responsavel);
+				this.repository.findByColaboradorAndVigencia(colaborador, inicioVigencia, fimVigencia, EnumSituacao.PENDENTE.getCodigo().toString());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<FolhaMetaModel> findAllPendentesByVigencia(Long inicioVigencia, Long fimVigencia) {
+		return
+				this.repository.findByResponsavelAndVigencia(null, inicioVigencia, fimVigencia, EnumSituacao.PENDENTE.getCodigo().toString());
 	}
 	
 	@Transactional(readOnly = false)

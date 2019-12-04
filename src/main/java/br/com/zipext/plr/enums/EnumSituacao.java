@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum EnumSituacao {
 	ATIVO('A',"Ativo"),
 	INATIVO('I', "Inativo"),
+	PENDENTE('P', "Pendente"),
 	NA('N',"Não aplicável");
 	
 	private Character codigo;

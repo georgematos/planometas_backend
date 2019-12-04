@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.enums.EnumSituacao;
+import br.com.zipext.plr.model.FormulaModel;
+import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TipoMedicaoModel;
+import br.com.zipext.plr.model.TipoMetaModel;
 import br.com.zipext.plr.repository.MetasRepository;
 
 @Service
@@ -29,9 +33,10 @@ public class MetasService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<MetasModel> findByFilter(String meta, String situacao, String tipoMedicao, String tipoMeta, String formula, String frequenciaMedicao) {
+	public List<MetasModel> findByFilter(MetasModel model, String meta, String situacao, TipoMedicaoModel tipoMedicao, TipoMetaModel tipoMeta,
+			FormulaModel formula, FrequenciaMedicaoModel frequenciaMedicao) {
 		return 
-				this.repository.findByFilter(meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);
+				this.repository.findByFilter(model, meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);
 	}
 	
 	@Transactional(readOnly = false)

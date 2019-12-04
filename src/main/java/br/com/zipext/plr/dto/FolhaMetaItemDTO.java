@@ -50,8 +50,8 @@ public class FolhaMetaItemDTO {
 		
 		this.viewMetasMensais = new ArrayList<>();
 		if (folhaMetaAnual != null) {
-			this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("REAL", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
 			this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("META", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
+			this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("REAL", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
 			if (!(folhaMetaAnual.isMetaRestrita() && isPerfilReadOnly)) {
 				this.viewMetasMensais.add(new ViewFolhaMetaMensalDTO("%", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
 			}

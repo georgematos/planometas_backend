@@ -5,7 +5,8 @@ import br.com.zipext.plr.model.PerfilModel;
 public enum EnumPerfil {
 	
 	ADMIN(1L, "Administrador"),
-	GENERICO(2L, "Genérico");
+	GENERICO(2L, "Genérico"),
+	CADASTRADOR(3L, "Cadastrador");
 	
 	private Long id;
 	private String nome;

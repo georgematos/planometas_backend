@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.MetasDTO;
+import br.com.zipext.plr.model.FormulaModel;
+import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TipoMedicaoModel;
+import br.com.zipext.plr.model.TipoMetaModel;
 import br.com.zipext.plr.service.MetasService;
 
 @Controller
@@ -32,19 +36,21 @@ public class MetasController {
 	}
 
 	@GetMapping("/filter")
-	public ResponseEntity<List<MetasDTO>> findByFilter(@RequestParam(name = "meta", required = false) String meta,
+	public ResponseEntity<List<MetasDTO>> findByFilter(
+			@RequestParam(name = "idMeta", required = false) Long idMeta,
+			@RequestParam(name = "meta", required = false) String meta,
 			@RequestParam(name = "situacao", required = false) String situacao,
-			@RequestParam(name = "tipoMedicao", required = false) String tipoMedicao,
-			@RequestParam(name = "tipoMeta", required = false) String tipoMeta,
-			@RequestParam(name = "formula", required = false) String formula,
-			@RequestParam(name = "frequenciaMedicao", required = false) String frequenciaMedicao) {
+			@RequestParam(name = "tipoMedicao", required = false) Long tipoMedicao,
+			@RequestParam(name = "tipoMeta", required = false) Long tipoMeta,
+			@RequestParam(name = "formula", required = false) Long formula,
+			@RequestParam(name = "frequenciaMedicao", required = false) Long frequenciaMedicao) {
 
-		List<MetasModel> models = this.service.findByFilter(StringUtils.isNotBlank(meta) ? meta.toUpperCase() : null,
+		List<MetasModel> models = this.service.findByFilter(idMeta != null ? new MetasModel(idMeta) : null, StringUtils.isNotBlank(meta) ? meta.toUpperCase() : null,
 				StringUtils.isNotBlank(situacao) ? situacao.toUpperCase() : null,
-				StringUtils.isNotBlank(tipoMedicao) ? tipoMedicao.toUpperCase() : null,
-				StringUtils.isNotBlank(tipoMeta) ? tipoMeta.toUpperCase() : null,
-				StringUtils.isNoneBlank(formula) ? formula.toUpperCase() : null, 
-				StringUtils.isNoneBlank(frequenciaMedicao) ? frequenciaMedicao.toUpperCase() : null);
+				tipoMedicao != null ? new TipoMedicaoModel(tipoMedicao) : null,
+				tipoMeta != null ? new TipoMetaModel(tipoMeta) : null,
+				formula != null ? new FormulaModel(formula) : null, 
+				frequenciaMedicao != null ? new FrequenciaMedicaoModel(frequenciaMedicao) : null);
 		return new ResponseEntity<>(models.stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	

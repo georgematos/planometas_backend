@@ -7,7 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import br.com.zipext.plr.model.FormulaModel;
+import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TipoMedicaoModel;
+import br.com.zipext.plr.model.TipoMetaModel;
 
 @Repository
 public interface MetasRepository extends JpaRepository<MetasModel, Long> {
@@ -24,18 +28,20 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 		 + "join fetch model.tipoMeta tipoMeta "
 		 + "join fetch model.tipoMedicao tipoMedicao "
 		 + "join fetch model.frequenciaMedicao frequenciaMedicao "
-		 + "where (:situacao is null or model.situacao = :situacao )"
+		 + "where (:situacao is null or model.situacao = :situacao ) "
+		 + "and (:metaModel is null or model = :metaModel)"
 		 + "and (:meta is null or model.descricao like %:meta%) "
-		 + "and (:tipoMedicao is null or tipoMedicao.descricao like %:tipoMedicao%) "
-		 + "and (:tipoMeta is null or tipoMeta.descricao like %:tipoMeta%) "
-		 + "and (:formula is null or formula.nome like %:formula%) "
-		 + "and (:frequenciaMedicao is null or frequenciaMedicao.descricao like %:frequenciaMedicao%) "
+		 + "and (:tipoMedicao is null or tipoMedicao = :tipoMedicao) "
+		 + "and (:tipoMeta is null or tipoMeta = :tipoMeta) "
+		 + "and (:formula is null or formula = :formula) "
+		 + "and (:frequenciaMedicao is null or frequenciaMedicao = :frequenciaMedicao) "
 		 + "order by model.descricao asc")
 	public List<MetasModel> findByFilter(
+				@Param("metaModel") MetasModel model,
 				@Param("meta") String meta, 
 				@Param("situacao") String situacao, 
-				@Param("tipoMedicao") String tipoMedicao, 
-				@Param("tipoMeta") String tipoMeta, 
-				@Param("formula") String formula, 
-				@Param("frequenciaMedicao") String frequenciaMedicao);
+				@Param("tipoMedicao") TipoMedicaoModel tipoMedicao, 
+				@Param("tipoMeta") TipoMetaModel tipoMeta, 
+				@Param("formula") FormulaModel formula, 
+				@Param("frequenciaMedicao") FrequenciaMedicaoModel frequenciaMedicao);
 }

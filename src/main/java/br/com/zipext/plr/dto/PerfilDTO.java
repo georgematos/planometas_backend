@@ -1,5 +1,8 @@
 package br.com.zipext.plr.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.BeanUtils;
 
 import br.com.zipext.plr.model.PerfilModel;
@@ -13,6 +16,8 @@ public class PerfilDTO {
 	private String nome;
 	
 	private Character situacao;
+	
+	private List<Long> idsAreaPermissaoAcesso;
 	
 	private boolean isEditable;
 	
@@ -36,6 +41,7 @@ public class PerfilDTO {
 			this.isEditable = false;
 		}
 		
+		this.idsAreaPermissaoAcesso = perfil.getPerfisAcesso().stream().map(pa -> pa.getPk().getInformacaoAcesso().getId()).collect(Collectors.toList());
 	}
 
 	public Long getId() {
@@ -68,5 +74,13 @@ public class PerfilDTO {
 
 	public void setEditable(boolean isEditable) {
 		this.isEditable = isEditable;
+	}
+
+	public List<Long> getIdsAreaPermissaoAcesso() {
+		return idsAreaPermissaoAcesso;
+	}
+
+	public void setIdsAreaPermissaoAcesso(List<Long> idsAreaPermissaoAcesso) {
+		this.idsAreaPermissaoAcesso = idsAreaPermissaoAcesso;
 	}
 }
