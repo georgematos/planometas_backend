@@ -8,12 +8,14 @@ public class CargoDTO {
 	
 	private Long id;
 	private String nome;
+	private EquivalenciaDTO equivalencia;
 
 	public CargoDTO() {}
 	
 	public CargoDTO(CargoModel model) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
+			this.equivalencia = new EquivalenciaDTO(model.getEquivalencia());
 		}
 	}
 
@@ -31,5 +33,13 @@ public class CargoDTO {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public EquivalenciaDTO getEquivalencia() {
+		return equivalencia;
+	}
+
+	public void setEquivalencia(EquivalenciaDTO equivalencia) {
+		this.equivalencia = equivalencia;
 	}
 }

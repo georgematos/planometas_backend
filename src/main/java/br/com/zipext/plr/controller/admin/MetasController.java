@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,9 @@ import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.model.TipoMetaModel;
+import br.com.zipext.plr.service.MetasPeriodoService;
 import br.com.zipext.plr.service.MetasService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/metas")
@@ -28,13 +31,25 @@ public class MetasController {
 
 	@Autowired
 	private MetasService service;
+	
+	@Autowired
+	private MetasPeriodoService metasPeriodoService;
 
 	@GetMapping
 	public ResponseEntity<List<MetasDTO>> findAll() {
 		return new ResponseEntity<>(
 				this.service.findAllAtivasByOrderByDescricaoAsc().stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/quantitativas/{periodoPLR}")
+	public ResponseEntity<List<MetasDTO>> findMetasQuantitativasByPeriodo(@PathVariable("periodoPLR") String periodoPLR) {
+		List<MetasDTO> dtos = this.metasPeriodoService.findMetasQuantitativasByPeriodo(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR))
+				.stream()
+				.map(mp -> new MetasDTO(mp.getPk().getMetas()))
+				.collect(Collectors.toList());
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
+	}
+	
 	@GetMapping("/filter")
 	public ResponseEntity<List<MetasDTO>> findByFilter(
 			@RequestParam(name = "idMeta", required = false) Long idMeta,

@@ -37,4 +37,9 @@ public class FolhaMetaMensalService {
 		return
 				this.repository.findAll();
 	}
+	
+	@Transactional(readOnly = false)
+	public List<FolhaMetaMensalModel> saveAll(List<FolhaMetaMensalModel> models) {
+		return this.repository.saveAll(models);
+	}
 }

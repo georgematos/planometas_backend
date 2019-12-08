@@ -2,6 +2,7 @@ package br.com.zipext.plr.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -40,6 +42,13 @@ public class MetasModel {
 	
 	@Column(name = "VAL_META")
 	public BigDecimal valor;
+	
+	@Column(name = "DT_INC")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime inclusao;
+    
+    @Column(name = "CD_LOGIN_INC")
+    private String responsavelInclusao;
 
 	@ManyToOne
 	@JoinColumn(name = "SKY_PRAZO")
@@ -61,12 +70,8 @@ public class MetasModel {
 	@JoinColumn(name = "CD_TIPO_META")
 	public TipoMetaModel tipoMeta;
 	
-	@Column(name = "DT_INC")
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime inclusao;
-    
-    @Column(name = "CD_LOGIN_INC")
-    private String responsavelInclusao;
+	@OneToMany(mappedBy = "pk.metas")
+	private List<MetasPeriodoModel> metasPeriodo;
 	
 	public MetasModel() {}
 	
@@ -176,6 +181,14 @@ public class MetasModel {
 
 	public void setResponsavelInclusao(String responsavelInclusao) {
 		this.responsavelInclusao = responsavelInclusao;
+	}
+	
+	public List<MetasPeriodoModel> getMetasPeriodo() {
+		return metasPeriodo;
+	}
+
+	public void setMetasPeriodo(List<MetasPeriodoModel> metasPeriodo) {
+		this.metasPeriodo = metasPeriodo;
 	}
 
 	@Override
