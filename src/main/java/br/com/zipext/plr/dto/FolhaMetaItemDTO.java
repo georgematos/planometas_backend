@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.enums.EnumSimNao;
 import br.com.zipext.plr.model.FolhaMetaAnualModel;
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
@@ -28,7 +30,13 @@ public class FolhaMetaItemDTO {
 	
 	private BigDecimal pontuacao;
 	
+	private String tipoSugerida;
+	
 	private MetasDTO meta;
+	
+	private boolean isReadOnly;
+	
+	private Long idTempo;
 	
 	private List<FolhaMetaMensalDTO> viewMetasMensais;
 	
@@ -61,10 +69,12 @@ public class FolhaMetaItemDTO {
 	public FolhaMetaItemModel obterModel() {
 		FolhaMetaItemModel model = new FolhaMetaItemModel();
 		
+		model.setId(this.id);
 		model.setPeso(this.peso);
 		model.setSequencia(this.sequencia);
 		model.setMeta(new MetasModel(this.meta.getId()));
 		model.setFolhaMeta(new FolhaMetaModel(this.folhaMeta.getId()));
+		model.setTipoSugerida(StringUtils.isNotBlank(this.tipoSugerida) ? this.tipoSugerida : EnumSimNao.NAO.getCodigoToString());
 		model.setInclusao(LocalDateTime.now());
 		model.setResponsavelInclusao("SISTEMA");
 		
@@ -126,6 +136,14 @@ public class FolhaMetaItemDTO {
 	public void setFolhaMeta(FolhaMetaDTO folhaMeta) {
 		this.folhaMeta = folhaMeta;
 	}
+	
+	public boolean isReadOnly() {
+		return isReadOnly;
+	}
+
+	public void setReadOnly(boolean isReadOnly) {
+		this.isReadOnly = isReadOnly;
+	}
 
 	public List<FolhaMetaMensalDTO> getViewMetasMensais() {
 		return viewMetasMensais;
@@ -133,5 +151,21 @@ public class FolhaMetaItemDTO {
 
 	public void setViewMetasMensais(List<FolhaMetaMensalDTO> viewMetasMensais) {
 		this.viewMetasMensais = viewMetasMensais;
+	}
+
+	public String getTipoSugerida() {
+		return tipoSugerida;
+	}
+
+	public void setTipoSugerida(String tipoSugerida) {
+		this.tipoSugerida = tipoSugerida;
+	}
+
+	public Long getIdTempo() {
+		return idTempo;
+	}
+
+	public void setIdTempo(Long idTempo) {
+		this.idTempo = idTempo;
 	}
 }

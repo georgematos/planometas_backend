@@ -32,6 +32,9 @@ public class FolhaMetaItemModel {
 	@Column(name = "VAL_PESO")
 	private BigDecimal peso;
 	
+	@Column(name = "FL_ITEM_SUGERIDO")
+	private String tipoSugerida;
+	
 	@ManyToOne
 	@JoinColumn(name = "CD_META")
 	private MetasModel meta;
@@ -107,6 +110,14 @@ public class FolhaMetaItemModel {
 
 	public void setResponsavelInclusao(String responsavelInclusao) {
 		this.responsavelInclusao = responsavelInclusao;
+	}
+
+	public String getTipoSugerida() {
+		return tipoSugerida;
+	}
+
+	public void setTipoSugerida(String tipoSugerida) {
+		this.tipoSugerida = tipoSugerida;
 	}
 
 	@Override
