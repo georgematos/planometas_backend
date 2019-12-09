@@ -53,7 +53,8 @@ public class FolhaMetaController {
 				StringUtils.isNotBlank(inicioVigencia) ? PLRUtils.getSkyTempoFromStringDate(inicioVigencia) : null,
 				StringUtils.isNotBlank(fimVigencia) ? PLRUtils.getSkyTempoFromStringDate(fimVigencia) : null, 
 				StringUtils.isNotBlank(colaborador) ? colaborador.toUpperCase() : null, 
-				StringUtils.isNotBlank(responsavel) ? responsavel.toUpperCase() : null, situacao)
+				StringUtils.isNotBlank(responsavel) ? responsavel.toUpperCase() : null, 
+				StringUtils.isNotBlank(situacao) ? situacao : null)
 					.stream()
 					.map(FolhaMetaDTO::new)
 					.collect(Collectors.toList());

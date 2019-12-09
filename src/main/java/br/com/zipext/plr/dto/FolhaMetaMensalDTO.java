@@ -1,10 +1,13 @@
 package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.zipext.plr.model.FolhaMetaAnualModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
+import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TempoModel;
 
 public class FolhaMetaMensalDTO {
 	
@@ -55,7 +58,7 @@ public class FolhaMetaMensalDTO {
 	}
 	
 	public void pivotListMensaisToObject(FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
-		boolean isMetaRestrita = folhaMetaAnual == null ? true :  (folhaMetaAnual.isMetaRestrita() && isPerfilReadOnly);
+		boolean isMetaRestrita = folhaMetaAnual == null && !isPerfilReadOnly ? false : (folhaMetaAnual.isMetaRestrita() && isPerfilReadOnly);
 		FolhaMetaMensalModel fmJan = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(1)).findFirst().orElse(new FolhaMetaMensalModel());
 		FolhaMetaMensalModel fmFev = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(2)).findFirst().orElse(new FolhaMetaMensalModel());
 		FolhaMetaMensalModel fmMar = folhaMetasMensais.stream().filter(fmm -> fmm.getPrazo().getMes().equals(3)).findFirst().orElse(new FolhaMetaMensalModel());
@@ -140,6 +143,20 @@ public class FolhaMetaMensalDTO {
 		}
 	}
 	
+	public FolhaMetaMensalModel obterModel() {
+		FolhaMetaMensalModel model = new FolhaMetaMensalModel();
+		
+		model.setId(this.id);
+		model.setMeta(new MetasModel(this.idMeta));
+		model.setPrazo(this.prazo == null ? new TempoModel(-1L) : new TempoModel(this.prazo.getId()));
+		model.setResponsavelInclusao("SISTEMA");
+		model.setInclusao(LocalDateTime.now());
+		model.setValorMeta(this.valorMeta != null && this.valorMeta.equals(BigDecimal.ZERO) ? null : this.valorMeta);
+		model.setValorReal(this.valorReal != null && this.valorReal.equals(BigDecimal.ZERO) ? null : this.valorReal);
+
+		return 
+				model;
+	}
 
 	public Long getId() {
 		return id;

@@ -2,6 +2,7 @@ package br.com.zipext.plr.controller.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,8 +44,13 @@ public class FolhaMetaMensalController {
 	
 	@PostMapping
 	public ResponseEntity<List<FolhaMetaMensalDTO>> save(@RequestBody List<FolhaMetaMensalDTO> dtos) {
-		List<FolhaMetaMensalModel> models = new ArrayList<>();
+		List<FolhaMetaMensalModel> models = this.service.saveAll(dtos.stream().map(dto -> dto.obterModel()).collect(Collectors.toList()));
+		List<FolhaMetaMensalDTO> results= new ArrayList<>();
+		if (models != null && !models.isEmpty()) {
+			results.add(new FolhaMetaMensalDTO("META", null, models, false));
+			results.add(new FolhaMetaMensalDTO("REAL", null, models, false));
+		}
 		
-		return null;
+		return new ResponseEntity<>(results, HttpStatus.OK);
 	}
 }

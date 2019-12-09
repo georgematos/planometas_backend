@@ -67,6 +67,19 @@ public class TempoModel {
 	public void setMes(Integer mes) {
 		this.mes = mes;
 	}
+	
+	public Integer getMesNullSafe() {
+		if (this.mes != null) {
+			return 
+					this.mes;
+		} else if (this.id != null) {
+			String strId = this.id.toString().substring(5,6);
+			return
+					Integer.valueOf(strId);
+		} else {
+			return 1;
+		}
+	}
 
 	public Integer getDia() {
 		return dia;
