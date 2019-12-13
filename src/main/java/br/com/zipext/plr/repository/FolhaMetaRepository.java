@@ -53,7 +53,7 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 			+  "where (:responsavel is null or resp = :responsavel) "
 			+  "and ini.id >= :inicioVigencia "
 			+  "and fim.id <= :fimVigencia "
-			+  "and model.situacao = :situacao "
+			+  "and (:situacao is null or model.situacao = :situacao) "
 			+  "order by resp.nome asc")
 	public List<FolhaMetaModel> findByResponsavelAndVigencia(
 			@Param("responsavel") ColaboradorModel responsavel,

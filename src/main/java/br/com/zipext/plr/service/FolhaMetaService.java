@@ -45,7 +45,7 @@ public class FolhaMetaService {
 	@Transactional(readOnly = true)
 	public List<FolhaMetaModel> findByResponsavelAndVigencia(ColaboradorModel responsavel, Long inicioVigencia, Long fimVigencia) {
 		return 
-				this.repository.findByResponsavelAndVigencia(responsavel, inicioVigencia, fimVigencia, EnumSituacao.ATIVO.getCodigo().toString());
+				this.repository.findByResponsavelAndVigencia(responsavel, inicioVigencia, fimVigencia, null);
 	}
 	
 	@Transactional(readOnly = true)

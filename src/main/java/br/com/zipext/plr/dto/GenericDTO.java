@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 public class GenericDTO {
 	
 	private Long id;
+	private String matricula;
 	private String nome;
 	private String descricao;
 	private Situacao situacao;
@@ -23,6 +24,14 @@ public class GenericDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 
 	public String getNome() {

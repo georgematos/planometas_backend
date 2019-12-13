@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -16,29 +17,35 @@ import br.com.zipext.plr.utils.PLRUtils;
 
 public class MetasDTO {
 	
-	public Long id;
+	private Long id;
 	
 	private boolean isNewMeta;
 
-	public String descricao;
+	private String descricao;
 	
-	public String observacao;
+	private String observacao;
 	
-	public String situacao;
+	private String situacao;
 	
-	public String prazo;
+	private String prazo;
 	
-	public String isQuantitativa;
+	private String isQuantitativa;
 	
-	public BigDecimal valor;
+	private BigDecimal valor;
 	
-	public FrequenciaMedicaoDTO frequenciaMedicao;
+	private FrequenciaMedicaoDTO frequenciaMedicao;
 	
-	public TipoMedicaoDTO tipoMedicao;
+	private TipoMedicaoDTO tipoMedicao;
 	
-	public TipoMetaDTO tipoMeta;
+	private TipoMetaDTO tipoMeta;
 	
-	public FormulaDTO formula;
+	private FormulaDTO formula;
+	
+	private GenericDTO metaNumerador;
+	
+	private GenericDTO metaDenominador;
+	
+	private GenericDTO aprovador; 
 
 	public MetasDTO() {}
 	
@@ -62,6 +69,18 @@ public class MetasDTO {
 		
 		if (model.getPrazo() != null) {
 			this.prazo = model.getPrazo().getDescricao();
+		}
+		
+		if (model.getMetaNumerador() != null) {
+			this.metaNumerador = new GenericDTO(model.getMetaNumerador());
+		}
+		
+		if (model.getMetaDenominador() != null) {
+			this.metaDenominador = new GenericDTO(model.getMetaDenominador());
+		}
+		
+		if (model.getAprovador() != null) {
+			this.aprovador = new GenericDTO(model.getAprovador());
 		}
 	}
 	
@@ -87,6 +106,18 @@ public class MetasDTO {
 		
 		if (StringUtils.isNotBlank(this.prazo)) {
 			model.setPrazo(new TempoModel(PLRUtils.getSkyTempoFromStringDate(this.prazo)));
+		}
+		
+		if (this.metaNumerador != null) {
+			model.setMetaNumerador(new MetasModel(this.metaNumerador.getId()));
+		}
+		
+		if (this.metaDenominador != null) {
+			model.setMetaDenominador(new MetasModel(this.metaDenominador.getId()));
+		}
+		
+		if (this.aprovador != null) {
+			model.setAprovador(new ColaboradorModel(this.aprovador.getMatricula()));
 		}
 		
 		model.setInclusao(LocalDateTime.now());
@@ -191,5 +222,29 @@ public class MetasDTO {
 
 	public void setNewMeta(boolean isNewMeta) {
 		this.isNewMeta = isNewMeta;
+	}
+
+	public GenericDTO getMetaNumerador() {
+		return metaNumerador;
+	}
+
+	public void setMetaNumerador(GenericDTO metaNumerador) {
+		this.metaNumerador = metaNumerador;
+	}
+
+	public GenericDTO getMetaDenominador() {
+		return metaDenominador;
+	}
+
+	public void setMetaDenominador(GenericDTO metaDenominador) {
+		this.metaDenominador = metaDenominador;
+	}
+
+	public GenericDTO getAprovador() {
+		return aprovador;
+	}
+
+	public void setAprovador(GenericDTO aprovador) {
+		this.aprovador = aprovador;
 	}
 }

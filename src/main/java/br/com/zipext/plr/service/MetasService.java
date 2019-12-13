@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.enums.EnumQuantQual;
 import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
@@ -37,6 +38,12 @@ public class MetasService {
 			FormulaModel formula, FrequenciaMedicaoModel frequenciaMedicao) {
 		return 
 				this.repository.findByFilter(model, meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<MetasModel> findQualitativas() {
+		return
+				this.repository.findQuantitativas(EnumQuantQual.QUANTITATIVA.getCodigo().toString());
 	}
 	
 	@Transactional(readOnly = false)

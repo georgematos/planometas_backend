@@ -26,22 +26,22 @@ public class MetasModel {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cadMetasSeq")
 	@SequenceGenerator(schema = "METAS", name = "cadMetasSeq", sequenceName = "CAD_META_SEQ",  allocationSize = 1)
 	@Column(name = "CD_META")
-	public Long id;
+	private Long id;
 
 	@Column(name = "DS_META")
-	public String descricao;
+	private String descricao;
 	
 	@Column(name = "DS_OBSERVACAO")
-	public String observacao;
+	private String observacao;
 	
 	@Column(name = "FL_ATIVO")
-	public String situacao;
+	private String situacao;
 	
 	@Column(name = "FL_QUANTI_QUALI")
-	public String isQuantitativa;
+	private String isQuantitativa;
 	
 	@Column(name = "VAL_META")
-	public BigDecimal valor;
+	private BigDecimal valor;
 	
 	@Column(name = "DT_INC")
     @Convert(converter = LocalDateTimeConverter.class)
@@ -49,26 +49,38 @@ public class MetasModel {
     
     @Column(name = "CD_LOGIN_INC")
     private String responsavelInclusao;
+    
+    @ManyToOne
+    @JoinColumn(name = "CD_APROVADOR")
+    private ColaboradorModel aprovador;
+    
+    @ManyToOne
+    @JoinColumn(name = "CD_META_NUMERADOR")
+    private MetasModel metaNumerador;
+    
+    @ManyToOne
+    @JoinColumn(name = "CD_META_DENOMINADOR")
+    private MetasModel metaDenominador;
 
 	@ManyToOne
 	@JoinColumn(name = "SKY_PRAZO")
-	public TempoModel prazo;
+	private TempoModel prazo;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_FORMULA")
-	public FormulaModel formula;
+	private FormulaModel formula;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_FREQ_MEDICAO")
-	public FrequenciaMedicaoModel frequenciaMedicao;
+	private FrequenciaMedicaoModel frequenciaMedicao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_TIPO_MEDICAO")
-	public TipoMedicaoModel tipoMedicao;
+	private TipoMedicaoModel tipoMedicao;
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_TIPO_META")
-	public TipoMetaModel tipoMeta;
+	private TipoMetaModel tipoMeta;
 	
 	@OneToMany(mappedBy = "pk.metas")
 	private List<MetasPeriodoModel> metasPeriodo;
@@ -189,6 +201,30 @@ public class MetasModel {
 
 	public void setMetasPeriodo(List<MetasPeriodoModel> metasPeriodo) {
 		this.metasPeriodo = metasPeriodo;
+	}
+	
+	public ColaboradorModel getAprovador() {
+		return aprovador;
+	}
+
+	public void setAprovador(ColaboradorModel aprovador) {
+		this.aprovador = aprovador;
+	}
+
+	public MetasModel getMetaNumerador() {
+		return metaNumerador;
+	}
+
+	public void setMetaNumerador(MetasModel metaNumerador) {
+		this.metaNumerador = metaNumerador;
+	}
+
+	public MetasModel getMetaDenominador() {
+		return metaDenominador;
+	}
+
+	public void setMetaDenominador(MetasModel metaDenominador) {
+		this.metaDenominador = metaDenominador;
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.MetasPeriodoDTO;
 import br.com.zipext.plr.model.MetasModel;
@@ -27,10 +28,11 @@ public class MetasPeriodoController {
 	@Autowired
 	private MetasPeriodoService service;
 
-	@GetMapping
-	public ResponseEntity<List<MetasPeriodoDTO>> findAll() {
+	@GetMapping("/{periodoplr}")
+	public ResponseEntity<List<MetasPeriodoDTO>> findAllForPeriodo(@PathVariable("periodoplr") Long periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
 		return new ResponseEntity<>
-			(this.service.findAll().stream().map(MetasPeriodoDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+			(this.service.findMetasQuantitativasByPeriodoAndSituacao(periodoPLR, null, page)
+					.stream().map(MetasPeriodoDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
 	@PostMapping

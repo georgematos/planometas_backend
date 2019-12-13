@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import br.com.zipext.plr.enums.EnumQuantQual;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -44,4 +45,8 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 				@Param("tipoMeta") TipoMetaModel tipoMeta, 
 				@Param("formula") FormulaModel formula, 
 				@Param("frequenciaMedicao") FrequenciaMedicaoModel frequenciaMedicao);
+	
+	@Query("select model from MetasModel model "
+		  + "where model.isQuantitativa = :isQuantitativa")
+	public List<MetasModel> findQuantitativas(@Param("isQuantitativa") String isQuantitativa);
 }

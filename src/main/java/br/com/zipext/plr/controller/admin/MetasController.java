@@ -41,9 +41,15 @@ public class MetasController {
 				this.service.findAllAtivasByOrderByDescricaoAsc().stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
+	@GetMapping("/quantitativas")
+	public ResponseEntity<List<MetasDTO>> findMetasQuantitativas() {
+		return 
+				new ResponseEntity<>(this.service.findQualitativas().stream().map(m -> new MetasDTO(m)).collect(Collectors.toList()), HttpStatus.OK);
+	}
+	
 	@GetMapping("/quantitativas/{periodoPLR}")
-	public ResponseEntity<List<MetasDTO>> findMetasQuantitativasByPeriodo(@PathVariable("periodoPLR") String periodoPLR) {
-		List<MetasDTO> dtos = this.metasPeriodoService.findMetasQuantitativasByPeriodo(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR))
+	public ResponseEntity<List<MetasDTO>> findMetasQuantitativasByPeriodo(@PathVariable("periodoPLR") String periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
+		List<MetasDTO> dtos = this.metasPeriodoService.findMetasQuantitativasByPeriodo(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR), page)
 				.stream()
 				.map(mp -> new MetasDTO(mp.getPk().getMetas()))
 				.collect(Collectors.toList());

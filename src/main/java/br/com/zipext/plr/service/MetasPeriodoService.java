@@ -3,6 +3,7 @@ package br.com.zipext.plr.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +38,22 @@ public class MetasPeriodoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<MetasPeriodoModel> findMetasQuantitativasByPeriodo(Long periodoPLR) {
+	public List<MetasPeriodoModel> findMetasQuantitativasByPeriodo(Long periodoPLR, Integer page) {
+		Integer pageSize = page == null ? 2000 : page;
 		return
 				this.repository.findMetasQuantitativasByPeriodoAndSituacao(
 						EnumQuantQual.QUANTITATIVA.getCodigo(), 
 						periodoPLR, 
-						EnumSituacao.ATIVO.getCodigo().toString());
+						EnumSituacao.ATIVO.getCodigo().toString(), PageRequest.of(0, pageSize));
+	}
+	
+	@Transactional(readOnly = true)
+	public List<MetasPeriodoModel> findMetasQuantitativasByPeriodoAndSituacao(Long periodoPLR, String situacao, Integer page) {
+		Integer pageSize = page == null ? 2000 : page;
+		return
+				this.repository.findMetasQuantitativasByPeriodoAndSituacao(
+						EnumQuantQual.QUANTITATIVA.getCodigo(), 
+						periodoPLR, situacao, PageRequest.of(0, pageSize));
 	}
 	
 	@Transactional(readOnly = false)
