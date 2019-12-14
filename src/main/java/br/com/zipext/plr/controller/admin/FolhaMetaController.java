@@ -75,7 +75,12 @@ public class FolhaMetaController {
 	
 	@GetMapping("/responsavel/{matricula}/periodo/{periodoPLR}")
 	public ResponseEntity<List<FolhaMetaDTO>> findByResponsavel(@PathVariable("matricula") String matricula, @PathVariable("periodoPLR") Long periodoPLR) {
-		List<FolhaMetaDTO> dtos = this.service.findByResponsavelAndVigencia(new ColaboradorModel(matricula), 
+		PerfilUsuarioModel perfilUsuario = this.perfilUsuarioService.findByUsuario(new UsuarioModel(matricula));
+		ColaboradorModel filtroColaborador = new ColaboradorModel(matricula); 
+		if (perfilUsuario.getPk().getPerfil().getId().equals(EnumPerfil.ADMIN.getId())) {
+			filtroColaborador = null;
+		}
+		List<FolhaMetaDTO> dtos = this.service.findByResponsavelAndVigencia(filtroColaborador, 
 				PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()), 
 				PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
 					.stream()
