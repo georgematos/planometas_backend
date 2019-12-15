@@ -42,9 +42,12 @@ public class FolhaMetaMensalController {
 		return new ResponseEntity<List<FolhaMetaMensalDTO>>(dtos, HttpStatus.OK);
 	}
 	
-	@PostMapping
-	public ResponseEntity<List<FolhaMetaMensalDTO>> save(@RequestBody List<FolhaMetaMensalDTO> dtos) {
-		List<FolhaMetaMensalModel> models = this.service.saveAll(dtos.stream().map(dto -> dto.obterModel()).collect(Collectors.toList()));
+	@PostMapping("/{idMeta}")
+	public ResponseEntity<List<FolhaMetaMensalDTO>> save(@RequestBody List<FolhaMetaMensalDTO> dtos, @PathVariable("idMeta") Long idMeta) {
+		List<FolhaMetaMensalModel> modelsToSave = dtos.stream().map(dto -> dto.obterModel()).collect(Collectors.toList());
+		this.service.deleteByMeta(new MetasModel(idMeta));
+		
+		List<FolhaMetaMensalModel> models = this.service.saveAll(modelsToSave);
 		List<FolhaMetaMensalDTO> results= new ArrayList<>();
 		if (models != null && !models.isEmpty()) {
 			models.forEach(m -> results.add(new FolhaMetaMensalDTO(m)));

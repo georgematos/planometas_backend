@@ -3,6 +3,7 @@ package br.com.zipext.plr.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,23 @@ public class FolhaMetaMensalService {
 	@Autowired
 	private FolhaMetaMensalRepository repository;
 	
+	@Modifying
+	@Transactional(readOnly = false)
+	public void deleteAll(List<FolhaMetaMensalModel> models) {
+		this.repository.deleteAll(models);
+	}
+	
+	@Transactional(readOnly = false)
+	public void deleteByMeta(MetasModel meta) {
+		this.repository.deleteByMeta(meta);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<FolhaMetaMensalModel> findAll() {
+		return
+				this.repository.findAll();
+	}
+	
 	@Transactional(readOnly = true)
 	public List<FolhaMetaMensalModel> findByMetaAndAno(MetasModel meta, Integer ano) {
 		return
@@ -30,12 +48,6 @@ public class FolhaMetaMensalService {
 		
 		return
 				models;
-	}
-	
-	@Transactional(readOnly = true)
-	public List<FolhaMetaMensalModel> findAll() {
-		return
-				this.repository.findAll();
 	}
 	
 	@Transactional(readOnly = false)
