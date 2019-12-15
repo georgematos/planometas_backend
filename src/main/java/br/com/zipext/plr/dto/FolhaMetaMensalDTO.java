@@ -49,7 +49,8 @@ public class FolhaMetaMensalDTO {
 	public FolhaMetaMensalDTO() {}
 	
 	public FolhaMetaMensalDTO(FolhaMetaMensalModel model) {
-		
+		this.id = model.getId();
+		this.idMeta = model.getMeta().getId();
 	}
 	
 	public FolhaMetaMensalDTO(String tipoMeta, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {

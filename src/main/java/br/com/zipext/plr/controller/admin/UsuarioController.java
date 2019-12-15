@@ -31,7 +31,6 @@ public class UsuarioController {
 			@PathVariable("periodoPLR") Integer periodoPLR) throws Exception {
 		UsuarioModel usuario = this.service.processLogin(dto.getModel());
 		if (usuario == null) {
-			//return new ResponseEntity<>("Login inválido! ", HttpStatus.NOT_FOUND);
 			throw new Exception("Usuário não encontrado!");
 		} 
 		

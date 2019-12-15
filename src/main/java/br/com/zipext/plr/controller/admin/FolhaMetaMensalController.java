@@ -47,8 +47,7 @@ public class FolhaMetaMensalController {
 		List<FolhaMetaMensalModel> models = this.service.saveAll(dtos.stream().map(dto -> dto.obterModel()).collect(Collectors.toList()));
 		List<FolhaMetaMensalDTO> results= new ArrayList<>();
 		if (models != null && !models.isEmpty()) {
-			results.add(new FolhaMetaMensalDTO("META", null, models, false));
-			results.add(new FolhaMetaMensalDTO("REAL", null, models, false));
+			models.forEach(m -> results.add(new FolhaMetaMensalDTO(m)));
 		}
 		
 		return new ResponseEntity<>(results, HttpStatus.OK);

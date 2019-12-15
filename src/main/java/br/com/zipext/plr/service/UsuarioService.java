@@ -30,19 +30,16 @@ public class UsuarioService {
 		UsuarioModel result = this.findByLogin(model.getLogin());
 		ColaboradorModel colaborador = this.colaboradorService.findByMatricula(model.getLogin());
 		if (result == null) {
-			return null;
-			/*if (colaborador ==  null) {
+			if (colaborador ==  null) {
 				return null;
 			} else {
-				
-				
 				UsuarioDTO dto = new UsuarioDTO(colaborador);
 				UsuarioModel newUser = dto.getModel();
 				newUser.setColaborador(colaborador);
 				
 				return	
 						this.save(newUser);
-			}*/
+			}
 		}  else {
 			return
 					result;
