@@ -31,7 +31,7 @@ public class MetasPeriodoController {
 	@GetMapping("/{periodoplr}")
 	public ResponseEntity<List<MetasPeriodoDTO>> findAllForPeriodo(@PathVariable("periodoplr") Long periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
 		return new ResponseEntity<>
-			(this.service.findMetasQuantitativasByPeriodoAndSituacao(periodoPLR, null, page)
+			(this.service.findMetasByPeriodoAndSituacao(periodoPLR, null, page)
 					.stream().map(MetasPeriodoDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
@@ -39,7 +39,7 @@ public class MetasPeriodoController {
 	public ResponseEntity<MetasPeriodoDTO> save(@RequestBody MetasPeriodoDTO dto) {
 		MetasPeriodoModel model = this.service.save(dto.obterModel());
 		return
-				new ResponseEntity<MetasPeriodoDTO>(new MetasPeriodoDTO(model), HttpStatus.OK);
+				new ResponseEntity<>(new MetasPeriodoDTO(model), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/meta/{idMeta}/periodoplr/{periodoPLR}")

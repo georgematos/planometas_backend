@@ -22,7 +22,20 @@ public interface MetasPeriodoRepository extends JpaRepository<MetasPeriodoModel,
 	public List<MetasPeriodoModel> findMetasQuantitativasByPeriodoAndSituacao(
 			@Param("isQuantitativa") String isQuantitativa, @Param("periodoPLR") Long periodoPLR,
 			@Param("situacao") String situacao, Pageable page);
+	
+	@Query("select model from MetasPeriodoModel model "
+		 + "where model.pk.tempo.id = :periodoPLR "
+		 + "and (:situacao is null or model.situacao = :situacao) "
+		 + "order by model.pk.metas.descricao asc")
+	public List<MetasPeriodoModel> findMetasByPeriodoAndSituacao(@Param("periodoPLR") Long periodoPLR, 
+			@Param("situacao") String situacao,
+			Pageable page);
 
+	@Query("select model from MetasPeriodoModel model "
+		 + "where model.pk.tempo.id = :periodoPLR "
+		 + "order by model.pk.metas.descricao asc")
+	public List<MetasPeriodoModel> findAllByPeriodo(@Param("periodoPLR") Long periodoPLR);
+	
 	@Query("select count(model) from MetasPeriodoModel model "
 		 + "join fetch model.pk pk "
 		 + "where pk.tempo.ano = :periodoPLR")

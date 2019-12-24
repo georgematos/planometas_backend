@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.MetasDTO;
+import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -41,18 +42,33 @@ public class MetasController {
 				this.service.findAllAtivasByOrderByDescricaoAsc().stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
-	@GetMapping("/quantitativas")
-	public ResponseEntity<List<MetasDTO>> findMetasQuantitativas() {
+	@GetMapping("/{periodoPLR}")
+	public ResponseEntity<List<MetasDTO>> findAllByPeriodo(@PathVariable("periodoPLR") String periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
+		List<MetasDTO> dtos = this.metasPeriodoService.findAllByPeriodo(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR), page)
+				.stream()
+				.map(mp -> new MetasDTO(mp.getPk().getMetas()))
+				.collect(Collectors.toList());
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
+	}
+	
+	@GetMapping("/qualitativas")
+	public ResponseEntity<List<MetasDTO>> findMetasQualitativas() {
 		return 
 				new ResponseEntity<>(this.service.findQualitativas().stream().map(m -> new MetasDTO(m)).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
+	@GetMapping("/quantitativas")
+	public ResponseEntity<List<MetasDTO>> findMetasQuantitativas() {
+		return 
+				new ResponseEntity<>(this.service.findQuantitativas().stream().map(m -> new MetasDTO(m)).collect(Collectors.toList()), HttpStatus.OK);
+	}
+	
 	@GetMapping("/quantitativas/{periodoPLR}")
-	public ResponseEntity<List<MetasDTO>> findMetasQuantitativasByPeriodo(@PathVariable("periodoPLR") String periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
-		List<MetasDTO> dtos = this.metasPeriodoService.findMetasQuantitativasByPeriodo(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR), page)
-				.stream()
-				.map(mp -> new MetasDTO(mp.getPk().getMetas()))
-				.collect(Collectors.toList());
+	public ResponseEntity<List<MetasDTO>> findMetasQuantitativasByPeriodo(@PathVariable("periodoPLR") String periodoPLR,
+			@RequestParam(name = "page", required = false) Integer page) {
+		List<MetasDTO> dtos = this.metasPeriodoService.findMetasQuantitativasByPeriodoAndSituacao(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR),
+						EnumSituacao.ATIVO.getCodigo().toString(), page)
+				.stream().map(mp -> new MetasDTO(mp.getPk().getMetas())).collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	

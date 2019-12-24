@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.enums.EnumQuantQual;
-import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.MetasPeriodoModel;
 import br.com.zipext.plr.repository.MetasPeriodoRepository;
 
@@ -38,15 +37,20 @@ public class MetasPeriodoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<MetasPeriodoModel> findMetasQuantitativasByPeriodo(Long periodoPLR, Integer page) {
-		Integer pageSize = page == null ? 2000 : page;
+	public List<MetasPeriodoModel> findAllByPeriodo(Long periodoPLR, Integer page) {
 		return
-				this.repository.findMetasQuantitativasByPeriodoAndSituacao(
-						EnumQuantQual.QUANTITATIVA.getCodigo(), 
-						periodoPLR, 
-						EnumSituacao.ATIVO.getCodigo().toString(), PageRequest.of(0, pageSize));
+				this.repository.findAllByPeriodo(periodoPLR);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<MetasPeriodoModel> findMetasByPeriodoAndSituacao(Long periodoPLR, String situacao, Integer page) {
+		Integer pageSize = page == null ? 2000 : page;
+		return
+				this.repository.findMetasByPeriodoAndSituacao(
+						periodoPLR, situacao, PageRequest.of(0, pageSize));
+	}
+	
+
 	@Transactional(readOnly = true)
 	public List<MetasPeriodoModel> findMetasQuantitativasByPeriodoAndSituacao(Long periodoPLR, String situacao, Integer page) {
 		Integer pageSize = page == null ? 2000 : page;

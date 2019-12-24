@@ -11,12 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.FolhaMetaDTO;
 import br.com.zipext.plr.enums.EnumPerfil;
+import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
 import br.com.zipext.plr.model.PerfilUsuarioModel;
@@ -122,5 +124,12 @@ public class FolhaMetaController {
 		model.setFolhaMetaItems(this.folhaMetaItemService.saveAll(dto.obterFolhaMetaItems(model)));
 
 		return new ResponseEntity<FolhaMetaDTO>(new FolhaMetaDTO(model), HttpStatus.OK);
+	}
+	
+	@PutMapping("/aprovacao/{id}")
+	public ResponseEntity<Void> aprovarFolhaMeta(@PathVariable Long id) {
+		this.service.updateSituacaoById(id, EnumSituacao.ATIVO.getCodigo().toString());
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

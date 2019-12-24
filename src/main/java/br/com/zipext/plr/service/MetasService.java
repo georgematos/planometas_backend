@@ -43,7 +43,13 @@ public class MetasService {
 	@Transactional(readOnly = true)
 	public List<MetasModel> findQualitativas() {
 		return
-				this.repository.findQuantitativas(EnumQuantQual.QUANTITATIVA.getCodigo().toString());
+				this.repository.findByQualificadorMeta(EnumQuantQual.QUALITATIVA.getCodigo().toString());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<MetasModel> findQuantitativas() {
+		return
+				this.repository.findByQualificadorMeta(EnumQuantQual.QUANTITATIVA.getCodigo().toString());
 	}
 	
 	@Transactional(readOnly = false)
