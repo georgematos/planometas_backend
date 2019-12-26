@@ -72,8 +72,9 @@ public class MetasController {
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
-	@GetMapping("/filter")
+	@GetMapping("/filter/{periodoPLR}")
 	public ResponseEntity<List<MetasDTO>> findByFilter(
+			@PathVariable("periodoPLR") Integer periodoPLR,
 			@RequestParam(name = "idMeta", required = false) Long idMeta,
 			@RequestParam(name = "meta", required = false) String meta,
 			@RequestParam(name = "situacao", required = false) String situacao,
@@ -88,7 +89,7 @@ public class MetasController {
 				tipoMeta != null ? new TipoMetaModel(tipoMeta) : null,
 				formula != null ? new FormulaModel(formula) : null, 
 				frequenciaMedicao != null ? new FrequenciaMedicaoModel(frequenciaMedicao) : null);
-		return new ResponseEntity<>(models.stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+		return new ResponseEntity<>(models.stream().map(model -> new MetasDTO(model, periodoPLR)).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
 	@PostMapping

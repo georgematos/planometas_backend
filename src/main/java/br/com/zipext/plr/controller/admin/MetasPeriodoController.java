@@ -19,6 +19,8 @@ import br.com.zipext.plr.dto.MetasPeriodoDTO;
 import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.model.MetasPeriodoModel;
 import br.com.zipext.plr.model.TempoModel;
+import br.com.zipext.plr.service.FolhaMetaItemService;
+import br.com.zipext.plr.service.FolhaMetaMensalService;
 import br.com.zipext.plr.service.MetasPeriodoService;
 
 @Controller
@@ -27,7 +29,13 @@ public class MetasPeriodoController {
 
 	@Autowired
 	private MetasPeriodoService service;
+	
+	@Autowired
+	private FolhaMetaItemService folhaMetaItemService;
 
+	@Autowired
+	private FolhaMetaMensalService folhaMetaMensalService;
+	
 	@GetMapping("/{periodoplr}")
 	public ResponseEntity<List<MetasPeriodoDTO>> findAllForPeriodo(@PathVariable("periodoplr") Long periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
 		return new ResponseEntity<>
@@ -43,8 +51,20 @@ public class MetasPeriodoController {
 	}
 	
 	@DeleteMapping("/meta/{idMeta}/periodoplr/{periodoPLR}")
-	public ResponseEntity<Void> delete(@PathVariable("idMeta") Long idMeta, @PathVariable("periodoPLR") Long periodoPLR) {
+	public ResponseEntity<MetasPeriodoDTO> delete(@PathVariable("idMeta") Long idMeta, @PathVariable("periodoPLR") Long periodoPLR) throws Exception {
+		MetasModel meta = new MetasModel(idMeta);
+		Long numItems = this.folhaMetaItemService.countByMeta(meta);
+		if (numItems > 0) {
+			throw new Exception("Existem Folhas de Metas vinculadas ao Indicador em questão. O Indicador não pode ser desvinculado ao período.");
+		}
+		
+		Long numMensais = this.folhaMetaMensalService.countByMeta(meta);
+		if (numMensais > 0) {
+			throw new Exception("Existem Registros Mensais cadastrados para o Indicador em questão. O Indicador não pode ser desvinculado ao período.");
+		}
+		
 		this.service.delete(new MetasPeriodoModel(new MetasModel(idMeta), new TempoModel(periodoPLR)));
-		return new ResponseEntity<>(HttpStatus.OK);
+		
+		return new ResponseEntity<>(new MetasPeriodoDTO(), HttpStatus.OK);
 	}
 }

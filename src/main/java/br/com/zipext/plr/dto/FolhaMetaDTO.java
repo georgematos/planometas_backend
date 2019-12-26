@@ -1,6 +1,7 @@
 package br.com.zipext.plr.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,8 @@ public class FolhaMetaDTO {
 
 	private String fimVigencia;
 	
+	private String dataCadastro;
+	
 	private ColaboradorDTO colaborador;
 	
 	private ColaboradorDTO responsavel;
@@ -36,6 +39,7 @@ public class FolhaMetaDTO {
 		BeanUtils.copyProperties(model, this);
 		
 		this.colaborador = new ColaboradorDTO(model.getColaborador());
+		this.dataCadastro = model.getInclusao() != null ? model.getInclusao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
 		this.responsavel = new ColaboradorDTO(model.getResponsavel());	
 		this.inicioVigencia = model.getInicioVigencia().getDescricao();
 		this.fimVigencia = model.getFimVigencia().getDescricao();
@@ -143,5 +147,13 @@ public class FolhaMetaDTO {
 
 	public void setFolhasMetaItem(List<FolhaMetaItemDTO> folhasMetaItem) {
 		this.folhasMetaItem = folhasMetaItem;
+	}
+
+	public String getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(String dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 }

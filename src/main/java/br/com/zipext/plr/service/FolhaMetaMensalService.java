@@ -18,6 +18,11 @@ public class FolhaMetaMensalService {
 	@Autowired
 	private FolhaMetaMensalRepository repository;
 	
+	@Transactional(readOnly = true)
+	public Long countByMeta(MetasModel meta) {
+		return this.repository.countByMeta(meta);
+	}
+	
 	@Modifying
 	@Transactional(readOnly = false)
 	public void deleteAll(List<FolhaMetaMensalModel> models) {

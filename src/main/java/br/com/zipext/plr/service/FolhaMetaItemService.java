@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
+import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.repository.FolhaMetaItemRepository;
 
 @Service
@@ -16,6 +17,12 @@ public class FolhaMetaItemService {
 
 	@Autowired
 	private FolhaMetaItemRepository repository;
+	
+	@Transactional(readOnly = true)
+	public Long countByMeta(MetasModel meta) {
+		return
+				this.repository.countByMeta(meta);
+	}
 	
 	@Modifying
 	@Transactional(readOnly = false)

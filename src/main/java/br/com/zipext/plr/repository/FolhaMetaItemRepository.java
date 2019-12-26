@@ -10,10 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
+import br.com.zipext.plr.model.MetasModel;
 
 @Repository
 public interface FolhaMetaItemRepository extends JpaRepository<FolhaMetaItemModel, Long> {
 
+	public Long countByMeta(MetasModel meta);
+	
 	@Modifying
 	@Query("delete from FolhaMetaItemModel model "
 		+  "where model.folhaMeta.id = :idFolhaMeta")

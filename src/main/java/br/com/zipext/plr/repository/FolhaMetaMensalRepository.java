@@ -14,6 +14,8 @@ import br.com.zipext.plr.model.MetasModel;
 @Repository
 public interface FolhaMetaMensalRepository extends JpaRepository<FolhaMetaMensalModel, Long> {
 	
+	public Long countByMeta(MetasModel meta);
+	
 	@Modifying
 	public void deleteByMeta(MetasModel meta);
 

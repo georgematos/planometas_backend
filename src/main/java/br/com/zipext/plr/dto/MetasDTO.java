@@ -2,6 +2,7 @@ package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -10,6 +11,7 @@ import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.MetasPeriodoModel;
 import br.com.zipext.plr.model.TempoModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.model.TipoMetaModel;
@@ -18,6 +20,8 @@ import br.com.zipext.plr.utils.PLRUtils;
 public class MetasDTO {
 	
 	private Long id;
+	
+	private boolean isAtivaForPeriodo;
 	
 	private boolean isNewMeta;
 
@@ -48,6 +52,14 @@ public class MetasDTO {
 	private GenericDTO aprovador; 
 
 	public MetasDTO() {}
+	
+	public MetasDTO(MetasModel model, Integer periodoPLR) {
+		this(model);
+		List<MetasPeriodoModel> metasPeriodo = model.getMetasPeriodo();
+		if (metasPeriodo != null && !metasPeriodo.isEmpty()) {
+			isAtivaForPeriodo = metasPeriodo.stream().filter(mp -> mp.getPk().getTempo().getAno().equals(periodoPLR)).findFirst().isPresent();
+		}
+	}
 	
 	public MetasDTO(MetasModel model) {
 		BeanUtils.copyProperties(model, this);
@@ -125,7 +137,6 @@ public class MetasDTO {
 		
 		return
 				model;
-		
 	}
 
 	public Long getId() {
@@ -246,5 +257,13 @@ public class MetasDTO {
 
 	public void setAprovador(GenericDTO aprovador) {
 		this.aprovador = aprovador;
+	}
+
+	public boolean isAtivaForPeriodo() {
+		return isAtivaForPeriodo;
+	}
+
+	public void setAtivaForPeriodo(boolean isAtivaForPeriodo) {
+		this.isAtivaForPeriodo = isAtivaForPeriodo;
 	}
 }
