@@ -1,10 +1,13 @@
 package br.com.zipext.plr.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -23,11 +26,14 @@ public class UsuarioModel {
 	private String nome;
 	
 	@Column(name = "IN_PRIMEIRO_ACESSO")
-	private Character inPrimeiroAcesso;
+	private String inPrimeiroAcesso;
 	
-	@ManyToOne
-	@JoinColumn(name = "CD_MATRICULA")
+	@OneToOne
+    @PrimaryKeyJoinColumn(name = "CD_LOGIN", referencedColumnName = "CD_MATRICULA")
 	private ColaboradorModel colaborador;
+	
+	@OneToMany(mappedBy = "pk.usuario")
+	private List<PerfilUsuarioModel> perfisUsuario;
 	
 	@Transient
 	private Character resetPassword;
@@ -70,11 +76,11 @@ public class UsuarioModel {
 		this.resetPassword = resetPassword;
 	}
 
-	public Character getInPrimeiroAcesso() {
+	public String getInPrimeiroAcesso() {
 		return inPrimeiroAcesso;
 	}
 
-	public void setInPrimeiroAcesso(Character inPrimeiroAcesso) {
+	public void setInPrimeiroAcesso(String inPrimeiroAcesso) {
 		this.inPrimeiroAcesso = inPrimeiroAcesso;
 	}
 
@@ -84,6 +90,14 @@ public class UsuarioModel {
 
 	public void setHash(String hash) {
 		this.hash = hash;
+	}
+	
+	public List<PerfilUsuarioModel> getPerfisUsuario() {
+		return perfisUsuario;
+	}
+
+	public void setPerfisUsuario(List<PerfilUsuarioModel> perfisUsuario) {
+		this.perfisUsuario = perfisUsuario;
 	}
 
 	@Override

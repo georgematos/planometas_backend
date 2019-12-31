@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.zipext.plr.converter.LocalDateTimeConverter;
@@ -44,6 +45,10 @@ public class ColaboradorModel {
     @Column(name = "CD_LOGIN_INC")
     private String responsavelInclusao;
 	
+    @OneToOne
+	@JoinColumn(name = "CD_MATRICULA")
+    private UsuarioModel usuarioSistema;
+    
 	@ManyToOne
 	@JoinColumn(name = "CD_DIRETORIA")
 	private DiretoriaModel diretoria;
@@ -160,6 +165,14 @@ public class ColaboradorModel {
 
 	public void setResponsavelInclusao(String responsavelInclusao) {
 		this.responsavelInclusao = responsavelInclusao;
+	}
+
+	public UsuarioModel getUsuarioSistema() {
+		return usuarioSistema;
+	}
+
+	public void setUsuarioSistema(UsuarioModel usuarioSistema) {
+		this.usuarioSistema = usuarioSistema;
 	}
 
 	@Override

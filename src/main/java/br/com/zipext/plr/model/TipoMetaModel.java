@@ -68,7 +68,7 @@ public class TipoMetaModel {
 	}
 	
 	public boolean isMetaRestrita() {
-		return this.isMetaRestrita != EnumSimNao.SIM.getCodigoToString();
+		return this.isMetaRestrita != EnumSimNao.SIM.getValue();
 	}
 
 	@Override

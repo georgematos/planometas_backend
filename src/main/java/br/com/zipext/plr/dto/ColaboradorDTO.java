@@ -37,6 +37,8 @@ public class ColaboradorDTO {
 	
 	private GenericDTO filial;
 	
+	private UsuarioDTO usuario;
+	
 	public ColaboradorDTO() {}
 	
 	public ColaboradorDTO(ColaboradorModel model) {
@@ -46,8 +48,13 @@ public class ColaboradorDTO {
 		this.time = new TimeDTO(model.getTime());
 		this.filial = new GenericDTO(model.getFilial());
 		
+		if (model.getUsuarioSistema() != null) {
+			this.usuario = new UsuarioDTO(model.getUsuarioSistema());
+		}
+		
 		this.dataAdmissao = model.getDataAdmissao() != null ? model.getDataAdmissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
 		this.dataDemissao = model.getDataDemissao() != null ? model.getDataDemissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+		
 	}
 	
 	public ColaboradorModel obterModel() {
@@ -170,6 +177,14 @@ public class ColaboradorDTO {
 
 	public void setNewColaborador(boolean isNewColaborador) {
 		this.isNewColaborador = isNewColaborador;
+	}
+	
+	public UsuarioDTO getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(UsuarioDTO usuario) {
+		this.usuario = usuario;
 	}
 
 	public DiretoriaDTO getDiretoriaOrElse() {

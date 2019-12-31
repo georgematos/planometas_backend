@@ -18,12 +18,28 @@ public class PerfilUsuarioModel {
 	private PerfilUsuarioPK pk;
 	
 	@Column(name = "IN_SITUACAO")
-	private Character situacao;
+	private String situacao;
 	
 	public PerfilUsuarioModel() {}
 	
 	public PerfilUsuarioModel(PerfilModel perfil, UsuarioModel usuario) {
 		this.pk = new PerfilUsuarioPK(perfil, usuario);
+	}
+	
+	public PerfilUsuarioPK getPk() {
+		return pk;
+	}
+
+	public void setPk(PerfilUsuarioPK pk) {
+		this.pk = pk;
+	}
+
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
 	}
 	
 	@Embeddable
@@ -61,21 +77,5 @@ public class PerfilUsuarioModel {
 		public void setUsuario(UsuarioModel usuario) {
 			this.usuario = usuario;
 		}
-	}
-
-	public PerfilUsuarioPK getPk() {
-		return pk;
-	}
-
-	public void setPk(PerfilUsuarioPK pk) {
-		this.pk = pk;
-	}
-
-	public Character getSituacao() {
-		return situacao;
-	}
-
-	public void setSituacao(Character situacao) {
-		this.situacao = situacao;
 	}
 }

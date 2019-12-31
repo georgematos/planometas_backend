@@ -37,7 +37,7 @@ public class EquivalenciaDTO {
 					item.setSequencia(sequence);
 					item.setPeso(me.getPeso());
 					item.setReadOnly(me.isReadOnly());
-					item.setTipoSugerida(EnumSimNao.SIM.getCodigoToString());
+					item.setTipoSugerida(EnumSimNao.SIM.getValue());
 					item.setIdTempo(me.getPk().getTempo().getId());
 					
 					this.metasEquivalentes.add(item);

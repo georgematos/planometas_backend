@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 public class GenericDTO {
 	
 	private Long id;
+	private String login;
 	private String matricula;
 	private String nome;
 	private String descricao;
@@ -56,6 +57,14 @@ public class GenericDTO {
 
 	public void setSituacao(Situacao situacao) {
 		this.situacao = situacao;
+	}
+	
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public static class Situacao {

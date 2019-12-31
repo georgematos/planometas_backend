@@ -28,7 +28,7 @@ public class PerfilModel {
 	private String nome;
 	
 	@Column(name = "IN_SITUACAO")
-	private Character situacao;
+	private String situacao;
 	
 	@Column(name = "DT_INC")
 	private LocalDateTime dataInclusao;
@@ -78,11 +78,11 @@ public class PerfilModel {
 		this.responsavel = responsavel;
 	}
 	
-	public Character getSituacao() {
+	public String getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(Character situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 

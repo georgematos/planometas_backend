@@ -74,7 +74,7 @@ public class FolhaMetaItemDTO {
 		model.setSequencia(this.sequencia);
 		model.setMeta(new MetasModel(this.meta.getId()));
 		model.setFolhaMeta(new FolhaMetaModel(this.folhaMeta.getId()));
-		model.setTipoSugerida(StringUtils.isNotBlank(this.tipoSugerida) ? this.tipoSugerida : EnumSimNao.NAO.getCodigoToString());
+		model.setTipoSugerida(StringUtils.isNotBlank(this.tipoSugerida) ? this.tipoSugerida : EnumSimNao.NAO.getValue());
 		model.setInclusao(LocalDateTime.now());
 		model.setResponsavelInclusao("SISTEMA");
 		

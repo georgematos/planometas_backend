@@ -20,7 +20,7 @@ public enum EnumSimNao {
 		return descricao;
 	}
 	
-	public String getCodigoToString() {
+	public String getValue() {
 		return
 				String.valueOf(codigo);
 	}

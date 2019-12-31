@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.com.zipext.plr.dto.ColaboradorDTO;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.service.ColaboradorService;
+import br.com.zipext.plr.service.PerfilUsuarioService;
 
 @Controller
 @RequestMapping("/colaboradores")
@@ -25,6 +26,9 @@ public class ColaboradorController {
 
 	@Autowired
 	private ColaboradorService service;
+	
+	@Autowired
+	private PerfilUsuarioService perfilUsuarioService;
 	
 	@GetMapping("/filter")
 	public ResponseEntity<List<ColaboradorDTO>> findByFilter(
@@ -55,6 +59,11 @@ public class ColaboradorController {
 		}
 		
 		ColaboradorModel resultModel = this.service.save(dto.obterModel());
+		
+		if (dto.isNewColaborador()) {
+				this.perfilUsuarioService.associaUsuarioGenerico(dto.getMatricula());
+		}
+		
 		return new ResponseEntity<>(new ColaboradorDTO(resultModel), HttpStatus.OK);
 	}
 }

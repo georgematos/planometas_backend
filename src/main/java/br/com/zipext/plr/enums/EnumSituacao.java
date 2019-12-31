@@ -25,6 +25,10 @@ public enum EnumSituacao {
 		return descricao;
 	}
 	
+	public String getValue() {
+		return codigo.toString();
+	}
+	
 	@JsonCreator
 	public static EnumSituacao forValue(String value) {
 		if (value == null) return NA;

@@ -1,9 +1,12 @@
 package br.com.zipext.plr.dto;
 
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 
 import br.com.zipext.plr.enums.EnumSimNao;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.PerfilUsuarioModel;
 import br.com.zipext.plr.model.UsuarioModel;
 import br.com.zipext.plr.utils.PLRUtils;
 
@@ -14,7 +17,8 @@ public class UsuarioDTO {
 	private String phrase;
 	private String nome;
 	private String matricula;
-	private Character inPrimeiroAcesso;
+	private String inPrimeiroAcesso;
+	private PerfilUsuarioDTO perfilUsuario;
 	
 	public UsuarioDTO() {}
 	
@@ -22,16 +26,25 @@ public class UsuarioDTO {
 		this.login = colaborador.getMatricula();
 		this.hash = colaborador.getMatricula();
 		this.nome = colaborador.getNome();
-		this.inPrimeiroAcesso = EnumSimNao.SIM.getCodigo();
+		this.inPrimeiroAcesso = EnumSimNao.SIM.getCodigo().toString();
 	}
 	
 	public UsuarioDTO(UsuarioModel usuario) {
 		this.login = usuario.getLogin();
 		this.nome = usuario.getNome();
-		this.inPrimeiroAcesso = usuario.getInPrimeiroAcesso();
+		this.inPrimeiroAcesso = usuario.getInPrimeiroAcesso().toString();
 		this.matricula = usuario.getColaborador().getMatricula();
 		this.hash = usuario.getHash();
 		this.phrase = PLRUtils.genPhrase(usuario.getColaborador().getNome(), Long.valueOf(usuario.getColaborador().getMatricula()));			
+		
+		//Atualmente, somente um perfil é associado ao Usuário. Para o futuro, mais que um serão permitidos. 
+		//Atualmente, o backend já pode lidar com essa condição.
+		if (usuario.getPerfisUsuario() != null) {
+			Optional<PerfilUsuarioModel> perfilUsuarioModel = usuario.getPerfisUsuario().stream().findFirst();
+			if (perfilUsuarioModel.isPresent()) {
+				this.perfilUsuario = new PerfilUsuarioDTO(perfilUsuarioModel.get());
+			}	
+		}
 	}
 	
 	public UsuarioDTO(String login, String nome) {
@@ -79,11 +92,11 @@ public class UsuarioDTO {
 		this.matricula = matricula;
 	}
 
-	public Character getInPrimeiroAcesso() {
+	public String getInPrimeiroAcesso() {
 		return inPrimeiroAcesso;
 	}
 
-	public void setInPrimeiroAcesso(Character inPrimeiroAcesso) {
+	public void setInPrimeiroAcesso(String inPrimeiroAcesso) {
 		this.inPrimeiroAcesso = inPrimeiroAcesso;
 	}
 	
@@ -93,6 +106,14 @@ public class UsuarioDTO {
 
 	public void setPhrase(String phrase) {
 		this.phrase = phrase;
+	}
+	
+	public PerfilUsuarioDTO getPerfilUsuario() {
+		return perfilUsuario;
+	}
+
+	public void setPerfilUsuario(PerfilUsuarioDTO perfilUsuario) {
+		this.perfilUsuario = perfilUsuario;
 	}
 
 	@Override
