@@ -1,12 +1,12 @@
 package br.com.zipext.plr.enums;
 
-public enum EnumXlsSheets {
+public enum EnumXLSSheets {
 	
-	METAS("FOLHA METAS");
+	FOLHA_METAS("Folha de Metas");
 
 	private String nome;
 	
-	private EnumXlsSheets(String nome) {
+	private EnumXLSSheets(String nome) {
 		this.nome = nome;
 	}
 

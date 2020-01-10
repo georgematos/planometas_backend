@@ -17,6 +17,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import br.com.zipext.plr.converter.LocalDateTimeConverter;
+import br.com.zipext.plr.enums.EnumSituacao;
+import br.com.zipext.plr.enums.EnumTipoMeta;
 
 @Entity
 @Table(schema = "METAS", name = "CAD_FOLHA_META")
@@ -134,7 +136,139 @@ public class FolhaMetaModel {
 	public void setResponsavelInclusao(String responsavelInclusao) {
 		this.responsavelInclusao = responsavelInclusao;
 	}
+	
+	/**
+	 * Export folha de metas  
+	 *
+	*/
+	
+	public String getAnoVigencia() {
+		return "PLR ".concat(this.inicioVigencia.getAno().toString());
+	}
+	
+	public String getSituacaoFolha() {
+		return EnumSituacao.forValue(this.situacao).getDescricao();
+	}
+	
+	public Long countMetasGatilho() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.GATILHO.getAbv().toString()))
+								  .count();
+	}
+	
+	public Double sumMetasGatilho() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.GATILHO.getAbv().toString()))
+								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
+								  .sum();
+	}
+	
+	public Long countMetasCorporativas() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.CORPORATIVAS.getAbv().toString()))
+								  .count();
+	}
+	
+	public Double sumMetasCorporativas() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.CORPORATIVAS.getAbv().toString()))
+								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
+								  .sum();
+	}
 
+	public Long countMetasTime() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.TIME.getAbv().toString()))
+								  .count();
+	}
+	
+	public Double sumMetasTime() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.TIME.getAbv().toString()))
+								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
+								  .sum();
+	}
+	
+	public Long countMetasQuantitativa() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.QUANTITATIVA.getAbv().toString()))
+								  .count();
+	}
+	
+	public Double sumMetasQuantitativa() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.QUANTITATIVA.getAbv().toString()))
+								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
+								  .sum();
+	}
+	
+	public Long countMetasProjetos() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.PROJETOS.getAbv().toString()))
+								  .count();
+	}
+	
+	public Double sumMetasProjetos() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.PROJETOS.getAbv().toString()))
+								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
+								  .sum();
+	}
+	
+	public Long countMetasAvaliacao() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.AVALIACAO.getAbv().toString()))
+								  .count();
+	}
+	
+	public Double sumMetasAvaliacao() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.AVALIACAO.getAbv().toString()))
+								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
+								  .sum();
+	}
+	
+	public Long countMetasExtras() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.EXTRAS.getAbv().toString()))
+								  .count();
+	}
+	
+	public Double sumMetasExtras() {
+		return this.folhaMetaItems.stream()
+								  .filter(item -> item.getMeta().getTipoMeta()
+										  						.getAbreviacao()
+										  						.equals(EnumTipoMeta.EXTRAS.getAbv().toString()))
+								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
+								  .sum();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -1,13 +1,17 @@
 package br.com.zipext.plr.controller.admin;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +27,7 @@ import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
 import br.com.zipext.plr.model.PerfilUsuarioModel;
 import br.com.zipext.plr.model.UsuarioModel;
+import br.com.zipext.plr.service.ColaboradorService;
 import br.com.zipext.plr.service.FolhaMetaItemService;
 import br.com.zipext.plr.service.FolhaMetaService;
 import br.com.zipext.plr.service.PerfilUsuarioService;
@@ -34,6 +39,9 @@ public class FolhaMetaController {
 
 	@Autowired
 	private FolhaMetaService service;
+	
+	@Autowired
+	private ColaboradorService colaboradorService;
 	
 	@Autowired
 	private FolhaMetaItemService folhaMetaItemService;
@@ -114,6 +122,18 @@ public class FolhaMetaController {
 		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
 	}
 	
+	@GetMapping("/export")
+	public ResponseEntity<InputStreamResource> exportFolha(@RequestParam("matricula") String matricula, @RequestParam Long idFolhaMeta) throws IOException {
+		ColaboradorModel model = this.colaboradorService.findByMatricula(matricula);
+
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = model.getMatricula() + "_" + model.getNome() + "_" + PLRUtils.today() + ".xlsx";
+		
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+		
+		return new ResponseEntity<>(new InputStreamResource(this.service.export(idFolhaMeta)), headers, HttpStatus.OK);
+	}
+	
 	@PostMapping	
 	public ResponseEntity<FolhaMetaDTO> save(@RequestBody FolhaMetaDTO dto) {
 		if (dto.getId() != null) {
@@ -129,6 +149,13 @@ public class FolhaMetaController {
 	@PutMapping("/aprovacao/{id}")
 	public ResponseEntity<Void> aprovarFolhaMeta(@PathVariable Long id) {
 		this.service.updateSituacaoById(id, EnumSituacao.ATIVO.getCodigo().toString());
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteFolhaMeta(@PathVariable Long id) {
+		this.service.deleteById(id);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

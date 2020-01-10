@@ -1,5 +1,7 @@
 package br.com.zipext.plr.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +10,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.enums.EnumSituacao;
+import br.com.zipext.plr.enums.EnumXLSArea;
+import br.com.zipext.plr.enums.EnumXLSSheets;
+import br.com.zipext.plr.export.impl.XlsFileExport;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
 import br.com.zipext.plr.repository.FolhaMetaRepository;
@@ -18,6 +24,37 @@ public class FolhaMetaService {
 
 	@Autowired
 	private FolhaMetaRepository repository;
+	
+	@Autowired
+	private PropertyService propertyService;
+	
+	@Autowired
+	private TemplateCampoService templateCampoService;
+	
+	@Modifying
+	@Transactional(readOnly = false)
+	public void deleteById(Long id) {
+		this.repository.deleteById(id);
+	}
+	
+	public ByteArrayInputStream export(Long idFolhaMeta) throws IOException {
+		XlsFileExport export = new XlsFileExport(this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_PATH), EnumXLSSheets.FOLHA_METAS);
+		Optional<FolhaMetaModel> optionalFolhaMeta = this.findById(idFolhaMeta);
+		byte emptyBuff[] = new byte[] {};
+		
+		if (optionalFolhaMeta.isPresent()) {
+			FolhaMetaModel folhaMeta = optionalFolhaMeta.get();
+			
+			export.processField(folhaMeta, this.templateCampoService.findByArea(EnumXLSArea.FOLHA_META.getArea()));
+			export.processTable(folhaMeta.getFolhaMetaItems(), this.templateCampoService.findByArea(EnumXLSArea.ITEM_FOLHA.getArea()));
+			
+			return 
+					export.writeToFile();
+		}
+		
+		return
+				new ByteArrayInputStream(emptyBuff);
+	}
 	
 	@Transactional(readOnly = true)
 	public List<FolhaMetaModel> findAll() {

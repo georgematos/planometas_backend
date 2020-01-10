@@ -4,6 +4,11 @@ public enum EnumTipoMeta {
 	
 	QUANTITATIVA(1, 'Q', "Metas Quantitativas"),
 	PROJETOS(2, 'P', "Metas de Projeto"),
+	GATILHO(-1, 'G', "Gatilho"),
+	CORPORATIVAS(-1, 'C', "Corporativas"),
+	TIME(-1, 'T', "Time"),
+	AVALIACAO(-1, 'A', "Avaliação"),
+	EXTRAS(-1, 'E', "Extras"),
 	NOVALUE(-1, '-', "N/A");
 	
 	private int id;
