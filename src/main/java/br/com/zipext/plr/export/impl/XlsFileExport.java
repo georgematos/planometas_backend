@@ -62,7 +62,7 @@ public class XlsFileExport extends FileExport {
 				this.setCellValue(cell, cellValue);
 			}
 		} catch (Exception e) {
-			
+			System.out.println("Erro no processamento da célula. Erro: " + e.getMessage());
 		}
 	}
 	
@@ -80,7 +80,6 @@ public class XlsFileExport extends FileExport {
 
 		XSSFFormulaEvaluator.evaluateAllFormulaCells(this.workbook);
 		this.workbook.write(out);
-		//this.workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
 		
 		this.closeFileInputStream();
 		

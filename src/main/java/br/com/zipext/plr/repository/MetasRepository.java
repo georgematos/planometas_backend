@@ -10,12 +10,19 @@ import org.springframework.stereotype.Repository;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TempoModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.model.TipoMetaModel;
 
 @Repository
 public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 
+	@Query("select model from MetasModel model "
+		+  "left join fetch model.metasPeriodo mp "
+		+  "where mp.pk.tempo = :periodo "
+		+  "order by model.descricao asc")
+	public List<MetasModel> findAll(@Param("periodo") TempoModel periodo);
+	
 	@Query("select model from MetasModel model "
 		 + "where model.situacao = :situacao "
 		 + "order by model.descricao asc")

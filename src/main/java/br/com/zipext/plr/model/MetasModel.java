@@ -3,6 +3,7 @@ package br.com.zipext.plr.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -225,6 +226,21 @@ public class MetasModel {
 
 	public void setMetaDenominador(MetasModel metaDenominador) {
 		this.metaDenominador = metaDenominador;
+	}
+	
+	/*Export*/
+	
+	public String isQuantitativoQualitativo() {
+		return this.isQuantitativa.equals("1") ? "QUANTITATIVA" : "QUALITATIVA";
+	}
+	
+	public String getPeriodosAtivos() {
+		if (this.metasPeriodo != null && !this.metasPeriodo.isEmpty()) {
+			return
+					this.metasPeriodo.stream().map(p -> p.getPk().getTempo().getAno().toString()).collect(Collectors.joining(";"));
+		}
+		
+		return "-";
 	}
 
 	@Override

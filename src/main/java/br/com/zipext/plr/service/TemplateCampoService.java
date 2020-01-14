@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.model.TemplateCampoModel;
+import br.com.zipext.plr.model.TemplateModel;
 import br.com.zipext.plr.repository.TemplateCampoRepository;
 
 @Service
@@ -21,7 +22,7 @@ public class TemplateCampoService {
 	}
 	
 	@Transactional(readOnly = false)
-	public List<TemplateCampoModel> findByArea(String area) {
-		return this.repository.findByArea(area);
+	public List<TemplateCampoModel> findByTemplateAndArea(TemplateModel template, String area) {
+		return this.repository.findByTemplateAndArea(template, area);
 	}
 }

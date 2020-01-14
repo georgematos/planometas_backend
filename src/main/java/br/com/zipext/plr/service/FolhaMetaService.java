@@ -14,9 +14,11 @@ import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.enums.EnumXLSArea;
 import br.com.zipext.plr.enums.EnumXLSSheets;
+import br.com.zipext.plr.enums.EnumXLSTemplates;
 import br.com.zipext.plr.export.impl.XlsFileExport;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
+import br.com.zipext.plr.model.TemplateModel;
 import br.com.zipext.plr.repository.FolhaMetaRepository;
 
 @Service
@@ -38,15 +40,17 @@ public class FolhaMetaService {
 	}
 	
 	public ByteArrayInputStream export(Long idFolhaMeta) throws IOException {
-		XlsFileExport export = new XlsFileExport(this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_PATH), EnumXLSSheets.FOLHA_METAS);
+		XlsFileExport export = new XlsFileExport(this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_FOLHA_META_PATH), EnumXLSSheets.FOLHA_METAS);
 		Optional<FolhaMetaModel> optionalFolhaMeta = this.findById(idFolhaMeta);
 		byte emptyBuff[] = new byte[] {};
 		
 		if (optionalFolhaMeta.isPresent()) {
 			FolhaMetaModel folhaMeta = optionalFolhaMeta.get();
 			
-			export.processField(folhaMeta, this.templateCampoService.findByArea(EnumXLSArea.FOLHA_META.getArea()));
-			export.processTable(folhaMeta.getFolhaMetaItems(), this.templateCampoService.findByArea(EnumXLSArea.ITEM_FOLHA.getArea()));
+			export.processField(folhaMeta, this.templateCampoService.findByTemplateAndArea(
+					new TemplateModel(EnumXLSTemplates.FOLHA_METAS.getCodigo()), EnumXLSArea.FOLHA_META.getArea()));
+			export.processTable(folhaMeta.getFolhaMetaItems(), this.templateCampoService.findByTemplateAndArea(
+					new TemplateModel(EnumXLSTemplates.FOLHA_METAS.getCodigo()), EnumXLSArea.ITEM_FOLHA.getArea()));
 			
 			return 
 					export.writeToFile();

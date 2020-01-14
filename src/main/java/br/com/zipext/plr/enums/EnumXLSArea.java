@@ -3,7 +3,8 @@ package br.com.zipext.plr.enums;
 public enum EnumXLSArea {
 
 	FOLHA_META("FOLHA META"),
-	ITEM_FOLHA("ITEM FOLHA META");
+	ITEM_FOLHA("ITEM FOLHA META"),
+	INDICADORES("INDICADORES");
 	
 	private String area;
 	

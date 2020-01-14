@@ -1,10 +1,13 @@
 package br.com.zipext.plr.controller.admin;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TempoModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.model.TipoMetaModel;
 import br.com.zipext.plr.service.MetasPeriodoService;
@@ -35,6 +39,17 @@ public class MetasController {
 	
 	@Autowired
 	private MetasPeriodoService metasPeriodoService;
+
+	@GetMapping("/export/{periodoPLR}")
+	public ResponseEntity<InputStreamResource> exportIndicadores(@PathVariable("periodoPLR") String periodoPLR) throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "INDICADORES" + "_" + periodoPLR + ".xlsx";
+		
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+		
+		return new ResponseEntity<>(new InputStreamResource(this.service.export(
+				new TempoModel(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR)))), headers, HttpStatus.OK);
+	}
 
 	@GetMapping
 	public ResponseEntity<List<MetasDTO>> findAll() {

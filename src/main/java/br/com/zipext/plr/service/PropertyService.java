@@ -8,8 +8,11 @@ import br.com.zipext.plr.enums.EnumProperty;
 @Service
 public class PropertyService {
 
-	@Value("${app.plr.export.template.path}")
-	private String templatePath;
+	@Value("${app.plr.export.template.folha.meta.path}")
+	private String templateFolhaMetaPath;
+	
+	@Value("${app.plr.export.template.indicadores.path}")
+	private String templateIndicadoresPath;
 
 	@Value("${app.frontend.ext.ip}")
 	private String appExternalHostIp;
@@ -19,8 +22,10 @@ public class PropertyService {
 	
 	public String getProperty(EnumProperty property) {
 		switch (property) {
-		case XLS_TEMPLATE_PATH:
-			return this.templatePath;
+		case XLS_TEMPLATE_FOLHA_META_PATH:
+			return this.templateFolhaMetaPath;
+		case XLS_TEMPLATE_INDICADORES_PATH:
+			return this.templateIndicadoresPath;
 		case APP_EXTERNAL_HOST_IP:
 			return this.appExternalHostIp;
 		case APP_INTERNAL_HOST_IP:
