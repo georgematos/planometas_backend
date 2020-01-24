@@ -86,6 +86,9 @@ public class MetasModel {
 	@OneToMany(mappedBy = "pk.metas")
 	private List<MetasPeriodoModel> metasPeriodo;
 	
+	@OneToMany(mappedBy = "meta")
+	private List<FolhaMetaMensalModel> folhaMetasMensais;
+	
 	public MetasModel() {}
 	
 	public MetasModel(Long id) {
@@ -228,6 +231,14 @@ public class MetasModel {
 		this.metaDenominador = metaDenominador;
 	}
 	
+	public List<FolhaMetaMensalModel> getFolhaMetasMensais() {
+		return folhaMetasMensais;
+	}
+
+	public void setFolhaMetasMensais(List<FolhaMetaMensalModel> folhaMetasMensais) {
+		this.folhaMetasMensais = folhaMetasMensais;
+	}
+
 	/*Export*/
 	
 	public String isQuantitativoQualitativo() {

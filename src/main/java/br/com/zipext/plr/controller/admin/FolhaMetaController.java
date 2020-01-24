@@ -30,6 +30,7 @@ import br.com.zipext.plr.model.UsuarioModel;
 import br.com.zipext.plr.service.ColaboradorService;
 import br.com.zipext.plr.service.FolhaMetaItemService;
 import br.com.zipext.plr.service.FolhaMetaService;
+import br.com.zipext.plr.service.MetasService;
 import br.com.zipext.plr.service.PerfilUsuarioService;
 import br.com.zipext.plr.utils.PLRUtils;
 
@@ -48,6 +49,9 @@ public class FolhaMetaController {
 	
 	@Autowired
 	private PerfilUsuarioService perfilUsuarioService;
+	
+	@Autowired
+	private MetasService metasService;
 	
 	@GetMapping("/filter")
 	public ResponseEntity<List<FolhaMetaDTO>> findByFilter(
@@ -69,7 +73,7 @@ public class FolhaMetaController {
 					.map(FolhaMetaDTO::new)
 					.collect(Collectors.toList());
 		
-		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	@GetMapping("/colaborador/{matricula}/periodo/{periodoPLR}")
@@ -80,7 +84,7 @@ public class FolhaMetaController {
 				.map(FolhaMetaDTO::new)
 				.collect(Collectors.toList());
 		
-		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	@GetMapping("/responsavel/{matricula}/periodo/{periodoPLR}")
@@ -97,7 +101,7 @@ public class FolhaMetaController {
 					.map(FolhaMetaDTO::new)
 					.collect(Collectors.toList());
 		
-		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	@GetMapping("/pendentes/colaborador/{matricula}/periodo/{periodoPLR}")
@@ -119,7 +123,7 @@ public class FolhaMetaController {
 						.collect(Collectors.toList());			
 		}
 		
-		return new ResponseEntity<List<FolhaMetaDTO>>(dtos, HttpStatus.OK);
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	@GetMapping("/export")
@@ -142,8 +146,9 @@ public class FolhaMetaController {
 	
 		FolhaMetaModel model = this.service.save(dto.obterModel());
 		model.setFolhaMetaItems(this.folhaMetaItemService.saveAll(dto.obterFolhaMetaItems(model)));
-
-		return new ResponseEntity<FolhaMetaDTO>(new FolhaMetaDTO(model), HttpStatus.OK);
+		model.getFolhaMetaItems().forEach(item -> item.setMeta(this.metasService.findById(item.getMeta().getId())));
+		
+		return new ResponseEntity<>(new FolhaMetaDTO(model), HttpStatus.OK);
 	}
 	
 	@PutMapping("/aprovacao/{id}")

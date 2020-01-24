@@ -3,7 +3,8 @@ package br.com.zipext.plr.enums;
 public enum EnumXLSSheets {
 	
 	FOLHA_METAS("Folha de Metas"),
-	INDICADORES("Indicadores");
+	INDICADORES("Indicadores"),
+	COLABORADORES("Colaboradores");
 
 	private String nome;
 	

@@ -1,10 +1,13 @@
 package br.com.zipext.plr.controller.admin;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ import br.com.zipext.plr.dto.ColaboradorDTO;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.service.ColaboradorService;
 import br.com.zipext.plr.service.PerfilUsuarioService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/colaboradores")
@@ -29,6 +33,16 @@ public class ColaboradorController {
 	
 	@Autowired
 	private PerfilUsuarioService perfilUsuarioService;
+	
+	@GetMapping("/export")
+	public ResponseEntity<InputStreamResource> exportIndicadores() throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "COLABORADORES" + "_" + PLRUtils.today() + ".xlsx";
+		
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+		
+		return new ResponseEntity<>(new InputStreamResource(this.service.export()), headers, HttpStatus.OK);
+	}
 	
 	@GetMapping("/filter")
 	public ResponseEntity<List<ColaboradorDTO>> findByFilter(

@@ -14,6 +14,9 @@ public class PropertyService {
 	@Value("${app.plr.export.template.indicadores.path}")
 	private String templateIndicadoresPath;
 
+	@Value("${app.plr.export.template.colaboradores.path}")
+	private String templateColaboradoresPath;
+	
 	@Value("${app.frontend.ext.ip}")
 	private String appExternalHostIp;
 	
@@ -26,6 +29,8 @@ public class PropertyService {
 			return this.templateFolhaMetaPath;
 		case XLS_TEMPLATE_INDICADORES_PATH:
 			return this.templateIndicadoresPath;
+		case XLS_TEMPLATE_COLABORADORES_PATH:
+			return this.templateColaboradoresPath;
 		case APP_EXTERNAL_HOST_IP:
 			return this.appExternalHostIp;
 		case APP_INTERNAL_HOST_IP:

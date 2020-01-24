@@ -24,4 +24,15 @@ public enum EnumSimNao {
 		return
 				String.valueOf(codigo);
 	}
+	
+	public static EnumSimNao forValue(String value) {
+		for (EnumSimNao e : EnumSimNao.values()) {
+			if (e.getCodigo().toString().equals(value) || e.getDescricao().equalsIgnoreCase(value)) {
+				return
+						e;
+			}
+		}
+		
+		return null;
+	}
 }

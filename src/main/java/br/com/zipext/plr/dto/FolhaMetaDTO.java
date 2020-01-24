@@ -33,6 +33,8 @@ public class FolhaMetaDTO {
 	
 	private List<FolhaMetaItemDTO> folhasMetaItem;
 	
+	private List<FolhaMetaMensalDTO> folhaMetasMensais;
+	
 	public FolhaMetaDTO() {}
 	
 	public FolhaMetaDTO(FolhaMetaModel model) {
@@ -45,6 +47,10 @@ public class FolhaMetaDTO {
 		this.fimVigencia = model.getFimVigencia().getDescricao();
 		this.situacao = model.getSituacao();
 		this.folhasMetaItem = model.getFolhaMetaItems().stream().map(FolhaMetaItemDTO::new).collect(Collectors.toList());
+		this.folhaMetasMensais = new ArrayList<>();
+		
+		model.getFolhaMetaItems().stream()
+								 .forEach(item -> this.folhaMetasMensais.add(new FolhaMetaMensalDTO("META", null, item.getMeta(), item.getMeta().getFolhaMetasMensais(), false)));
 	}
 	
 	public FolhaMetaModel obterModel() {
@@ -147,6 +153,14 @@ public class FolhaMetaDTO {
 
 	public void setFolhasMetaItem(List<FolhaMetaItemDTO> folhasMetaItem) {
 		this.folhasMetaItem = folhasMetaItem;
+	}
+	
+	public List<FolhaMetaMensalDTO> getFolhaMetasMensais() {
+		return folhaMetasMensais;
+	}
+
+	public void setFolhaMetasMensais(List<FolhaMetaMensalDTO> folhaMetasMensais) {
+		this.folhaMetasMensais = folhaMetasMensais;
 	}
 
 	public String getDataCadastro() {

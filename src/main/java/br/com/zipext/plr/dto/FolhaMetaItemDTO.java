@@ -58,10 +58,10 @@ public class FolhaMetaItemDTO {
 		
 		this.viewMetasMensais = new ArrayList<>();
 		if (folhaMetaAnual != null) {
-			this.viewMetasMensais.add(new FolhaMetaMensalDTO("META", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
-			this.viewMetasMensais.add(new FolhaMetaMensalDTO("REAL", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
+			this.viewMetasMensais.add(new FolhaMetaMensalDTO("META", folhaMetaAnual, null, folhaMetasMensais, isPerfilReadOnly));
+			this.viewMetasMensais.add(new FolhaMetaMensalDTO("REAL", folhaMetaAnual, null, folhaMetasMensais, isPerfilReadOnly));
 			if (!(folhaMetaAnual.isMetaRestrita() && isPerfilReadOnly)) {
-				this.viewMetasMensais.add(new FolhaMetaMensalDTO("%", folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly));
+				this.viewMetasMensais.add(new FolhaMetaMensalDTO("%", folhaMetaAnual, null, folhaMetasMensais, isPerfilReadOnly));
 			}
 		}
 	}

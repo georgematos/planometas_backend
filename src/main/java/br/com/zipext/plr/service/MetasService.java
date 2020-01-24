@@ -3,6 +3,7 @@ package br.com.zipext.plr.service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,16 @@ public class MetasService {
 			FormulaModel formula, FrequenciaMedicaoModel frequenciaMedicao) {
 		return 
 				this.repository.findByFilter(model, meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);
+	}
+	
+	@Transactional(readOnly = true)
+	public MetasModel findById(Long id) {
+		Optional<MetasModel> model = this.repository.findById(id);
+		if (model.isPresent()) {
+			return model.get();
+		}
+		
+		return null;
 	}
 	
 	@Transactional(readOnly = true)

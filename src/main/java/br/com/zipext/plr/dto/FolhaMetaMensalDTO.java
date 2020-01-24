@@ -16,6 +16,9 @@ public class FolhaMetaMensalDTO {
 	private BigDecimal valorMeta;
 	private BigDecimal valorReal;
 	private TempoDTO prazo;
+
+	private GenericDTO aprovador;
+	private GenericDTO meta;
 	
 	private String tipoMeta;
 	
@@ -53,8 +56,13 @@ public class FolhaMetaMensalDTO {
 		this.idMeta = model.getMeta().getId();
 	}
 	
-	public FolhaMetaMensalDTO(String tipoMeta, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
+	public FolhaMetaMensalDTO(String tipoMeta, FolhaMetaAnualModel folhaMetaAnual, MetasModel meta, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
 		this.tipoMeta = tipoMeta;
+		if (meta != null) {
+			this.meta = new GenericDTO(meta);
+			this.aprovador = new GenericDTO(meta.getAprovador());
+		}
+		
 		this.pivotListMensaisToObject(folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly);
 	}
 	
@@ -405,5 +413,21 @@ public class FolhaMetaMensalDTO {
 
 	public void setIdDez(Long idDez) {
 		this.idDez = idDez;
+	}
+
+	public GenericDTO getAprovador() {
+		return aprovador;
+	}
+
+	public void setAprovador(GenericDTO aprovador) {
+		this.aprovador = aprovador;
+	}
+
+	public GenericDTO getMeta() {
+		return meta;
+	}
+
+	public void setMeta(GenericDTO meta) {
+		this.meta = meta;
 	}
 }

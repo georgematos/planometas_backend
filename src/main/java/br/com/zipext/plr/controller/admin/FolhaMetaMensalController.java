@@ -35,11 +35,11 @@ public class FolhaMetaMensalController {
 		List<FolhaMetaMensalDTO> dtos = new ArrayList<>();;
 		
 		if (models != null && !models.isEmpty()) {
-			dtos.add(new FolhaMetaMensalDTO("META", null, models, false));
-			dtos.add(new FolhaMetaMensalDTO("REAL", null, models, false));
+			dtos.add(new FolhaMetaMensalDTO("META", null, null, models, false));
+			dtos.add(new FolhaMetaMensalDTO("REAL", null, null, models, false));
 		}
 
-		return new ResponseEntity<List<FolhaMetaMensalDTO>>(dtos, HttpStatus.OK);
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	@PostMapping("/{idMeta}")

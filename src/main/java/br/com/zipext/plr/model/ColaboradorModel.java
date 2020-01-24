@@ -2,6 +2,7 @@ package br.com.zipext.plr.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -12,7 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import br.com.zipext.plr.converter.LocalDateTimeConverter;
+import br.com.zipext.plr.enums.EnumSimNao;
+import br.com.zipext.plr.enums.EnumSituacao;
 
 
 @Entity
@@ -173,6 +178,36 @@ public class ColaboradorModel {
 
 	public void setUsuarioSistema(UsuarioModel usuarioSistema) {
 		this.usuarioSistema = usuarioSistema;
+	}
+	
+	/* Export */
+	
+	public String getAdmissaoToString() {
+		if (this.dataAdmissao != null) {
+			return this.dataAdmissao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		}
+		
+		return "";
+	}
+	
+	public String getDemissaoToString() {
+		if (this.dataDemissao != null) {
+			return this.dataDemissao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		}
+		
+		return "";
+	}
+	
+	public String isElegivelIndividual() {
+		if (!StringUtils.isNotBlank(this.elegivel)) {
+			return "";
+		}
+		
+		return this.elegivel.equals("1") ? EnumSimNao.SIM.getDescricao() : EnumSimNao.NAO.getDescricao();
+	}
+	
+	public String getStatusToExport() {
+		return EnumSituacao.forValue(this.situacao).getDescricao();
 	}
 
 	@Override
