@@ -128,7 +128,7 @@ public class MetasDTO {
 			model.setMetaDenominador(new MetasModel(this.metaDenominador.getId()));
 		}
 		
-		if (this.aprovador != null) {
+		if (this.aprovador != null && StringUtils.isNotBlank(this.aprovador.getMatricula())) {
 			model.setAprovador(new ColaboradorModel(this.aprovador.getMatricula()));
 		}
 		
