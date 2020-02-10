@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import br.com.zipext.plr.enums.EnumTipoMeta;
 import br.com.zipext.plr.model.FolhaMetaAnualModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -61,6 +62,9 @@ public class FolhaMetaMensalDTO {
 		if (meta != null) {
 			this.meta = new GenericDTO(meta);
 			this.aprovador = new GenericDTO(meta.getAprovador());
+			if (meta.getTipoMeta().getDescricao().equalsIgnoreCase(EnumTipoMeta.PROJETOS.name())) {
+				this.prazo = new TempoDTO(meta.getPrazo());
+			}
 		}
 		
 		this.pivotListMensaisToObject(folhaMetaAnual, folhaMetasMensais, isPerfilReadOnly);

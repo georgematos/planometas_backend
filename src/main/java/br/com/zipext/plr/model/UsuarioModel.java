@@ -5,9 +5,9 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -28,8 +28,8 @@ public class UsuarioModel {
 	@Column(name = "IN_PRIMEIRO_ACESSO")
 	private String inPrimeiroAcesso;
 	
-	@OneToOne
-    @PrimaryKeyJoinColumn(name = "CD_LOGIN", referencedColumnName = "CD_MATRICULA")
+	@ManyToOne
+	@JoinColumn(name = "CD_MATRICULA")
 	private ColaboradorModel colaborador;
 	
 	@OneToMany(mappedBy = "pk.usuario")

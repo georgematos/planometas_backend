@@ -62,7 +62,7 @@ public class ColaboradorController {
 	
 	@GetMapping("/{matricula}")
 	public ResponseEntity<ColaboradorDTO> findByMatricula(@PathVariable("matricula") String matricula) {
-		return new ResponseEntity<ColaboradorDTO>(new ColaboradorDTO(this.service.findByMatricula(matricula)), HttpStatus.OK);
+		return new ResponseEntity<>(new ColaboradorDTO(this.service.findByMatricula(matricula)), HttpStatus.OK);
 	}
 	
 	@PostMapping
