@@ -22,6 +22,7 @@ import br.com.zipext.plr.model.UsuarioModel;
 import br.com.zipext.plr.service.PerfilPermissaoService;
 import br.com.zipext.plr.service.PerfilService;
 import br.com.zipext.plr.service.PerfilUsuarioService;
+import br.com.zipext.plr.service.UsuarioService;
 
 @RestController
 @RequestMapping("/perfis")
@@ -35,6 +36,9 @@ public class PerfilController {
 	
 	@Autowired
 	private PerfilUsuarioService perfilUsuarioService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@GetMapping
 	public ResponseEntity<List<PerfilDTO>> findAll() {
@@ -58,12 +62,15 @@ public class PerfilController {
 			dto = new PerfilDTO();
 		}
 		
-		return new ResponseEntity<PerfilDTO>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/bindperfilusuario")
 	public ResponseEntity<PerfilUsuarioDTO> save(@RequestBody PerfilUsuarioDTO dto) {
 		PerfilUsuarioModel model = dto.obterModel();
+		UsuarioModel usuario = this.usuarioService.processLogin(model.getPk().getUsuario());
+		model.getPk().setUsuario(usuario);
+		
 		this.perfilUsuarioService.deleteByUsuario(model.getPk().getUsuario());
 		
 		return new ResponseEntity<>(

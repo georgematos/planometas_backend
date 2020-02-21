@@ -3,6 +3,7 @@ package br.com.zipext.plr.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,8 @@ import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.DiretoriaModel;
 import br.com.zipext.plr.model.FilialModel;
 import br.com.zipext.plr.model.TimeModel;
+import br.com.zipext.plr.model.UsuarioModel;
+import br.com.zipext.plr.utils.PLRUtils;
 
 public class ColaboradorDTO {
 	
@@ -48,13 +51,16 @@ public class ColaboradorDTO {
 		this.time = new TimeDTO(model.getTime());
 		this.filial = new GenericDTO(model.getFilial());
 		
-		if (model.getUsuarioSistema() != null) {
-			this.usuario = new UsuarioDTO(model.getUsuarioSistema());
+		this.dataAdmissao = model.getDataAdmissao() != null ? model.getDataAdmissao().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)) : "";
+		this.dataDemissao = model.getDataDemissao() != null ? model.getDataDemissao().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)) : "";
+		
+		if (model.getUsuarios() != null) {
+			//TODO: change relation between UsuarioModel and ColaboradorModel to OneToOne
+			Optional<UsuarioModel> userOptional = model.getUsuarios().stream().findFirst();
+			if (userOptional.isPresent()) {
+				this.usuario = new UsuarioDTO(userOptional.get());				
+			}
 		}
-		
-		this.dataAdmissao = model.getDataAdmissao() != null ? model.getDataAdmissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
-		this.dataDemissao = model.getDataDemissao() != null ? model.getDataDemissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
-		
 	}
 	
 	public ColaboradorModel obterModel() {
