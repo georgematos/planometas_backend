@@ -3,7 +3,6 @@ package br.com.zipext.plr.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.dto.UsuarioDTO;
@@ -58,7 +57,7 @@ public class UsuarioService {
 		this.repository.redefinePrimeiroAcesso(login, EnumSimNao.SIM.getValue());
 	}
 	
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(readOnly = false)
 	public UsuarioModel save(UsuarioModel model) {
 		return
 				this.repository.save(model);

@@ -3,6 +3,7 @@ package br.com.zipext.plr.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -10,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
@@ -50,10 +51,6 @@ public class ColaboradorModel {
     @Column(name = "CD_LOGIN_INC")
     private String responsavelInclusao;
 	
-    @OneToOne
-	@JoinColumn(name = "CD_MATRICULA")
-    private UsuarioModel usuarioSistema;
-    
 	@ManyToOne
 	@JoinColumn(name = "CD_DIRETORIA")
 	private DiretoriaModel diretoria;
@@ -69,6 +66,9 @@ public class ColaboradorModel {
 	@ManyToOne
 	@JoinColumn(name = "CD_FILIAL")
 	private FilialModel filial;
+	
+	@OneToMany(mappedBy = "colaborador")
+	private List<UsuarioModel> usuarios;
 	
 	public ColaboradorModel() {}
 	
@@ -171,17 +171,17 @@ public class ColaboradorModel {
 	public void setResponsavelInclusao(String responsavelInclusao) {
 		this.responsavelInclusao = responsavelInclusao;
 	}
-
-	public UsuarioModel getUsuarioSistema() {
-		return usuarioSistema;
-	}
-
-	public void setUsuarioSistema(UsuarioModel usuarioSistema) {
-		this.usuarioSistema = usuarioSistema;
-	}
 	
 	/* Export */
 	
+	public List<UsuarioModel> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<UsuarioModel> usuarios) {
+		this.usuarios = usuarios;
+	}
+
 	public String getAdmissaoToString() {
 		if (this.dataAdmissao != null) {
 			return this.dataAdmissao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
