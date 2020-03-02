@@ -109,12 +109,12 @@ public class MetasController {
 	
 	@PostMapping
 	public ResponseEntity<MetasDTO> save(@RequestBody MetasDTO dto) throws Exception {
-		MetasModel metaExistente = this.service.findByDescricaoAndSituacao(dto.getDescricao(), dto.getSituacao());
+		/*MetasModel metaExistente = this.service.findByDescricaoAndSituacao(dto.getDescricao(), dto.getSituacao());
 		if (metaExistente != null) {
 			if (dto.getId() == null || !metaExistente.getId().equals(dto.getId())) {
 				throw new Exception("Já existe uma meta ativa cadastrada com esse nome! ");
 			}
-		}
+		}*/
 		
 		MetasModel meta = this.service.save(dto.obterModel());
 		return new ResponseEntity<MetasDTO>(new MetasDTO(meta), HttpStatus.OK);

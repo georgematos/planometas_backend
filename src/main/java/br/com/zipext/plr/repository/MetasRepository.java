@@ -28,7 +28,7 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 		 + "order by model.descricao asc")
 	public List<MetasModel> findAllAtivasByOrderByDescricaoAsc(@Param("situacao") String situacao);
 	
-	public MetasModel findByDescricaoAndSituacao(String descricao, String situacao);
+	public List<MetasModel> findByDescricaoAndSituacao(String descricao, String situacao);
 	
 	@Query("select model from MetasModel model "
 		 + "join fetch model.formula formula "

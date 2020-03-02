@@ -65,7 +65,7 @@ public class MetasService {
 	}
 	
 	@Transactional(readOnly = true)
-	public MetasModel findByDescricaoAndSituacao(String descricao, String situacao) {
+	public List<MetasModel> findByDescricaoAndSituacao(String descricao, String situacao) {
 		return
 				this.repository.findByDescricaoAndSituacao(descricao, situacao);
 	}
