@@ -47,12 +47,14 @@ public class ColaboradorController {
 	@GetMapping("/filter")
 	public ResponseEntity<List<ColaboradorDTO>> findByFilter(
 			@RequestParam(required = false, name = "matricula") String matricula,
+			@RequestParam(required = false, name = "cpf") String cpf,
 			@RequestParam(required = false, name = "nome") String nome,
 			@RequestParam(required = false, name = "situacao") String situacao,
 			@RequestParam(required = false, name = "cargo") String cargo,
 			@RequestParam(required = false, name = "diretoria") String diretoria,
 			@RequestParam(required = false, name = "time") String time) {
 		List<ColaboradorDTO> dtos = this.service.findByFilter(StringUtils.isNotBlank(matricula) ? matricula : null,
+				StringUtils.isNotBlank(cpf) ? cpf.toUpperCase() : null,
 				StringUtils.isNotBlank(nome) ? nome.toUpperCase() : null, StringUtils.isNotBlank(situacao) ? situacao : null,
 				StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null, StringUtils.isNotBlank(diretoria) ? diretoria.toUpperCase() : null,
 				StringUtils.isNotBlank(time) ? time.toUpperCase() : null).stream().map(ColaboradorDTO::new)

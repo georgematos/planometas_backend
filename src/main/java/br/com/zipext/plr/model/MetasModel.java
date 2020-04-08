@@ -29,6 +29,9 @@ public class MetasModel {
 	@Column(name = "CD_META")
 	private Long id;
 
+	@Column(name = "CD_META_LEGADO")
+	private Long codigoLegado;
+
 	@Column(name = "DS_META")
 	private String descricao;
 	
@@ -97,6 +100,14 @@ public class MetasModel {
 	
 	public Long getId() {
 		return id;
+	}
+	
+	public Long getCodigoLegado() {
+		return codigoLegado;
+	}
+
+	public void setCodigoLegado(Long codigoLegado) {
+		this.codigoLegado = codigoLegado;
 	}
 
 	public void setId(Long id) {

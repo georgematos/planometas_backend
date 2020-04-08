@@ -21,6 +21,8 @@ public class MetasDTO {
 	
 	private Long id;
 	
+	private Long codigoLegado;
+	
 	private boolean isAtivaForPeriodo;
 	
 	private boolean isNewMeta;
@@ -145,6 +147,14 @@ public class MetasDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getCodigoLegado() {
+		return codigoLegado;
+	}
+
+	public void setCodigoLegado(Long codigoLegado) {
+		this.codigoLegado = codigoLegado;
 	}
 
 	public String getDescricao() {

@@ -91,6 +91,7 @@ public class MetasController {
 	public ResponseEntity<List<MetasDTO>> findByFilter(
 			@PathVariable("periodoPLR") Integer periodoPLR,
 			@RequestParam(name = "idMeta", required = false) Long idMeta,
+			@RequestParam(name = "codigoLegado", required = false) Long codigoLegado,
 			@RequestParam(name = "meta", required = false) String meta,
 			@RequestParam(name = "situacao", required = false) String situacao,
 			@RequestParam(name = "tipoMedicao", required = false) Long tipoMedicao,
@@ -98,7 +99,9 @@ public class MetasController {
 			@RequestParam(name = "formula", required = false) Long formula,
 			@RequestParam(name = "frequenciaMedicao", required = false) Long frequenciaMedicao) {
 
-		List<MetasModel> models = this.service.findByFilter(idMeta != null ? new MetasModel(idMeta) : null, StringUtils.isNotBlank(meta) ? meta.toUpperCase() : null,
+		List<MetasModel> models = this.service.findByFilter(idMeta != null ? new MetasModel(idMeta) : null, 
+				codigoLegado,
+				StringUtils.isNotBlank(meta) ? meta.toUpperCase() : null,
 				StringUtils.isNotBlank(situacao) ? situacao.toUpperCase() : null,
 				tipoMedicao != null ? new TipoMedicaoModel(tipoMedicao) : null,
 				tipoMeta != null ? new TipoMetaModel(tipoMeta) : null,

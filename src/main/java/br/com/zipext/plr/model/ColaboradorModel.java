@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import br.com.zipext.plr.converter.LocalDateTimeConverter;
 import br.com.zipext.plr.enums.EnumSimNao;
 import br.com.zipext.plr.enums.EnumSituacao;
+import br.com.zipext.plr.utils.PLRUtils;
 
 
 @Entity
@@ -28,6 +29,9 @@ public class ColaboradorModel {
 	@Id
 	@Column(name = "CD_MATRICULA")
 	private String matricula; 
+	
+	@Column(name = "CD_CPF")
+	private String cpf;
 	
 	@Column(name = "NM_COLABORADOR")
 	private String nome;
@@ -172,6 +176,14 @@ public class ColaboradorModel {
 		this.responsavelInclusao = responsavelInclusao;
 	}
 	
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	
 	/* Export */
 	
 	public List<UsuarioModel> getUsuarios() {
@@ -208,6 +220,10 @@ public class ColaboradorModel {
 	
 	public String getStatusToExport() {
 		return EnumSituacao.forValue(this.situacao).getDescricao();
+	}
+	
+	public String getFormattedCPF() {
+		return PLRUtils.formatCPF(this.cpf);
 	}
 
 	@Override
