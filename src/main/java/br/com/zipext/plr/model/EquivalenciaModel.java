@@ -31,6 +31,9 @@ public class EquivalenciaModel {
 	@Column(name = "VAL_LIM_MULTIPLICADOR")
 	private BigDecimal limiteMultiplicador;
 	
+	@Column(name = "VAL_LIM_SOMA_METAS")
+	private BigDecimal limiteSomaMetas;
+	
 	@OneToMany(mappedBy = "pk.equivalencia")
 	private List<MetaEquivalenciaPeriodoModel> metasEquivalencia;
 	
@@ -72,6 +75,14 @@ public class EquivalenciaModel {
 		this.limiteMultiplicador = limiteMultiplicador;
 	}
 	
+	public BigDecimal getLimiteSomaMetas() {
+		return limiteSomaMetas;
+	}
+
+	public void setLimiteSomaMetas(BigDecimal limiteSomaMetas) {
+		this.limiteSomaMetas = limiteSomaMetas;
+	}
+
 	public List<MetaEquivalenciaPeriodoModel> getMetasEquivalencia() {
 		return metasEquivalencia;
 	}

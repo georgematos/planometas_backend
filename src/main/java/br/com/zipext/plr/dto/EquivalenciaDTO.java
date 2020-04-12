@@ -17,6 +17,7 @@ public class EquivalenciaDTO {
 	private String descricao;
 	private BigDecimal multiplicador;
 	private BigDecimal limiteMultiplicador;
+	private BigDecimal limiteSomaMetas;
 	private List<FolhaMetaItemDTO> metasEquivalentes;
 	
 	public EquivalenciaDTO() {}
@@ -76,6 +77,14 @@ public class EquivalenciaDTO {
 
 	public void setLimiteMultiplicador(BigDecimal limiteMultiplicador) {
 		this.limiteMultiplicador = limiteMultiplicador;
+	}
+	
+	public BigDecimal getLimiteSomaMetas() {
+		return limiteSomaMetas;
+	}
+
+	public void setLimiteSomaMetas(BigDecimal limiteSomaMetas) {
+		this.limiteSomaMetas = limiteSomaMetas;
 	}
 
 	public List<FolhaMetaItemDTO> getMetasEquivalentes() {
