@@ -36,7 +36,8 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 		 + "join fetch model.tipoMedicao tipoMedicao "
 		 + "join fetch model.frequenciaMedicao frequenciaMedicao "
 		 + "where (:situacao is null or model.situacao = :situacao ) "
-		 + "and (:metaModel is null or model = :metaModel)"
+		 + "and (:metaModel is null or model = :metaModel) "
+		 + "and (:codigoLegado is null or model.codigoLegado = :codigoLegado) "
 		 + "and (:meta is null or model.descricao like %:meta%) "
 		 + "and (:tipoMedicao is null or tipoMedicao = :tipoMedicao) "
 		 + "and (:tipoMeta is null or tipoMeta = :tipoMeta) "
@@ -45,6 +46,7 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 		 + "order by model.descricao asc")
 	public List<MetasModel> findByFilter(
 				@Param("metaModel") MetasModel model,
+				@Param("codigoLegado") Long codigoLegado,
 				@Param("meta") String meta, 
 				@Param("situacao") String situacao, 
 				@Param("tipoMedicao") TipoMedicaoModel tipoMedicao, 

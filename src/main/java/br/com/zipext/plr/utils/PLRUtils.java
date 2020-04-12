@@ -53,4 +53,28 @@ public class PLRUtils {
 		return
 				now.format(formatter);
 	}
+	
+	public static String formatCPF(String cpf) {
+		if (!StringUtils.isNotBlank(cpf)) {
+			return "N/I";
+		}
+		
+		if (cpf.length() != 11) {
+			return "INVALID CPF";
+		}
+		
+		String firstGrp = cpf.substring(0, 3);
+		String secondGrp = cpf.substring(3, 6);
+		String thirdGrp = cpf.substring(6, 9);
+		String lastDigits = cpf.substring(9, 11);
+		
+		String formatedCPF = firstGrp.concat(".")
+									 .concat(secondGrp)
+									 .concat(".")
+									 .concat(thirdGrp)
+									 .concat("-")
+									 .concat(lastDigits);
+		
+		return formatedCPF;
+	}
 }

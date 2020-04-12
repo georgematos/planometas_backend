@@ -23,4 +23,13 @@ public class PLRUtilsTest {
 		
 		assertThat(skyTempo).isEqualTo(20191121);
 	}
+	
+	@Test
+	public void testFormatCPF() {
+		String cpf = "60054527129";
+		String fmtCPF = PLRUtils.formatCPF(cpf);
+		
+		assertThat(fmtCPF).isNotBlank();
+		assertThat(fmtCPF).isEqualTo("600.545.271-29");
+	}
 }

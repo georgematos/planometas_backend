@@ -17,6 +17,7 @@ public interface ColaboradorRepository extends JpaRepository<ColaboradorModel, S
 	     + "join fetch model.diretoria diretoria "
 	     + "join fetch model.time time "
 		 + "where (:matricula is null or model.matricula = :matricula) "
+		 + "and (:cpf is null or model.cpf = :cpf) "
 		 + "and (:situacao is null or model.situacao = :situacao) "
 		 + "and (:nome is null or model.nome like %:nome%) "
 		 + "and (:cargo is null or cargo.nome like %:cargo%) "
@@ -24,6 +25,7 @@ public interface ColaboradorRepository extends JpaRepository<ColaboradorModel, S
 		 + "and (:time is null or time.nome like %:time%) "
 		 + "order by model.nome asc")
 	public List<ColaboradorModel> findByFilter(@Param("matricula") String matricula, 
+			@Param("cpf") String cpf,
 			@Param("nome") String nome, 
 			@Param("situacao") String situacao,
 			@Param("cargo") String cargo,

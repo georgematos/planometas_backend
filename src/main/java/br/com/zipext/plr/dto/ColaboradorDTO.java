@@ -22,6 +22,8 @@ public class ColaboradorDTO {
 	
 	private String matricula;
 	
+	private String cpf;
+	
 	private String nome;
 	
 	private String situacao;
@@ -185,6 +187,14 @@ public class ColaboradorDTO {
 		this.isNewColaborador = isNewColaborador;
 	}
 	
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
 	public UsuarioDTO getUsuario() {
 		return usuario;
 	}

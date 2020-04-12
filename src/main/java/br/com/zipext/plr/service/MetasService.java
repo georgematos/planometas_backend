@@ -71,10 +71,10 @@ public class MetasService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<MetasModel> findByFilter(MetasModel model, String meta, String situacao, TipoMedicaoModel tipoMedicao, TipoMetaModel tipoMeta,
+	public List<MetasModel> findByFilter(MetasModel model, Long codigoLegado, String meta, String situacao, TipoMedicaoModel tipoMedicao, TipoMetaModel tipoMeta,
 			FormulaModel formula, FrequenciaMedicaoModel frequenciaMedicao) {
 		return 
-				this.repository.findByFilter(model, meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);
+				this.repository.findByFilter(model, codigoLegado, meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);
 	}
 	
 	@Transactional(readOnly = true)

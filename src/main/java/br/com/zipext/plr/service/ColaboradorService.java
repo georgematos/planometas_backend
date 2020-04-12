@@ -46,9 +46,9 @@ public class ColaboradorService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<ColaboradorModel> findByFilter(String matricula, String nome, String situacao, String cargo, String diretoria, String time) {
+	public List<ColaboradorModel> findByFilter(String matricula, String cpf, String nome, String situacao, String cargo, String diretoria, String time) {
 		return 
-				this.repository.findByFilter(matricula, nome, situacao, cargo, diretoria, time);
+				this.repository.findByFilter(matricula, cpf, nome, situacao, cargo, diretoria, time);
 	}
 	
 	@Transactional(readOnly = true)
