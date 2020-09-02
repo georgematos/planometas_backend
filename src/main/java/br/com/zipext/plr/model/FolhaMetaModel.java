@@ -49,6 +49,10 @@ public class FolhaMetaModel {
 	@JoinColumn(name = "CD_RESPONSAVEL_CADASTRO")
 	private ColaboradorModel responsavel;
 	
+	@ManyToOne
+	@JoinColumn(name = "CD_CARGO")
+	private CargoModel cargo;
+	
 	@Column(name = "DT_INC")
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime inclusao;
@@ -111,6 +115,14 @@ public class FolhaMetaModel {
 
 	public void setResponsavel(ColaboradorModel responsavel) {
 		this.responsavel = responsavel;
+	}
+	
+	public CargoModel getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(CargoModel cargo) {
+		this.cargo = cargo;
 	}
 
 	public List<FolhaMetaItemModel> getFolhaMetaItems() {
