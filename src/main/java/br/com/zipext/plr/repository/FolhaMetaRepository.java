@@ -16,6 +16,7 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 	
 	@Query("select model from FolhaMetaModel model "
 		 + "join fetch model.colaborador colab "
+		 + "join fetch model.cargo cargo "
 		 + "join fetch model.responsavel resp "
 		 + "join fetch model.inicioVigencia ini "
 		 + "join fetch model.fimVigencia fim "
@@ -24,9 +25,11 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 		 + "and (:inicioVigencia is null or ini.id >= :inicioVigencia) "
 		 + "and (:fimVigencia is null or fim.id <= :fimVigencia) "
 		 + "and (:colaborador is null or colab.nome like %:colaborador%) "
+		 + "and (:cargo is null or cargo.nome like %:cargo%)"
 		 + "and (:responsavel is null or resp.nome like %:responsavel%) "
 		 + "order by colab.nome asc")
 	public List<FolhaMetaModel> findByFilter(@Param("matricula") String matricula, 
+											 @Param("cargo") String cargo,
 											 @Param("inicioVigencia") Long skyInicioVigencia, 
 											 @Param("fimVigencia") Long skyFimVigencia,
 											 @Param("colaborador") String colaborador,

@@ -67,9 +67,9 @@ public class FolhaMetaService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findByFilter(String matricula, Long skyInicioVigencia, Long skyFimVigencia, String colaborador, String responsavel, String situacao) {
+	public List<FolhaMetaModel> findByFilter(String matricula, String cargo, Long skyInicioVigencia, Long skyFimVigencia, String colaborador, String responsavel, String situacao) {
 		return
-				this.repository.findByFilter(matricula, skyInicioVigencia, skyFimVigencia, colaborador, responsavel, situacao);
+				this.repository.findByFilter(matricula, cargo, skyInicioVigencia, skyFimVigencia, colaborador, responsavel, situacao);
 	}
 	
 	@Transactional(readOnly = true)

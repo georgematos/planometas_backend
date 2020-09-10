@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.model.CargoModel;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
@@ -31,6 +32,8 @@ public class FolhaMetaDTO {
 	
 	private ColaboradorDTO responsavel;
 	
+	private CargoDTO cargo;
+	
 	private List<FolhaMetaItemDTO> folhasMetaItem;
 	
 	private List<FolhaMetaMensalDTO> folhaMetasMensais;
@@ -43,6 +46,7 @@ public class FolhaMetaDTO {
 		this.colaborador = new ColaboradorDTO(model.getColaborador());
 		this.dataCadastro = model.getInclusao() != null ? model.getInclusao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
 		this.responsavel = new ColaboradorDTO(model.getResponsavel());	
+		this.cargo = new CargoDTO(model.getCargo());
 		this.inicioVigencia = model.getInicioVigencia().getDescricao();
 		this.fimVigencia = model.getFimVigencia().getDescricao();
 		this.situacao = model.getSituacao();
@@ -71,6 +75,10 @@ public class FolhaMetaDTO {
 		
 		if (this.responsavel != null) {
 			model.setResponsavel(new ColaboradorModel(this.responsavel.getMatricula()));
+		}
+		
+		if (this.cargo != null) {
+			model.setCargo(new CargoModel(this.cargo.getId()));
 		}
 		
 		List<FolhaMetaItemModel> folhaMetaItems = new ArrayList<>();
@@ -145,6 +153,14 @@ public class FolhaMetaDTO {
 
 	public void setResponsavel(ColaboradorDTO responsavel) {
 		this.responsavel = responsavel;
+	}
+
+	public CargoDTO getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(CargoDTO cargo) {
+		this.cargo = cargo;
 	}
 
 	public List<FolhaMetaItemDTO> getFolhasMetaItem() {

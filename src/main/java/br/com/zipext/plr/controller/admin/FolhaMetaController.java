@@ -56,6 +56,7 @@ public class FolhaMetaController {
 	@GetMapping("/filter")
 	public ResponseEntity<List<FolhaMetaDTO>> findByFilter(
 			@RequestParam(name = "matricula", required = false) String matricula,
+			@RequestParam(name = "cargo", required = false) String cargo,
 			@RequestParam(name = "inicioVigencia", required = false) String inicioVigencia, 
 			@RequestParam(name = "fimVigencia", required = false) String fimVigencia, 
 			@RequestParam(name = "colaborador", required = false) String colaborador, 
@@ -64,6 +65,7 @@ public class FolhaMetaController {
 		
 		List<FolhaMetaDTO> dtos = this.service.findByFilter(
 				StringUtils.isNotBlank(matricula) ? matricula.toUpperCase() : null, 
+				StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null, 
 				StringUtils.isNotBlank(inicioVigencia) ? PLRUtils.getSkyTempoFromStringDate(inicioVigencia) : null,
 				StringUtils.isNotBlank(fimVigencia) ? PLRUtils.getSkyTempoFromStringDate(fimVigencia) : null, 
 				StringUtils.isNotBlank(colaborador) ? colaborador.toUpperCase() : null, 
