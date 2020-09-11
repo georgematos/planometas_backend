@@ -46,7 +46,7 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 		 + "order by model.descricao asc")
 	public List<MetasModel> findByFilter(
 				@Param("metaModel") MetasModel model,
-				@Param("codigoLegado") Long codigoLegado,
+				@Param("codigoLegado") String codigoLegado,
 				@Param("meta") String meta, 
 				@Param("situacao") String situacao, 
 				@Param("tipoMedicao") TipoMedicaoModel tipoMedicao, 

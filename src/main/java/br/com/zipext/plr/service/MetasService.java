@@ -71,7 +71,7 @@ public class MetasService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<MetasModel> findByFilter(MetasModel model, Long codigoLegado, String meta, String situacao, TipoMedicaoModel tipoMedicao, TipoMetaModel tipoMeta,
+	public List<MetasModel> findByFilter(MetasModel model, String codigoLegado, String meta, String situacao, TipoMedicaoModel tipoMedicao, TipoMetaModel tipoMeta,
 			FormulaModel formula, FrequenciaMedicaoModel frequenciaMedicao) {
 		return 
 				this.repository.findByFilter(model, codigoLegado, meta, situacao, tipoMedicao, tipoMeta, formula, frequenciaMedicao);
