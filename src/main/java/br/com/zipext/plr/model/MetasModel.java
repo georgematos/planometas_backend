@@ -30,7 +30,7 @@ public class MetasModel {
 	private Long id;
 
 	@Column(name = "CD_META_LEGADO")
-	private Long codigoLegado;
+	private String codigoLegado;
 
 	@Column(name = "DS_META")
 	private String descricao;
@@ -102,11 +102,11 @@ public class MetasModel {
 		return id;
 	}
 	
-	public Long getCodigoLegado() {
+	public String getCodigoLegado() {
 		return codigoLegado;
 	}
 
-	public void setCodigoLegado(Long codigoLegado) {
+	public void setCodigoLegado(String codigoLegado) {
 		this.codigoLegado = codigoLegado;
 	}
 
