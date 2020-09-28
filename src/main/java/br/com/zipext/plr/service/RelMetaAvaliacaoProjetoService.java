@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.model.RelMetaAvaliacaoProjetoModel;
 import br.com.zipext.plr.model.TempoModel;
 import br.com.zipext.plr.repository.RelMetaAvaliacaoProjetoRepository;
@@ -16,6 +17,11 @@ public class RelMetaAvaliacaoProjetoService {
 
 	@Autowired
 	private RelMetaAvaliacaoProjetoRepository repository;
+	
+	@Transactional(readOnly = false)
+	public void deleteByMetaAndPeriodo(MetasModel meta, Integer anoPeriodoPLR) {
+		this.repository.deleteByMetaAndPeriodo(meta);
+	}
 	
 	@Transactional(readOnly = true)
 	public List<RelMetaAvaliacaoProjetoModel> findByResponsavelAndVigencia(ColaboradorModel responsavel, TempoModel dataAvaliacao) {

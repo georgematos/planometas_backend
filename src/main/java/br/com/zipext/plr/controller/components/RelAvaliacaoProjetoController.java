@@ -10,19 +10,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.zipext.plr.dto.CargoDTO;
-import br.com.zipext.plr.service.CargoService;
+import br.com.zipext.plr.dto.RelAvaliacaoProjetoDTO;
+import br.com.zipext.plr.service.RelAvaliacaoProjetoService;
 
 @Controller
-@RequestMapping("/cargos")
-public class CargoController {
+@RequestMapping("/avaliacao")
+public class RelAvaliacaoProjetoController {
 
 	@Autowired
-	private CargoService service;
+	private RelAvaliacaoProjetoService service;
 	
 	@GetMapping
-	public ResponseEntity<List<CargoDTO>> findAll() {
-		return new ResponseEntity<>
-			(this.service.findAllByOrderByNomeAsc().stream().map(CargoDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+	public ResponseEntity<List<RelAvaliacaoProjetoDTO>> findAll() {
+		return
+				new ResponseEntity<>(this.service.findAll()
+						.stream()
+						.map(m -> new RelAvaliacaoProjetoDTO(m)).collect(Collectors.toList()), HttpStatus.OK);
 	}
 }

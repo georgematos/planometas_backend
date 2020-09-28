@@ -20,7 +20,7 @@ import br.com.zipext.plr.converter.LocalDateTimeConverter;
 public class RelAvaliacaoProjetoModel {
 	
 	@EmbeddedId
-	private RelAvaliacaoProjetoModelPK pk;
+	private RelAvaliacaoProjetoPK pk;
 	
 	@Column(name = "VAL_ESCALONAMENTO")
 	private BigDecimal valEscalonamento;
@@ -42,14 +42,14 @@ public class RelAvaliacaoProjetoModel {
     public RelAvaliacaoProjetoModel() {}
     
     public RelAvaliacaoProjetoModel(AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo, AvaliacaoProjetoQualiModel avaliacaoProjetoQuali) {
-    	this.pk = new RelAvaliacaoProjetoModelPK(avaliacaoProjetoPrazo, avaliacaoProjetoQuali);
+    	this.pk = new RelAvaliacaoProjetoPK(avaliacaoProjetoPrazo, avaliacaoProjetoQuali);
     }
 	
-	public RelAvaliacaoProjetoModelPK getPk() {
+	public RelAvaliacaoProjetoPK getPk() {
 		return pk;
 	}
 
-	public void setPk(RelAvaliacaoProjetoModelPK pk) {
+	public void setPk(RelAvaliacaoProjetoPK pk) {
 		this.pk = pk;
 	}
 
@@ -119,7 +119,7 @@ public class RelAvaliacaoProjetoModel {
 	}
 
 	@Embeddable
-	public static class RelAvaliacaoProjetoModelPK implements Serializable {
+	public static class RelAvaliacaoProjetoPK implements Serializable {
 
 		private static final long serialVersionUID = 8780212793915401691L;
 	
@@ -131,9 +131,9 @@ public class RelAvaliacaoProjetoModel {
 		@JoinColumn(name = "CD_AVAL_META_QUAL")
 		private AvaliacaoProjetoQualiModel avaliacaoProjetoQuali;
 		
-		public RelAvaliacaoProjetoModelPK() {}
+		public RelAvaliacaoProjetoPK() {}
 		
-		public RelAvaliacaoProjetoModelPK(AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo, AvaliacaoProjetoQualiModel avaliacaoProjetoQuali) {
+		public RelAvaliacaoProjetoPK(AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo, AvaliacaoProjetoQualiModel avaliacaoProjetoQuali) {
 			this.avaliacaoProjetoPrazo = avaliacaoProjetoPrazo;
 			this.avaliacaoProjetoQuali = avaliacaoProjetoQuali;
 		}
@@ -171,7 +171,7 @@ public class RelAvaliacaoProjetoModel {
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			RelAvaliacaoProjetoModelPK other = (RelAvaliacaoProjetoModelPK) obj;
+			RelAvaliacaoProjetoPK other = (RelAvaliacaoProjetoPK) obj;
 			if (avaliacaoProjetoPrazo == null) {
 				if (other.avaliacaoProjetoPrazo != null)
 					return false;

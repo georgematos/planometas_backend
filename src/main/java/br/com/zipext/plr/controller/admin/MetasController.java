@@ -1,6 +1,8 @@
 package br.com.zipext.plr.controller.admin;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.MetasDTO;
 import br.com.zipext.plr.enums.EnumSituacao;
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -39,7 +42,7 @@ public class MetasController {
 	
 	@Autowired
 	private MetasPeriodoService metasPeriodoService;
-
+	
 	@GetMapping("/export/{periodoPLR}")
 	public ResponseEntity<InputStreamResource> exportIndicadores(@PathVariable("periodoPLR") String periodoPLR) throws IOException {
 		HttpHeaders headers = new HttpHeaders();
@@ -110,15 +113,18 @@ public class MetasController {
 		return new ResponseEntity<>(models.stream().map(model -> new MetasDTO(model, periodoPLR)).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
+	@GetMapping("/projetos/{periodoPLR}")
+	public ResponseEntity<List<MetasDTO>> findMetasProjetoVencidasByResponsavel(@PathVariable("periodoPLR") Integer periodoPLR, 
+			@RequestParam(name = "aprovador", required = false) String aprovador) {
+		Long skyDataLimite = PLRUtils.getSkyTempoFromStringDate(
+				LocalDate.now().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
+		List<MetasModel> models = this.service.findProjetosVencidosByResponsavel(periodoPLR, skyDataLimite, 
+				StringUtils.isNotBlank(aprovador) ? new ColaboradorModel(aprovador) : null);
+		return new ResponseEntity<>(models.stream().map(model -> new MetasDTO(model, periodoPLR)).collect(Collectors.toList()), HttpStatus.OK);
+	}
+	
 	@PostMapping
 	public ResponseEntity<MetasDTO> save(@RequestBody MetasDTO dto) throws Exception {
-		/*MetasModel metaExistente = this.service.findByDescricaoAndSituacao(dto.getDescricao(), dto.getSituacao());
-		if (metaExistente != null) {
-			if (dto.getId() == null || !metaExistente.getId().equals(dto.getId())) {
-				throw new Exception("Já existe uma meta ativa cadastrada com esse nome! ");
-			}
-		}*/
-		
 		MetasModel meta = this.service.save(dto.obterModel());
 		return new ResponseEntity<MetasDTO>(new MetasDTO(meta), HttpStatus.OK);
 	}

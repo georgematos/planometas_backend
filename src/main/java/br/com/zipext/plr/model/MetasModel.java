@@ -92,6 +92,9 @@ public class MetasModel {
 	@OneToMany(mappedBy = "meta")
 	private List<FolhaMetaMensalModel> folhaMetasMensais;
 	
+	@OneToMany(mappedBy = "pk.meta")
+	private List<RelMetaAvaliacaoProjetoModel> avaliacoesMetas;
+	
 	public MetasModel() {}
 	
 	public MetasModel(Long id) {
@@ -249,9 +252,17 @@ public class MetasModel {
 	public void setFolhaMetasMensais(List<FolhaMetaMensalModel> folhaMetasMensais) {
 		this.folhaMetasMensais = folhaMetasMensais;
 	}
-
+	
+	public List<RelMetaAvaliacaoProjetoModel> getAvaliacoesMetas() {
+		return avaliacoesMetas;
+	}
+	
 	/*Export*/
 	
+	public void setAvaliacoesMetas(List<RelMetaAvaliacaoProjetoModel> avaliacoesMetas) {
+		this.avaliacoesMetas = avaliacoesMetas;
+	}
+
 	public String isQuantitativoQualitativo() {
 		return this.isQuantitativa.equals("1") ? "QUANTITATIVA" : "QUALITATIVA";
 	}

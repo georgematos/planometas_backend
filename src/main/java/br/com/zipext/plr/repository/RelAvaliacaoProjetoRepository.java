@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import br.com.zipext.plr.model.RelAvaliacaoProjetoModel;
 
 @Repository
-public interface RelAvaliacaoProjetoRepository extends JpaRepository<RelAvaliacaoProjetoModel, RelAvaliacaoProjetoModel.RelAvaliacaoProjetoModelPK> {
+public interface RelAvaliacaoProjetoRepository extends JpaRepository<RelAvaliacaoProjetoModel, RelAvaliacaoProjetoModel.RelAvaliacaoProjetoPK> {
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -104,8 +105,10 @@ public class RelMetaAvaliacaoProjetoModel {
 		private MetasModel meta;
 		
 		@ManyToOne
-		@JoinColumn(name = "CD_AVAL_META_PRAZO")
-		@JoinColumn(name = "CD_AVAL_META_QUAL")
+		@JoinColumns( {
+		    @JoinColumn(name="CD_AVAL_META_PRAZO", referencedColumnName="CD_AVAL_META_PRAZO"),
+		    @JoinColumn(name="CD_AVAL_META_QUAL", referencedColumnName="CD_AVAL_META_QUAL")
+		} )
 		private RelAvaliacaoProjetoModel relAvaliacaoProjeto;
 		
 		public RelMetaAvaliacaoProjetoPK() {}

@@ -3,12 +3,13 @@ package br.com.zipext.plr.enums;
 public enum EnumTipoMeta {
 	
 	QUANTITATIVA(1, 'Q', "Metas Quantitativas"),
-	PROJETOS(2, 'P', "Metas de Projeto"),
+	PROJETO(8, 'P', "Metas de Projeto"),
 	GATILHO(-1, 'G', "Gatilho"),
-	CORPORATIVAS(-1, 'C', "Corporativas"),
+	CORPORATIVA(-1, 'C', "Corporativas"),
 	TIME(-1, 'T', "Time"),
 	AVALIACAO(-1, 'A', "Avaliação"),
-	EXTRAS(-1, 'E', "Extras"),
+	EXTRAS(7, 'X', "Extras"),
+	ENTREGA(4, 'E', "Entrega"),
 	NOVALUE(-1, '-', "N/A");
 	
 	private int id;

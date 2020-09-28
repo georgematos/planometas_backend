@@ -13,6 +13,8 @@ public class PLRUtils {
 	
 	public static final String DATE_PATTERN_FILE = "yyyyMMdd";
 	
+	public static final String SYS_USER = "SISTEMA";
+	
 	public static Long getSkyTempoFromStringDate(String stringDate) {
 		if (!StringUtils.isNotBlank(stringDate)) {
 			return

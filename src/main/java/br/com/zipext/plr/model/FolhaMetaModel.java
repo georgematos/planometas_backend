@@ -183,7 +183,7 @@ public class FolhaMetaModel {
 		return this.folhaMetaItems.stream()
 								  .filter(item -> item.getMeta().getTipoMeta()
 										  						.getAbreviacao()
-										  						.equals(EnumTipoMeta.CORPORATIVAS.getAbv().toString()))
+										  						.equals(EnumTipoMeta.CORPORATIVA.getAbv().toString()))
 								  .count();
 	}
 	
@@ -191,7 +191,7 @@ public class FolhaMetaModel {
 		return this.folhaMetaItems.stream()
 								  .filter(item -> item.getMeta().getTipoMeta()
 										  						.getAbreviacao()
-										  						.equals(EnumTipoMeta.CORPORATIVAS.getAbv().toString()))
+										  						.equals(EnumTipoMeta.CORPORATIVA.getAbv().toString()))
 								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
 								  .sum();
 	}
@@ -234,7 +234,7 @@ public class FolhaMetaModel {
 		return this.folhaMetaItems.stream()
 								  .filter(item -> item.getMeta().getTipoMeta()
 										  						.getAbreviacao()
-										  						.equals(EnumTipoMeta.PROJETOS.getAbv().toString()))
+										  						.equals(EnumTipoMeta.PROJETO.getAbv().toString()))
 								  .count();
 	}
 	
@@ -242,7 +242,7 @@ public class FolhaMetaModel {
 		return this.folhaMetaItems.stream()
 								  .filter(item -> item.getMeta().getTipoMeta()
 										  						.getAbreviacao()
-										  						.equals(EnumTipoMeta.PROJETOS.getAbv().toString()))
+										  						.equals(EnumTipoMeta.PROJETO.getAbv().toString()))
 								  .mapToDouble(item -> item.getPeso() == null ? 0 : item.getPeso().doubleValue())
 								  .sum();
 	}

@@ -2,6 +2,7 @@ package br.com.zipext.plr.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,10 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.enums.EnumQuantQual;
 import br.com.zipext.plr.enums.EnumSituacao;
+import br.com.zipext.plr.enums.EnumTipoMeta;
 import br.com.zipext.plr.enums.EnumXLSArea;
 import br.com.zipext.plr.enums.EnumXLSSheets;
 import br.com.zipext.plr.enums.EnumXLSTemplates;
 import br.com.zipext.plr.export.impl.XlsFileExport;
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -87,6 +90,12 @@ public class MetasService {
 		return null;
 	}
 	
+	@Transactional(readOnly = true)
+	public List<MetasModel> findProjetosVencidosByResponsavel(Integer periodoPLR, Long skyDataLimite, ColaboradorModel aprovador) {
+		return 
+			this.repository.findProjetosVencidosByResponsavel(periodoPLR, skyDataLimite, aprovador, Arrays.asList(EnumTipoMeta.PROJETO.name(), EnumTipoMeta.ENTREGA.name()));
+	}
+
 	@Transactional(readOnly = true)
 	public List<MetasModel> findQualitativas() {
 		return

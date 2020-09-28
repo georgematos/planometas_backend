@@ -15,6 +15,7 @@ import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.utils.PLRUtils;
 
 public class FolhaMetaItemDTO {
 	
@@ -76,7 +77,7 @@ public class FolhaMetaItemDTO {
 		model.setFolhaMeta(new FolhaMetaModel(this.folhaMeta.getId()));
 		model.setTipoSugerida(StringUtils.isNotBlank(this.tipoSugerida) ? this.tipoSugerida : EnumSimNao.NAO.getValue());
 		model.setInclusao(LocalDateTime.now());
-		model.setResponsavelInclusao("SISTEMA");
+		model.setResponsavelInclusao(PLRUtils.SYS_USER);
 		
 		return model;
 	}

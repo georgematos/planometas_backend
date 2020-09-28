@@ -89,7 +89,7 @@ public class FolhaMetaDTO {
 		});
 		
 		model.setInclusao(LocalDateTime.now());
-		model.setResponsavelInclusao("SISTEMA");
+		model.setResponsavelInclusao(PLRUtils.SYS_USER);
 		
 		return
 				model;

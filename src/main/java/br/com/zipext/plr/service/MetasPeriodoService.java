@@ -50,7 +50,6 @@ public class MetasPeriodoService {
 						periodoPLR, situacao, PageRequest.of(0, pageSize));
 	}
 	
-
 	@Transactional(readOnly = true)
 	public List<MetasPeriodoModel> findMetasQuantitativasByPeriodoAndSituacao(Long periodoPLR, String situacao, Integer page) {
 		Integer pageSize = page == null ? 2000 : page;
@@ -59,6 +58,7 @@ public class MetasPeriodoService {
 						EnumQuantQual.QUANTITATIVA.getCodigo(), 
 						periodoPLR, situacao, PageRequest.of(0, pageSize));
 	}
+	
 	
 	@Transactional(readOnly = false)
 	public MetasPeriodoModel save(MetasPeriodoModel model) {

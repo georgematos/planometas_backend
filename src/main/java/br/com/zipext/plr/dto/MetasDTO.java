@@ -3,6 +3,7 @@ package br.com.zipext.plr.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,7 @@ import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.model.MetasPeriodoModel;
+import br.com.zipext.plr.model.RelMetaAvaliacaoProjetoModel;
 import br.com.zipext.plr.model.TempoModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.model.TipoMetaModel;
@@ -52,6 +54,10 @@ public class MetasDTO {
 	private GenericDTO metaDenominador;
 	
 	private GenericDTO aprovador; 
+	
+	private RelMetaAvaliacaoProjetoDTO avaliacao;
+	
+	private boolean permiteEdicaoAprovacao;
 
 	public MetasDTO() {}
 	
@@ -96,6 +102,15 @@ public class MetasDTO {
 		if (model.getAprovador() != null) {
 			this.aprovador = new GenericDTO(model.getAprovador());
 		}
+		
+		List<RelMetaAvaliacaoProjetoModel> avaliacoesModel = model.getAvaliacoesMetas();
+		if (avaliacoesModel != null && !avaliacoesModel.isEmpty()) {
+			Optional<RelMetaAvaliacaoProjetoModel> avaliacaoModel = avaliacoesModel.stream().findFirst();
+			this.avaliacao = avaliacaoModel.isPresent() ? new RelMetaAvaliacaoProjetoDTO(avaliacaoModel.get()) : new RelMetaAvaliacaoProjetoDTO();
+			this.permiteEdicaoAprovacao = false;
+		} else {
+			this.permiteEdicaoAprovacao = true;
+		}
 	}
 	
 	public MetasModel obterModel() {
@@ -135,7 +150,7 @@ public class MetasDTO {
 		}
 		
 		model.setInclusao(LocalDateTime.now());
-		model.setResponsavelInclusao("SISTEMA");
+		model.setResponsavelInclusao(PLRUtils.SYS_USER);
 		
 		return
 				model;
@@ -275,5 +290,21 @@ public class MetasDTO {
 
 	public void setAtivaForPeriodo(boolean isAtivaForPeriodo) {
 		this.isAtivaForPeriodo = isAtivaForPeriodo;
+	}
+
+	public RelMetaAvaliacaoProjetoDTO getAvaliacao() {
+		return avaliacao;
+	}
+
+	public void setAvaliacao(RelMetaAvaliacaoProjetoDTO avaliacao) {
+		this.avaliacao = avaliacao;
+	}
+
+	public boolean isPermiteEdicaoAprovacao() {
+		return permiteEdicaoAprovacao;
+	}
+
+	public void setPermiteEdicaoAprovacao(boolean permiteEdicaoAprovacao) {
+		this.permiteEdicaoAprovacao = permiteEdicaoAprovacao;
 	}
 }

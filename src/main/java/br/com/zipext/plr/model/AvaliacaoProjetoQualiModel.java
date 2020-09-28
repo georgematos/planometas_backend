@@ -1,6 +1,7 @@
 package br.com.zipext.plr.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -39,6 +41,9 @@ public class AvaliacaoProjetoQualiModel {
     
     @Column(name = "CD_LOGIN_ALT")
     private String responsavelAlteracao;
+    
+    @OneToMany(mappedBy = "pk.avaliacaoProjetoQuali")
+    private List<RelAvaliacaoProjetoModel> avaliacoesProjeto;
     
     public AvaliacaoProjetoQualiModel() {}
     
@@ -92,6 +97,14 @@ public class AvaliacaoProjetoQualiModel {
 
 	public void setResponsavelAlteracao(String responsavelAlteracao) {
 		this.responsavelAlteracao = responsavelAlteracao;
+	}
+	
+	public List<RelAvaliacaoProjetoModel> getAvaliacoesProjeto() {
+		return avaliacoesProjeto;
+	}
+
+	public void setAvaliacoesProjeto(List<RelAvaliacaoProjetoModel> avaliacoesProjeto) {
+		this.avaliacoesProjeto = avaliacoesProjeto;
 	}
 
 	@Override

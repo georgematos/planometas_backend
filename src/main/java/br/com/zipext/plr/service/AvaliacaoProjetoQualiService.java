@@ -18,7 +18,7 @@ public class AvaliacaoProjetoQualiService {
 	@Transactional(readOnly = true)
 	public List<AvaliacaoProjetoQualiModel> findAllOrderedByDescricao() {
 		return
-				this.findAllOrderedByDescricao();
+				this.repository.findAllByOrderByDescricaoAsc();
 	}
 	
 	@Transactional(readOnly = false)

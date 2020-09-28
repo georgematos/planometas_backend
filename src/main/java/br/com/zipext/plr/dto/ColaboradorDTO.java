@@ -86,15 +86,15 @@ public class ColaboradorDTO {
 		}
 		
 		if (StringUtils.isNotBlank(this.dataAdmissao)) {
-			model.setDataAdmissao(LocalDate.parse(this.dataAdmissao.substring(0, 10), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+			model.setDataAdmissao(LocalDate.parse(this.dataAdmissao.substring(0, 10), DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 		}
 		
 		if (StringUtils.isNotBlank(this.dataDemissao)) {
-			model.setDataDemissao(LocalDate.parse(this.dataDemissao.substring(0, 10), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+			model.setDataDemissao(LocalDate.parse(this.dataDemissao.substring(0, 10), DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 		}
 		
 		model.setInclusao(LocalDateTime.now());
-		model.setResponsavelInclusao("SISTEMA");
+		model.setResponsavelInclusao(PLRUtils.SYS_USER);
 		
 		return model;
 	}

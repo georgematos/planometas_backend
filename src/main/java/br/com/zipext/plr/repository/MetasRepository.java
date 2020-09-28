@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FormulaModel;
 import br.com.zipext.plr.model.FrequenciaMedicaoModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -57,4 +58,17 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 	@Query("select model from MetasModel model "
 		  + "where model.isQuantitativa = :isQuantitativa")
 	public List<MetasModel> findByQualificadorMeta(@Param("isQuantitativa") String isQuantitativa);
+	
+	@Query("select model from MetasModel model "
+		 + "join fetch model.prazo prazo "
+		 + "join fetch model.tipoMeta tipoMeta "
+		 + "where (:aprovador is null or model.aprovador = :aprovador)"
+		 + "and tipoMeta.descricao in (:tiposMeta) "
+		 + "and prazo.ano = :periodoPLR "
+		 + "and prazo.id <= :skyDataLimite")
+	public List<MetasModel> findProjetosVencidosByResponsavel(
+			@Param("periodoPLR") Integer periodoPLR,
+			@Param("skyDataLimite") Long skyDataLimite, 
+			@Param("aprovador") ColaboradorModel aprovador,
+			@Param("tiposMeta") List<String> tiposMeta);
 }

@@ -9,6 +9,7 @@ import br.com.zipext.plr.model.FolhaMetaAnualModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.model.TempoModel;
+import br.com.zipext.plr.utils.PLRUtils;
 
 public class FolhaMetaMensalDTO {
 	
@@ -62,7 +63,7 @@ public class FolhaMetaMensalDTO {
 		if (meta != null) {
 			this.meta = new GenericDTO(meta);
 			this.aprovador = new GenericDTO(meta.getAprovador());
-			if (meta.getTipoMeta().getDescricao().equalsIgnoreCase(EnumTipoMeta.PROJETOS.name())) {
+			if (meta.getTipoMeta().getDescricao().equalsIgnoreCase(EnumTipoMeta.PROJETO.name())) {
 				this.prazo = new TempoDTO(meta.getPrazo());
 			}
 		}
@@ -162,7 +163,7 @@ public class FolhaMetaMensalDTO {
 		model.setId(this.id);
 		model.setMeta(new MetasModel(this.idMeta));
 		model.setPrazo(this.prazo == null ? new TempoModel(-1L) : new TempoModel(this.prazo.getId()));
-		model.setResponsavelInclusao("SISTEMA");
+		model.setResponsavelInclusao(PLRUtils.SYS_USER);
 		model.setInclusao(LocalDateTime.now());
 		model.setValorMeta(this.valorMeta != null && this.valorMeta.equals(BigDecimal.ZERO) ? null : this.valorMeta);
 		model.setValorReal(this.valorReal != null && this.valorReal.equals(BigDecimal.ZERO) ? null : this.valorReal);
