@@ -22,6 +22,9 @@ public class RelMetaAvaliacaoProjetoModel {
 	@Column(name = "VAL_ESCALONAMENTO")
 	private BigDecimal valEscalonamento;
 	
+	@Column(name = "DS_COMENTARIOS")
+	private String comentarios;
+	
 	@ManyToOne
 	@JoinColumn(name = "CD_RESPONSAVEL")
 	private ColaboradorModel responsavel;
@@ -66,6 +69,14 @@ public class RelMetaAvaliacaoProjetoModel {
 
 	public void setValEscalonamento(BigDecimal valEscalonamento) {
 		this.valEscalonamento = valEscalonamento;
+	}
+	
+	public String getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(String comentarios) {
+		this.comentarios = comentarios;
 	}
 
 	@Override

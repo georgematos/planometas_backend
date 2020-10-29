@@ -16,6 +16,7 @@ import br.com.zipext.plr.utils.PLRUtils;
 public class RelMetaAvaliacaoProjetoDTO {
 	
 	private BigDecimal valEscalonamento;
+	private String comentarios;
 	private ColaboradorDTO responsavel;
 	private String dataAvaliacao;
 	private GenericDTO meta;
@@ -29,6 +30,7 @@ public class RelMetaAvaliacaoProjetoDTO {
 		this.dataAvaliacao = model.getDataAvaliacao().getDescricao();
 		this.responsavel = new ColaboradorDTO(model.getResponsavel());
 		this.valEscalonamento = model.getValEscalonamento();
+		this.comentarios = model.getComentarios();
 	}
 	
 	public RelMetaAvaliacaoProjetoModel obterModel() {
@@ -50,6 +52,7 @@ public class RelMetaAvaliacaoProjetoDTO {
 		modelPK.setRelAvaliacaoProjeto(avalProjetoModel);
 		
 		model.setValEscalonamento(this.valEscalonamento);
+		model.setComentarios(this.comentarios);
 		model.setResponsavel(new ColaboradorModel(this.responsavel.getMatricula()));
 		model.setDataAvaliacao(new TempoModel(PLRUtils.getSkyTempoFromStringDate(this.dataAvaliacao)));
 		model.setPk(modelPK);
@@ -64,6 +67,15 @@ public class RelMetaAvaliacaoProjetoDTO {
 
 	public void setValEscalonamento(BigDecimal valEscalonamento) {
 		this.valEscalonamento = valEscalonamento;
+	}
+	
+
+	public String getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(String comentarios) {
+		this.comentarios = comentarios;
 	}
 
 	public ColaboradorDTO getResponsavel() {

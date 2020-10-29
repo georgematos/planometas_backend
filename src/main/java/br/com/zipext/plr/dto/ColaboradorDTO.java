@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.model.AfastamentoModel;
 import br.com.zipext.plr.model.CargoModel;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.DiretoriaModel;
@@ -44,6 +45,8 @@ public class ColaboradorDTO {
 	
 	private UsuarioDTO usuario;
 	
+	private AfastamentoDTO afastamento;
+	
 	public ColaboradorDTO() {}
 	
 	public ColaboradorDTO(ColaboradorModel model) {
@@ -61,6 +64,15 @@ public class ColaboradorDTO {
 			Optional<UsuarioModel> userOptional = model.getUsuarios().stream().findFirst();
 			if (userOptional.isPresent()) {
 				this.usuario = new UsuarioDTO(userOptional.get());				
+			}
+		}
+		
+		if (model.getAfastamentos() != null && !model.getAfastamentos().isEmpty()) {
+			Optional<AfastamentoModel> afastamentoOptional = model.getAfastamentos()
+																  .stream().filter(p -> p.getFimAfastamento() == null)
+																  .findFirst();
+			if (afastamentoOptional.isPresent()) {
+				this.afastamento = new AfastamentoDTO(afastamentoOptional.get());
 			}
 		}
 	}
@@ -201,6 +213,14 @@ public class ColaboradorDTO {
 
 	public void setUsuario(UsuarioDTO usuario) {
 		this.usuario = usuario;
+	}
+	
+	public AfastamentoDTO getAfastamento() {
+		return afastamento;
+	}
+
+	public void setAfastamento(AfastamentoDTO afastamento) {
+		this.afastamento = afastamento;
 	}
 
 	public DiretoriaDTO getDiretoriaOrElse() {

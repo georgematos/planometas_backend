@@ -74,6 +74,9 @@ public class ColaboradorModel {
 	@OneToMany(mappedBy = "colaborador")
 	private List<UsuarioModel> usuarios;
 	
+	@OneToMany(mappedBy = "pk.colaborador")
+	private List<AfastamentoModel> afastamentos;
+	
 	public ColaboradorModel() {}
 	
 	public ColaboradorModel(String matricula) {
@@ -183,6 +186,14 @@ public class ColaboradorModel {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+	
+	public List<AfastamentoModel> getAfastamentos() {
+		return afastamentos;
+	}
+
+	public void setAfastamentos(List<AfastamentoModel> afastamentos) {
+		this.afastamentos = afastamentos;
+	}	
 	
 	/* Export */
 	
