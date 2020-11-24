@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
 
@@ -21,9 +22,13 @@ public interface FolhaMetaMensalRepository extends JpaRepository<FolhaMetaMensal
 
 	@Query("select model from FolhaMetaMensalModel model "
 	   	+  "join fetch model.meta meta "
+	   	+  "join fetch model.colaboradorMeta colab"
 	   	+  "join fetch model.prazo prazo "
 	   	+  "where meta = :meta "
+	   	+  "and colab = :colab"
 	   	+  "and prazo.ano = :ano "
 	   	+  "order by prazo.mes asc")
-	public List<FolhaMetaMensalModel> findByMetaAndAno(@Param("meta") MetasModel meta, @Param("ano") Integer ano);
+	public List<FolhaMetaMensalModel> findByMetaColabAndAno(@Param("meta") MetasModel meta, 
+															@Param("colab") ColaboradorModel colaborador, 
+															@Param("ano") Integer ano);
 }

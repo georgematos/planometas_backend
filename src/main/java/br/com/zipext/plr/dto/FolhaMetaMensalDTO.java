@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.zipext.plr.enums.EnumTipoMeta;
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaAnualModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -21,6 +22,7 @@ public class FolhaMetaMensalDTO {
 
 	private GenericDTO aprovador;
 	private GenericDTO meta;
+	private GenericDTO colaboradorMeta;
 	
 	private String tipoMeta;
 	
@@ -167,6 +169,10 @@ public class FolhaMetaMensalDTO {
 		model.setInclusao(LocalDateTime.now());
 		model.setValorMeta(this.valorMeta != null && this.valorMeta.equals(BigDecimal.ZERO) ? null : this.valorMeta);
 		model.setValorReal(this.valorReal != null && this.valorReal.equals(BigDecimal.ZERO) ? null : this.valorReal);
+		
+		if (this.colaboradorMeta != null) {
+			model.setColaboradorMeta(new ColaboradorModel(this.colaboradorMeta.getMatricula()));
+		}
 
 		return 
 				model;
@@ -434,5 +440,13 @@ public class FolhaMetaMensalDTO {
 
 	public void setMeta(GenericDTO meta) {
 		this.meta = meta;
+	}
+
+	public GenericDTO getColaboradorMeta() {
+		return colaboradorMeta;
+	}
+
+	public void setColaboradorMeta(GenericDTO colaboradorMeta) {
+		this.colaboradorMeta = colaboradorMeta;
 	}
 }

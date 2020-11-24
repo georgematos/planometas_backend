@@ -26,11 +26,13 @@ public class FolhaMetaMensalController {
 	@Autowired
 	private FolhaMetaMensalService service;
 	
-	@GetMapping("/meta/{idMeta}/periodoPLR/{periodoPLR}")
+	@GetMapping("/meta/{idMeta}/periodoPLR/{periodoPLR}/colab/{colabMeta}")
 	public ResponseEntity<List<FolhaMetaMensalDTO>> findByMeta(
 			@PathVariable("idMeta") Long idMeta, 
-			@PathVariable("periodoPLR") Integer periodoPLR) {
+			@PathVariable("periodoPLR") Integer periodoPLR,
+			@PathVariable("colabMeta") String colaboradorMeta) {
 		
+		//TODO atualizar esta busca para passar o colaborador da meta mensal.
 		List<FolhaMetaMensalModel> models = this.service.findByMetaAndAno(new MetasModel(idMeta), periodoPLR);
 		List<FolhaMetaMensalDTO> dtos = new ArrayList<>();;
 		

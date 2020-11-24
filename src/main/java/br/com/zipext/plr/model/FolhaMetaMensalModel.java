@@ -49,6 +49,10 @@ public class FolhaMetaMensalModel {
 	@JoinColumn(name = "SKY_TEMPO")
 	private TempoModel prazo;
 	
+	@ManyToOne
+	@JoinColumn(name = "CD_MATRICULA")
+	private ColaboradorModel colaboradorMeta;
+	
 	
 	public FolhaMetaMensalModel() {}
 	
@@ -129,6 +133,14 @@ public class FolhaMetaMensalModel {
 
 	public void setResponsavelInclusao(String responsavelInclusao) {
 		this.responsavelInclusao = responsavelInclusao;
+	}
+	
+	public ColaboradorModel getColaboradorMeta() {
+		return colaboradorMeta;
+	}
+
+	public void setColaboradorMeta(ColaboradorModel colaboradorMeta) {
+		this.colaboradorMeta = colaboradorMeta;
 	}
 
 	@Override
