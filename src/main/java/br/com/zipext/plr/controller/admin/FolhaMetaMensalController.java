@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.zipext.plr.dto.FolhaMetaMensalDTO;
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.service.FolhaMetaMensalService;
@@ -26,14 +27,13 @@ public class FolhaMetaMensalController {
 	@Autowired
 	private FolhaMetaMensalService service;
 	
-	@GetMapping("/meta/{idMeta}/periodoPLR/{periodoPLR}/colab/{colabMeta}")
+	@GetMapping("/meta/{idMeta}/periodoPLR/{periodoPLR}/colaborador/{matricula}")
 	public ResponseEntity<List<FolhaMetaMensalDTO>> findByMeta(
 			@PathVariable("idMeta") Long idMeta, 
 			@PathVariable("periodoPLR") Integer periodoPLR,
-			@PathVariable("colabMeta") String colaboradorMeta) {
+			@PathVariable("matricula") String matricula) {
 		
-		//TODO atualizar esta busca para passar o colaborador da meta mensal.
-		List<FolhaMetaMensalModel> models = this.service.findByMetaAndAno(new MetasModel(idMeta), periodoPLR);
+		List<FolhaMetaMensalModel> models = this.service.findByMetaColaboradorAndAno(new MetasModel(idMeta), new ColaboradorModel(matricula), periodoPLR);
 		List<FolhaMetaMensalDTO> dtos = new ArrayList<>();;
 		
 		if (models != null && !models.isEmpty()) {
@@ -44,10 +44,12 @@ public class FolhaMetaMensalController {
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
-	@PostMapping("/{idMeta}")
-	public ResponseEntity<List<FolhaMetaMensalDTO>> save(@RequestBody List<FolhaMetaMensalDTO> dtos, @PathVariable("idMeta") Long idMeta) {
+	@PostMapping("/meta/{idMeta}/periodoPLR/{periodoPLR}/colaborador/{matricula}")
+	public ResponseEntity<List<FolhaMetaMensalDTO>> save(@RequestBody List<FolhaMetaMensalDTO> dtos, 
+			@PathVariable("idMeta") Long idMeta, @PathVariable("periodoPLR") Integer periodoPLR,
+			@PathVariable("matricula") String matricula) {
 		List<FolhaMetaMensalModel> modelsToSave = dtos.stream().map(dto -> dto.obterModel()).collect(Collectors.toList());
-		this.service.deleteByMeta(new MetasModel(idMeta));
+		this.service.deleteByMetaColaboradorAndAno(new MetasModel(idMeta), new ColaboradorModel(matricula), periodoPLR);
 		
 		List<FolhaMetaMensalModel> models = this.service.saveAll(modelsToSave);
 		List<FolhaMetaMensalDTO> results= new ArrayList<>();

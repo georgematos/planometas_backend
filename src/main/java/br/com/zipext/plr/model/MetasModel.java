@@ -44,6 +44,9 @@ public class MetasModel {
 	@Column(name = "FL_QUANTI_QUALI")
 	private String isQuantitativa;
 	
+	@Column(name = "FL_INDIVIDUAL")
+	private String isMetaIndividual;
+	
 	@Column(name = "VAL_META")
 	private BigDecimal valor;
 	
@@ -245,6 +248,14 @@ public class MetasModel {
 		this.metaDenominador = metaDenominador;
 	}
 	
+	public String getIsMetaIndividual() {
+		return isMetaIndividual;
+	}
+
+	public void setIsMetaIndividual(String isMetaIndividual) {
+		this.isMetaIndividual = isMetaIndividual;
+	}
+
 	public List<FolhaMetaMensalModel> getFolhaMetasMensais() {
 		return folhaMetasMensais;
 	}

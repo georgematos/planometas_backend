@@ -19,16 +19,32 @@ public interface FolhaMetaMensalRepository extends JpaRepository<FolhaMetaMensal
 	
 	@Modifying
 	public void deleteByMeta(MetasModel meta);
+	
+	@Modifying
+	@Query("delete from FolhaMetaMensalModel model "
+		 + "where model.meta = :meta "
+		 + "and   model.colaboradorMeta = :colaborador "
+		 + "and   model.prazo in (select tempo from TempoModel tempo where tempo.ano = :ano)")
+	public void deleteByMetaColaboradorAndAno(@Param("meta") MetasModel meta, @Param("colaborador") ColaboradorModel colaborador,@Param("ano") Integer ano);
 
 	@Query("select model from FolhaMetaMensalModel model "
 	   	+  "join fetch model.meta meta "
-	   	+  "join fetch model.colaboradorMeta colab"
+	   	+  "join fetch model.colaboradorMeta colaborador "
 	   	+  "join fetch model.prazo prazo "
 	   	+  "where meta = :meta "
-	   	+  "and colab = :colab"
+	   	+  "and colaborador = :colaborador "
 	   	+  "and prazo.ano = :ano "
 	   	+  "order by prazo.mes asc")
-	public List<FolhaMetaMensalModel> findByMetaColabAndAno(@Param("meta") MetasModel meta, 
-															@Param("colab") ColaboradorModel colaborador, 
+	public List<FolhaMetaMensalModel> findByMetaColaboradorAndAno(@Param("meta") MetasModel meta, 
+															@Param("colaborador") ColaboradorModel colaborador, 
 															@Param("ano") Integer ano);
+	
+	@Query("select model from FolhaMetaMensalModel model "
+		   	+  "join fetch model.meta meta "
+		   	+  "join fetch model.prazo prazo "
+		   	+  "where meta = :meta "
+		   	+  "and prazo.ano = :ano "
+		   	+  "order by prazo.mes asc")
+		public List<FolhaMetaMensalModel> findByMetaAndAno(@Param("meta") MetasModel meta, 
+																@Param("ano") Integer ano);
 }

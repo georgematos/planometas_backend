@@ -50,7 +50,7 @@ public class FolhaMetaMensalModel {
 	private TempoModel prazo;
 	
 	@ManyToOne
-	@JoinColumn(name = "CD_MATRICULA")
+	@JoinColumn(name = "CD_MATRICULA_COLAB_META")
 	private ColaboradorModel colaboradorMeta;
 	
 	

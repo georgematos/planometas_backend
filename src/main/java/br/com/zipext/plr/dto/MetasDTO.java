@@ -39,6 +39,8 @@ public class MetasDTO {
 	
 	private String isQuantitativa;
 	
+	private String isMetaIndividual;
+	
 	private BigDecimal valor;
 	
 	private FrequenciaMedicaoDTO frequenciaMedicao;
@@ -242,6 +244,14 @@ public class MetasDTO {
 
 	public void setPrazo(String prazo) {
 		this.prazo = prazo;
+	}
+	
+	public String getIsMetaIndividual() {
+		return isMetaIndividual;
+	}
+
+	public void setIsMetaIndividual(String isMetaIndividual) {
+		this.isMetaIndividual = isMetaIndividual;
 	}
 
 	public FormulaDTO getFormula() {

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -34,6 +35,11 @@ public class FolhaMetaMensalService {
 		this.repository.deleteByMeta(meta);
 	}
 	
+	@Transactional(readOnly = false)
+	public void deleteByMetaColaboradorAndAno(MetasModel meta, ColaboradorModel colaborador, Integer ano) {
+		this.repository.deleteByMetaColaboradorAndAno(meta, colaborador, ano);
+	}
+	
 	@Transactional(readOnly = true)
 	public List<FolhaMetaMensalModel> findAll() {
 		return
@@ -41,15 +47,15 @@ public class FolhaMetaMensalService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<FolhaMetaMensalModel> findByMetaAndAno(MetasModel meta, Integer ano) {
+	public List<FolhaMetaMensalModel> findByMetaColaboradorAndAno(MetasModel meta, ColaboradorModel colaborador, Integer ano) {
 		return
-				this.repository.findByMetaAndAno(meta, ano);
+				this.repository.findByMetaColaboradorAndAno(meta, colaborador, ano);
 	}
 	
 	@Transactional(readOnly = true)
 	public List<FolhaMetaMensalModel> findByFolhaMetaItem(FolhaMetaItemModel folhaMetaItem) {
 		List<FolhaMetaMensalModel> models = 
-				this.findByMetaAndAno(folhaMetaItem.getMeta(), folhaMetaItem.getFolhaMeta().getInicioVigencia().getAno());
+				this.repository.findByMetaAndAno(folhaMetaItem.getMeta(), folhaMetaItem.getFolhaMeta().getInicioVigencia().getAno());
 		
 		return
 				models;
