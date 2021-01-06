@@ -12,6 +12,6 @@ import br.com.zipext.plr.model.TempoModel;
 public interface TempoRepository extends JpaRepository<TempoModel, Long> {
 
 	@Query("select distinct model.ano from TempoModel model "
-		 + "order by model.ano asc")
+		 + "order by model.ano desc")
 	public List<Integer> findDistinctAno();
 }
