@@ -1,8 +1,12 @@
 package br.com.zipext.plr.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.zipext.plr.model.EquivalenciaModel;
@@ -12,13 +16,19 @@ public interface EquivalenciaRepository extends JpaRepository<EquivalenciaModel,
 
 	public List<EquivalenciaModel> findAllByOrderByDescricaoAsc();
 	
-//	@Query("select equivalencia from EquivalenciaModel equivalencia "
-//			 + "where (:id is null or cargo.id = :id) "
-//			 + "and (:nome is null or cargo.nome like %:nome%) "
-//			 + "and (:equivalencia is null or cargo.equivalencia.id = :equivalencia) "
-//			 + "order by cargo.nome asc")
-//	public List<CargoModel> findByFilter(
-//			@Param("id") Long id,
-//			@Param("nome") String nome,
-//			@Param("equivalencia") Long equivalencia);
+	@Query("select equivalencia from EquivalenciaModel equivalencia "
+			 + "where (:id is null or equivalencia.id = :id) "
+			 + "and (:descricao is null or equivalencia.descricao like %:descricao%) "
+			 + "and (:multiplicador is null or equivalencia.multiplicador = :multiplicador) "
+			 + "and (:limiteMultiplicador is null or equivalencia.limiteMultiplicador = :limiteMultiplicador) "
+			 + "and (:limiteSomaMetas is null or equivalencia.limiteSomaMetas = :limiteSomaMetas) "
+			 + "order by equivalencia.descricao asc")
+	public Optional<List<EquivalenciaModel>> findByFilter(
+			@Param("id") Long id,
+			@Param("descricao") String descricao,
+			@Param("multiplicador") BigDecimal multiplicador,
+			@Param("limiteMultiplicador") BigDecimal limiteMultiplicador,
+			@Param("limiteSomaMetas") BigDecimal limiteSomaMetas);
+
+	public Optional<EquivalenciaModel> findByDescricao(String descricao);
 }

@@ -1,16 +1,27 @@
 package br.com.zipext.plr.controller.components;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.EquivalenciaDTO;
+import br.com.zipext.plr.model.EquivalenciaModel;
 import br.com.zipext.plr.service.EquivalenciaService;
 
 @Controller
@@ -19,66 +30,56 @@ public class EquivalenciaController {
 
 	@Autowired
 	private EquivalenciaService service;
-	
+
 	@GetMapping
 	public ResponseEntity<List<EquivalenciaDTO>> findAll() {
-		return new ResponseEntity<>
-			(this.service.findAllByOrderByDescricaoAsc().stream().map(EquivalenciaDTO::new).collect(Collectors.toList()), HttpStatus.OK);
+		return new ResponseEntity<>(this.service.findAllByOrderByDescricaoAsc().stream().map(EquivalenciaDTO::new)
+				.collect(Collectors.toList()), HttpStatus.OK);
 	}
-	
-//	@GetMapping("/filter")
-//	public ResponseEntity<List<EquivalenciaDTO>> findByFilter(
-//			@RequestParam(name = "codigo", required = false) Long id,
-//			@RequestParam(name = "nome", required = false) String nome,
-//			@RequestParam(name = "equivalencia", required = false) Long equivalencia) {
-//		
-//		List<CargoDTO> dtos = this.service.findByFilter(
-//				id,
-//				StringUtils.isNotBlank(nome) ? nome.toUpperCase() : null,
-//				equivalencia)
-//					.stream()
-//					.map(CargoDTO::new)
-//					.collect(Collectors.toList());
-//		
-//		return new ResponseEntity<>(dtos, HttpStatus.OK);
-//	}
-	
-//	@GetMapping("/export")
-//	public ResponseEntity<InputStreamResource> exportFolha(@RequestParam("matricula") String matricula, @RequestParam Long idFolhaMeta) throws IOException {
-//		ColaboradorModel model = this.colaboradorService.findByMatricula(matricula);
-//
-//		HttpHeaders headers = new HttpHeaders();
-//		String fileName = model.getMatricula() + "_" + model.getNome() + "_" + PLRUtils.today() + ".xlsx";
-//		
-//		headers.add("Content-Disposition", "attachment; filename=" + fileName);
-//		
-//		return new ResponseEntity<>(new InputStreamResource(this.service.export(idFolhaMeta)), headers, HttpStatus.OK);
-//	}
-	
-//	@PostMapping	
-//	public ResponseEntity<FolhaMetaDTO> save(@RequestBody FolhaMetaDTO dto) {
-//		if (dto.getId() != null) {
-//			this.folhaMetaItemService.deleteByIdFolhaMeta(dto.getId());
-//		}
-//	
-//		FolhaMetaModel model = this.service.save(dto.obterModel());
-//		model.setFolhaMetaItems(this.folhaMetaItemService.saveAll(dto.obterFolhaMetaItems(model)));
-//		model.getFolhaMetaItems().forEach(item -> item.setMeta(this.metasService.findById(item.getMeta().getId())));
-//		
-//		return new ResponseEntity<>(new FolhaMetaDTO(model), HttpStatus.OK);
-//	}
-//	
-//	@PutMapping("/aprovacao/{id}")
-//	public ResponseEntity<Void> aprovarFolhaMeta(@PathVariable Long id) {
-//		this.service.updateSituacaoById(id, EnumSituacao.ATIVO.getCodigo().toString());
-//		
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
-//	
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<Void> deleteFolhaMeta(@PathVariable Long id) {
-//		this.service.deleteById(id);
-//		
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
+
+	@GetMapping("/filter")
+	public ResponseEntity<List<EquivalenciaDTO>> findByFilter(@RequestParam(name = "id", required = false) Long id,
+			@RequestParam(name = "descricao", required = false) String descricao,
+			@RequestParam(name = "multiplicador", required = false) BigDecimal multiplicador,
+			@RequestParam(name = "limitemultiplicador", required = false) BigDecimal limiteMultiplicador,
+			@RequestParam(name = "limitesomametas", required = false) BigDecimal limiteSomaMetas)
+			throws EntityNotFoundException {
+
+		List<EquivalenciaDTO> dtos = new ArrayList<>();
+
+		try {
+			List<EquivalenciaModel> models = this.service.findByFilter(id,
+					StringUtils.isNotBlank(descricao) ? descricao.toUpperCase() : null, multiplicador,
+					limiteMultiplicador, limiteSomaMetas);
+
+			dtos = models.stream().map(EquivalenciaDTO::new).collect(Collectors.toList());
+
+			return ResponseEntity.ok().body(dtos);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+
+	}
+
+	@PostMapping
+	public ResponseEntity<EquivalenciaDTO> save(@RequestBody EquivalenciaDTO dto) throws Exception {
+		if (dto.getId() != null) {
+			this.service.findById(dto.getId());
+		}
+
+		EquivalenciaModel model;
+
+		model = this.service.save(dto.obterModel());
+		return ResponseEntity.status(HttpStatus.CREATED).body(new EquivalenciaDTO(model));
+
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<EquivalenciaDTO> atualizarCargo(@PathVariable Long id, @RequestBody EquivalenciaDTO dto)
+			throws Exception {
+		EquivalenciaModel entity = this.service.update(id, dto);
+
+		return ResponseEntity.ok().body(new EquivalenciaDTO(entity));
+	}
+
 }
