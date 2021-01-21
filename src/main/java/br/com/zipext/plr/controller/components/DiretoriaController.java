@@ -60,5 +60,4 @@ public class DiretoriaController {
 		return ResponseEntity.ok().body(new DiretoriaDTO(entity));
 	}
 	
-	
 }
