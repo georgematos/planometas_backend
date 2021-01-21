@@ -12,10 +12,14 @@ public class FilialValidator implements Validator<FilialModel> {
 	@Autowired
 	private FilialRepository repository;
 	
+	@Autowired
+	ValidarNomeValidator nomeValidator;
+	
 	public boolean validar(FilialModel filial) throws Exception {
-		if (repository.findByNome(filial.getNome()).isPresent() && filial.getId() == null) {
-			throw new Exception("Foi encontrada uma filial com o mesmo nome, por favor tente outro.");
-		};
+		boolean isPresent = repository.findByNome(filial.getNome()).isPresent();
+
+		nomeValidator.validar(isPresent, filial.getId());
+
 		return true;
 	}
 

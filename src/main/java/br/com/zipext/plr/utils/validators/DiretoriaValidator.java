@@ -8,14 +8,18 @@ import br.com.zipext.plr.repository.DiretoriaRepository;
 
 @Service
 public class DiretoriaValidator implements Validator<DiretoriaModel> {
-	
+
 	@Autowired
 	private DiretoriaRepository repository;
-	
+
+	@Autowired
+	ValidarNomeValidator nomeValidator;
+
 	public boolean validar(DiretoriaModel diretoria) throws Exception {
-		if (repository.findByNome(diretoria.getNome()).isPresent() && diretoria.getId() == null) {
-			throw new Exception("Foi encontrada uma diretoria com o mesmo nome, por favor tente outro.");
-		};
+		boolean isPresent = repository.findByNome(diretoria.getNome()).isPresent();
+
+		nomeValidator.validar(isPresent, diretoria.getId());
+
 		return true;
 	}
 
