@@ -13,7 +13,7 @@ public class DiretoriaValidator implements Validator<DiretoriaModel> {
 	private DiretoriaRepository repository;
 
 	@Autowired
-	ValidarNomeValidator nomeValidator;
+	ValidarNomeValidator<Long> nomeValidator;
 
 	public boolean validar(DiretoriaModel diretoria) throws Exception {
 		boolean isPresent = repository.findByNome(diretoria.getNome()).isPresent();

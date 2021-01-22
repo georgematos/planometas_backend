@@ -13,7 +13,7 @@ public class FilialValidator implements Validator<FilialModel> {
 	private FilialRepository repository;
 	
 	@Autowired
-	ValidarNomeValidator nomeValidator;
+	ValidarNomeValidator<Long> nomeValidator;
 	
 	public boolean validar(FilialModel filial) throws Exception {
 		boolean isPresent = repository.findByNome(filial.getNome()).isPresent();
