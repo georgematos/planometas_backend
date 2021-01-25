@@ -38,19 +38,19 @@ public class WebConfig implements WebMvcConfigurer {
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/filiais/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
-			.allowedMethods("GET");
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/diretorias/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
-			.allowedMethods("GET");
-		registry.addMapping("/filiais/**")
-			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
-			.allowedMethods("GET");
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/cargos/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
-			.allowedMethods("GET");
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
+		registry.addMapping("/equivalencias/**")
+		.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+		.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/times/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
-			.allowedMethods("GET");
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/formulas/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET");

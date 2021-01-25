@@ -57,4 +57,21 @@ public class TempoDTO {
 	public void setDia(Integer dia) {
 		this.dia = dia;
 	}
+	
+	public TempoModel obterModel() {
+		TempoModel tempoModel = new TempoModel();
+
+		if (this.id != null)
+			tempoModel.setId(this.id);
+		if (this.descricao != null)
+			tempoModel.setDescricao(this.getDescricao());
+		if (this.ano != null)
+			tempoModel.setAno(this.getAno());
+		if (this.dia != null)
+			tempoModel.setDia(this.getDia());
+		if (this.mes != null)
+			tempoModel.setMes(this.getMes());
+
+		return tempoModel;
+	}
 }

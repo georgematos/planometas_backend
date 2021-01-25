@@ -2,20 +2,24 @@ package br.com.zipext.plr.dto;
 
 import org.springframework.beans.BeanUtils;
 
+import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.CargoModel;
 
 public class CargoDTO {
-	
+
 	private Long id;
 	private String nome;
 	private EquivalenciaDTO equivalencia;
+	private String situacao;
 
-	public CargoDTO() {}
-	
+	public CargoDTO() {
+	}
+
 	public CargoDTO(CargoModel model) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
 			this.equivalencia = new EquivalenciaDTO(model.getEquivalencia());
+			this.situacao = EnumSituacao.forValue(this.situacao).getDescricao();
 		}
 	}
 
@@ -42,4 +46,13 @@ public class CargoDTO {
 	public void setEquivalencia(EquivalenciaDTO equivalencia) {
 		this.equivalencia = equivalencia;
 	}
+
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
+	}
+
 }

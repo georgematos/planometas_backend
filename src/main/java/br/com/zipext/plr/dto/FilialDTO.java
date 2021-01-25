@@ -4,30 +4,30 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.BeanUtils;
 
-import br.com.zipext.plr.model.TimeModel;
+import br.com.zipext.plr.model.FilialModel;
 import br.com.zipext.plr.utils.PLRUtils;
 
-public class TimeDTO {
+public class FilialDTO {
 
-	private String codigo;
+	private Long id;
+
 	private String nome;
-	private boolean isNewTime;
 
-	public TimeDTO() {
+	public FilialDTO() {
 	}
 
-	public TimeDTO(TimeModel model) {
+	public FilialDTO(FilialModel model) {
 		if (model != null) {
 			BeanUtils.copyProperties(model, this);
 		}
 	}
 
-	public String getCodigo() {
-		return codigo;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -38,22 +38,14 @@ public class TimeDTO {
 		this.nome = nome;
 	}
 
-	public boolean getIsNewTime() {
-		return isNewTime;
-	}
+	public FilialModel obterModel() {
+		FilialModel filialModel = new FilialModel();
 
-	public void setIsNewTime(boolean isNewTime) {
-		this.isNewTime = isNewTime;
-	}
-
-	public TimeModel obterModel() {
-		TimeModel filialModel = new TimeModel();
-
-		if (this.codigo != null)
-			filialModel.setCodigo(this.codigo.toUpperCase());
+		if (this.id != null)
+			filialModel.setId(this.id);
 		if (this.nome != null)
 			filialModel.setNome(this.getNome().toUpperCase());
-		if (this.getIsNewTime()) {
+		if (this.id == null) {
 			filialModel.setInclusao(LocalDateTime.now());
 			filialModel.setResponsavelInclusao(PLRUtils.SYS_USER);
 		} else {
