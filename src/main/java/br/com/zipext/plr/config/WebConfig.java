@@ -46,8 +46,8 @@ public class WebConfig implements WebMvcConfigurer {
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/equivalencias/**")
-		.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
-		.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/times/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
@@ -61,6 +61,9 @@ public class WebConfig implements WebMvcConfigurer {
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/frequenciasmedicao/**")
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
+		registry.addMapping("/escalonamentos/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/tempo/**")
