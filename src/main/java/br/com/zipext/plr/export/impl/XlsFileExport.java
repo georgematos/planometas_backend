@@ -38,8 +38,8 @@ public class XlsFileExport extends FileExport {
 	
 	public Workbook initWorkbook(String templatePath, EnumXLSSheets sheet) {
 		try {
-			this.workbook = WorkbookFactory.create(getFileInputStream(templatePath));
-			this.sheet = this.workbook.getSheet(sheet.getNome());
+			workbook = WorkbookFactory.create(getFileInputStream(templatePath));
+			this.sheet = workbook.getSheet(sheet.getNome());
 		} catch (EncryptedDocumentException | IOException e) {
 		
 		}

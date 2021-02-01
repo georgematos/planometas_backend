@@ -4,7 +4,8 @@ public enum EnumXLSSheets {
 	
 	FOLHA_METAS("Folha de Metas"),
 	INDICADORES("Indicadores"),
-	COLABORADORES("Colaboradores");
+	COLABORADORES("Colaboradores"),
+	CARGOS("Cargos");
 
 	private String nome;
 	
