@@ -11,7 +11,8 @@ public enum EnumXLSTemplates {
 	TIMES(8L),
 	TIPOS_META(9L),
 	TIPOS_MEDICAO(10L),
-	FORMULA(11L);
+	FORMULA(11L),
+	FREQUENCIA_MEDICAO(12L);
 
 	private Long codigo;
 	

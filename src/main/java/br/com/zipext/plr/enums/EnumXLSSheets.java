@@ -12,7 +12,8 @@ public enum EnumXLSSheets {
 	TIMES("Times"),
 	TIPOS_METAS("Tipos de Metas"),
 	TIPOS_MEDICAO("Tipos de Medicao"),
-	FORMULA("Formula");
+	FORMULA("Formula"),
+	FREQUENCIA_MEDICAO("Frequencia de Medicao");
 
 	private String nome;
 	
