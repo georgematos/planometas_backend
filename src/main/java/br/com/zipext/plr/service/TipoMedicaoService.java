@@ -1,5 +1,7 @@
 package br.com.zipext.plr.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,6 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.dto.TipoMedicaoDTO;
+import br.com.zipext.plr.enums.EnumProperty;
+import br.com.zipext.plr.enums.EnumXLSArea;
+import br.com.zipext.plr.enums.EnumXLSSheets;
+import br.com.zipext.plr.enums.EnumXLSTemplates;
+import br.com.zipext.plr.export.impl.XlsFileExport;
+import br.com.zipext.plr.model.TemplateModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.repository.TipoMedicaoRepository;
 import br.com.zipext.plr.utils.PLRUtils;
@@ -19,9 +27,14 @@ public class TipoMedicaoService {
 
 	@Autowired
 	private TipoMedicaoRepository repository;
-	
+
 	@Autowired
 	private TipoMedicaoValidator validator;
+	@Autowired
+	private PropertyService propertyService;
+
+	@Autowired
+	private TemplateCampoService templateCampoService;
 
 	@Transactional(readOnly = true)
 	public List<TipoMedicaoModel> findAllByOrderByDescricaoAsc() {
@@ -40,7 +53,7 @@ public class TipoMedicaoService {
 	public TipoMedicaoModel findById(Long id) {
 		return repository.findById(id).get();
 	}
-	
+
 	@Transactional(readOnly = true)
 	public TipoMedicaoModel findByDescricao(String descricao) {
 		return repository.findByDescricao(descricao).get();
@@ -68,5 +81,20 @@ public class TipoMedicaoService {
 		entity.setDescricao(dto.getDescricao().toUpperCase());
 		entity.setAlteracao(LocalDateTime.now());
 		entity.setResponsavelAlteracao(PLRUtils.SYS_USER);
+	}
+
+	public ByteArrayInputStream export() throws IOException {
+		String template = propertyService.getProperty(EnumProperty.XLS_TEMPLATE_TIPOS_MEDICAO_PATH);
+		XlsFileExport export = new XlsFileExport(template, EnumXLSSheets.TIPOS_MEDICAO);
+		byte emptyBuff[] = new byte[] {};
+
+		List<TipoMedicaoModel> models = this.repository.findAll();
+		if (models != null && !models.isEmpty()) {
+			export.processTable(models, this.templateCampoService.findByTemplateAndArea(
+					new TemplateModel(EnumXLSTemplates.TIPOS_MEDICAO.getCodigo()), EnumXLSArea.TIPOS_MEDICAO.getArea()));
+			return export.writeToFile();
+		}
+
+		return new ByteArrayInputStream(emptyBuff);
 	}
 }

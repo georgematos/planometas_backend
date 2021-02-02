@@ -10,7 +10,8 @@ public enum EnumXLSSheets {
 	DIRETORIAS("Diretorias"),
 	FILIAIS("Filiais"),
 	TIMES("Times"),
-	TIPOS_METAS("Tipos de Metas");
+	TIPOS_METAS("Tipos de Metas"),
+	TIPOS_MEDICAO("Tipos de Medicao");
 
 	private String nome;
 	
