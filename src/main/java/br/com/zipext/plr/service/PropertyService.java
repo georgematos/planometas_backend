@@ -43,6 +43,9 @@ public class PropertyService {
 
 	@Value("${app.plr.export.template.frequencia.medicao.path}")
 	private String templateFrequenciaMedicaoPath;
+
+	@Value("${app.plr.export.template.escalonamento.path}")
+	private String templateEscalonamentoPath;
 	
 	@Value("${app.frontend.ext.ip}")
 	private String appExternalHostIp;
@@ -76,6 +79,8 @@ public class PropertyService {
 			return this.templateFormulaPath;
 		case XLS_TEMPLATE_FREQUENCIA_MEDICAO_PATH:
 			return this.templateFrequenciaMedicaoPath;
+		case XLS_TEMPLATE_ESCALONAMENTO_PATH:
+			return this.templateEscalonamentoPath;
 		case APP_EXTERNAL_HOST_IP:
 			return this.appExternalHostIp;
 		case APP_INTERNAL_HOST_IP:

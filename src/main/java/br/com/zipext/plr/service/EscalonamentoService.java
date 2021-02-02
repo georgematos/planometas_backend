@@ -1,5 +1,7 @@
 package br.com.zipext.plr.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.dto.EscalonamentoDTO;
+import br.com.zipext.plr.enums.EnumProperty;
+import br.com.zipext.plr.enums.EnumXLSArea;
+import br.com.zipext.plr.enums.EnumXLSSheets;
+import br.com.zipext.plr.enums.EnumXLSTemplates;
+import br.com.zipext.plr.export.impl.XlsFileExport;
 import br.com.zipext.plr.model.EscalonamentoModel;
+import br.com.zipext.plr.model.TemplateModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.repository.EscalonamentoRepository;
 import br.com.zipext.plr.repository.TipoMedicaoRepository;
@@ -22,10 +30,16 @@ public class EscalonamentoService {
 
 	@Autowired
 	private EscalonamentoRepository repository;
-	
+
 	@Autowired
 	private TipoMedicaoRepository tipoMedicaoRepository;
-	
+
+	@Autowired
+	private PropertyService propertyService;
+
+	@Autowired
+	private TemplateCampoService templateCampoService;
+
 	@Autowired
 	private EscalonamentoValidator validator;
 
@@ -46,11 +60,11 @@ public class EscalonamentoService {
 				.max((esc1, esc2) -> esc1.getFaixa().compareTo(esc2.getFaixa()));
 
 	}
-	
+
 	public List<EscalonamentoModel> findByFilter(Long id, Long tipoMedicaoId, BigDecimal faixa, BigDecimal desempenho) {
 		return repository.findByFilter(id, tipoMedicaoId, faixa, desempenho);
 	}
-	
+
 	public Optional<EscalonamentoModel> findById(Long id) {
 		return repository.findById(id);
 	}
@@ -65,9 +79,9 @@ public class EscalonamentoService {
 
 	@Transactional(readOnly = false)
 	public EscalonamentoModel update(Long id, EscalonamentoDTO dto) throws Exception {
-		
+
 		validator.validar(dto.obterModel());
-		
+
 		EscalonamentoModel entity = repository.findById(id).get();
 		updateEntity(entity, dto);
 		return repository.save(entity);
@@ -80,5 +94,22 @@ public class EscalonamentoService {
 		entity.setDesempenho(dto.getDesempenho());
 		entity.setAlteracao(LocalDateTime.now());
 		entity.setResponsavelAlteracao(PLRUtils.SYS_USER);
+	}
+
+	public ByteArrayInputStream export() throws IOException {
+		String template = propertyService.getProperty(EnumProperty.XLS_TEMPLATE_ESCALONAMENTO_PATH);
+		XlsFileExport export = new XlsFileExport(template, EnumXLSSheets.ESCALONAMENTO);
+		byte emptyBuff[] = new byte[] {};
+
+		List<EscalonamentoModel> models = this.repository.findAll();
+		if (models != null && !models.isEmpty()) {
+			export.processTable(models,
+					this.templateCampoService.findByTemplateAndArea(
+							new TemplateModel(EnumXLSTemplates.ESCALONAMENTO.getCodigo()),
+							EnumXLSArea.ESCALONAMENTO.getArea()));
+			return export.writeToFile();
+		}
+
+		return new ByteArrayInputStream(emptyBuff);
 	}
 }
