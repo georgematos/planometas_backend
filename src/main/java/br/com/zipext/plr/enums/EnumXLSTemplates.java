@@ -4,7 +4,8 @@ public enum EnumXLSTemplates {
 	FOLHA_METAS(1L),
 	INDICADORES(2L),
 	COLABORADORES(3L),
-	CARGOS(4L);
+	CARGOS(4L),
+	EQUIVALENCIAS(5L);
 
 	private Long codigo;
 	

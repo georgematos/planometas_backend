@@ -24,6 +24,7 @@ import br.com.zipext.plr.dto.CargoDTO;
 import br.com.zipext.plr.dto.CargoNewDTO;
 import br.com.zipext.plr.model.CargoModel;
 import br.com.zipext.plr.service.CargoService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/cargos")
@@ -73,9 +74,9 @@ public class CargoController {
 	}
 
 	@GetMapping("/export")
-	public ResponseEntity<InputStreamResource> exportIndicadores() throws IOException {
+	public ResponseEntity<InputStreamResource> exportCargos() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
-		String fileName = "CARGOS" + "_" + ".xlsx";
+		String fileName = "CARGOS" + "_" + PLRUtils.today() + ".xlsx";
 
 		headers.add("Content-Disposition", "attachment; filename=" + fileName);
 
