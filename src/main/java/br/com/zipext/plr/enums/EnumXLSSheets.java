@@ -11,7 +11,8 @@ public enum EnumXLSSheets {
 	FILIAIS("Filiais"),
 	TIMES("Times"),
 	TIPOS_METAS("Tipos de Metas"),
-	TIPOS_MEDICAO("Tipos de Medicao");
+	TIPOS_MEDICAO("Tipos de Medicao"),
+	FORMULA("Formula");
 
 	private String nome;
 	

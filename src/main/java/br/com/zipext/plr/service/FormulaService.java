@@ -1,5 +1,7 @@
 package br.com.zipext.plr.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,8 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.dto.FormulaDTO;
+import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.enums.EnumSituacao;
+import br.com.zipext.plr.enums.EnumXLSArea;
+import br.com.zipext.plr.enums.EnumXLSSheets;
+import br.com.zipext.plr.enums.EnumXLSTemplates;
+import br.com.zipext.plr.export.impl.XlsFileExport;
 import br.com.zipext.plr.model.FormulaModel;
+import br.com.zipext.plr.model.TemplateModel;
 import br.com.zipext.plr.repository.FormulaRepository;
 import br.com.zipext.plr.utils.PLRUtils;
 import br.com.zipext.plr.utils.validators.FormulaValidator;
@@ -22,6 +30,12 @@ public class FormulaService {
 	
 	@Autowired
 	private FormulaValidator validator;
+	
+	@Autowired
+	private PropertyService propertyService;
+
+	@Autowired
+	private TemplateCampoService templateCampoService;
 
 	@Transactional(readOnly = true)
 	public List<FormulaModel> findAllAtivosByOrderByNomeAsc() {
@@ -84,5 +98,20 @@ public class FormulaService {
 		default:
 			return null;
 		}
+	}
+	
+	public ByteArrayInputStream export() throws IOException {
+		String template = propertyService.getProperty(EnumProperty.XLS_TEMPLATE_FORMULA_PATH);
+		XlsFileExport export = new XlsFileExport(template, EnumXLSSheets.FORMULA);
+		byte emptyBuff[] = new byte[] {};
+
+		List<FormulaModel> models = this.repository.findAll();
+		if (models != null && !models.isEmpty()) {
+			export.processTable(models, this.templateCampoService.findByTemplateAndArea(
+					new TemplateModel(EnumXLSTemplates.FORMULA.getCodigo()), EnumXLSArea.FORMULA.getArea()));
+			return export.writeToFile();
+		}
+
+		return new ByteArrayInputStream(emptyBuff);
 	}
 }
