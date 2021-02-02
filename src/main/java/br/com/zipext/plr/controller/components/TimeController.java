@@ -1,10 +1,14 @@
 package br.com.zipext.plr.controller.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.com.zipext.plr.dto.TimeDTO;
 import br.com.zipext.plr.model.TimeModel;
 import br.com.zipext.plr.service.TimeService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/times")
@@ -57,5 +62,17 @@ public class TimeController {
 		dto.setCodigo(dto.getCodigo().toUpperCase());
 		TimeModel entity = this.service.update(codigo, dto);
 		return ResponseEntity.ok().body(new TimeDTO(entity));
+	}
+	
+	@GetMapping("/export")
+	public ResponseEntity<InputStreamResource> exportTimes() throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "TIMES" + "_" + PLRUtils.today() + ".xlsx";
+
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
+		ByteArrayInputStream exported = service.export();
+		
+		return new ResponseEntity<>(new InputStreamResource(exported), headers, HttpStatus.OK);
 	}
 }

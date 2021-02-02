@@ -7,7 +7,8 @@ public enum EnumXLSTemplates {
 	CARGOS(4L),
 	EQUIVALENCIAS(5L),
 	DIRETORIAS(6L),
-	FILIAIS(7L);
+	FILIAIS(7L),
+	TIMES(8L);
 
 	private Long codigo;
 	

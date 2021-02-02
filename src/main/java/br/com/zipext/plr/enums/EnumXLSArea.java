@@ -9,7 +9,8 @@ public enum EnumXLSArea {
 	CARGOS("CARGOS"),
 	EQUIVALENCIAS("EQUIVALENCIAS"),
 	DIRETORIAS("DIRETORIAS"),
-	FILIAIS("FILIAIS");
+	FILIAIS("FILIAIS"),
+	TIMES("TIMES");
 	
 	private String area;
 	
