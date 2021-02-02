@@ -22,6 +22,9 @@ public class PropertyService {
 
 	@Value("${app.plr.export.template.equivalencias.path}")
 	private String templateEquivalenciasPath;
+
+	@Value("${app.plr.export.template.diretorias.path}")
+	private String templateDiretoriasPath;
 	
 	@Value("${app.frontend.ext.ip}")
 	private String appExternalHostIp;
@@ -41,6 +44,8 @@ public class PropertyService {
 			return this.templateCargosPath;
 		case XLS_TEMPLATE_EQUIVALENCIAS_PATH:
 			return this.templateEquivalenciasPath;
+		case XLS_TEMPLATE_DIRETORIAS_PATH:
+			return this.templateDiretoriasPath;
 		case APP_EXTERNAL_HOST_IP:
 			return this.appExternalHostIp;
 		case APP_INTERNAL_HOST_IP:

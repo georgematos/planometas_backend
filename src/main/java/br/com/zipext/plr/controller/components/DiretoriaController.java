@@ -1,9 +1,13 @@
 package br.com.zipext.plr.controller.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.com.zipext.plr.dto.DiretoriaDTO;
 import br.com.zipext.plr.model.DiretoriaModel;
 import br.com.zipext.plr.service.DiretoriaService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/diretorias")
@@ -58,6 +63,18 @@ public class DiretoriaController {
 		DiretoriaModel entity = this.service.update(id, dto);
 
 		return ResponseEntity.ok().body(new DiretoriaDTO(entity));
+	}
+	
+	@GetMapping("/export")
+	public ResponseEntity<InputStreamResource> exportDiretorias() throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "DIRETORIAS" + "_" + PLRUtils.today() + ".xlsx";
+
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
+		ByteArrayInputStream exported = service.export();
+		
+		return new ResponseEntity<>(new InputStreamResource(exported), headers, HttpStatus.OK);
 	}
 	
 }

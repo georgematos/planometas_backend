@@ -5,7 +5,8 @@ public enum EnumXLSTemplates {
 	INDICADORES(2L),
 	COLABORADORES(3L),
 	CARGOS(4L),
-	EQUIVALENCIAS(5L);
+	EQUIVALENCIAS(5L),
+	DIRETORIAS(6L);
 
 	private Long codigo;
 	
