@@ -7,6 +7,7 @@ public enum EnumXLSSheets {
 	COLABORADORES("Colaboradores"),
 	CARGOS("Cargos"),
 	EQUIVALENCIAS("Equivalencias"),
+	FILIAIS("Filiais"),
 	DIRETORIAS("Diretorias");
 
 	private String nome;

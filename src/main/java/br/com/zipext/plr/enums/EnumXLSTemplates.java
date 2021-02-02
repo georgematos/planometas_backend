@@ -6,7 +6,8 @@ public enum EnumXLSTemplates {
 	COLABORADORES(3L),
 	CARGOS(4L),
 	EQUIVALENCIAS(5L),
-	DIRETORIAS(6L);
+	DIRETORIAS(6L),
+	FILIAIS(7L);
 
 	private Long codigo;
 	
