@@ -9,7 +9,8 @@ public enum EnumXLSSheets {
 	EQUIVALENCIAS("Equivalencias"),
 	DIRETORIAS("Diretorias"),
 	FILIAIS("Filiais"),
-	TIMES("Times");
+	TIMES("Times"),
+	TIPOS_METAS("Tipos de Metas");
 
 	private String nome;
 	

@@ -31,6 +31,9 @@ public class PropertyService {
 
 	@Value("${app.plr.export.template.times.path}")
 	private String templateTimesPath;
+
+	@Value("${app.plr.export.template.tipos.meta.path}")
+	private String templateTiposMetaPath;
 	
 	@Value("${app.frontend.ext.ip}")
 	private String appExternalHostIp;
@@ -56,6 +59,8 @@ public class PropertyService {
 			return this.templateFiliaisPath;
 		case XLS_TEMPLATE_TIMES_PATH:
 			return this.templateTimesPath;
+		case XLS_TEMPLATE_TIPOS_META_PATH:
+			return this.templateTiposMetaPath;
 		case APP_EXTERNAL_HOST_IP:
 			return this.appExternalHostIp;
 		case APP_INTERNAL_HOST_IP:

@@ -8,7 +8,8 @@ public enum EnumXLSTemplates {
 	EQUIVALENCIAS(5L),
 	DIRETORIAS(6L),
 	FILIAIS(7L),
-	TIMES(8L);
+	TIMES(8L),
+	TIPOS_META(9L);
 
 	private Long codigo;
 	
