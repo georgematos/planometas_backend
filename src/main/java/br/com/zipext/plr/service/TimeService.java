@@ -1,5 +1,7 @@
 package br.com.zipext.plr.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,6 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.dto.TimeDTO;
+import br.com.zipext.plr.enums.EnumProperty;
+import br.com.zipext.plr.enums.EnumXLSArea;
+import br.com.zipext.plr.enums.EnumXLSSheets;
+import br.com.zipext.plr.enums.EnumXLSTemplates;
+import br.com.zipext.plr.export.impl.XlsFileExport;
+import br.com.zipext.plr.model.TemplateModel;
 import br.com.zipext.plr.model.TimeModel;
 import br.com.zipext.plr.repository.TimeRepository;
 import br.com.zipext.plr.utils.PLRUtils;
@@ -24,6 +32,12 @@ public class TimeService {
 
 	@Autowired
 	private Validator<TimeModel> validator;
+	
+	@Autowired
+	private PropertyService propertyService;
+
+	@Autowired
+	private TemplateCampoService templateCampoService;
 
 	@Transactional(readOnly = true)
 	public List<TimeModel> findAllByOrderByNomeAsc() {
@@ -71,5 +85,20 @@ public class TimeService {
 		entity.setNome(dto.getNome().toUpperCase());
 		entity.setAlteracao(LocalDateTime.now());
 		entity.setResponsavelAlteracao(PLRUtils.SYS_USER);
+	}
+	
+	public ByteArrayInputStream export() throws IOException {
+		String template = propertyService.getProperty(EnumProperty.XLS_TEMPLATE_TIMES_PATH);
+		XlsFileExport export = new XlsFileExport(template, EnumXLSSheets.TIMES);
+		byte emptyBuff[] = new byte[] {};
+
+		List<TimeModel> models = this.repository.findAll();
+		if (models != null && !models.isEmpty()) {
+			export.processTable(models, this.templateCampoService.findByTemplateAndArea(
+					new TemplateModel(EnumXLSTemplates.TIMES.getCodigo()), EnumXLSArea.TIMES.getArea()));
+			return export.writeToFile();
+		}
+
+		return new ByteArrayInputStream(emptyBuff);
 	}
 }

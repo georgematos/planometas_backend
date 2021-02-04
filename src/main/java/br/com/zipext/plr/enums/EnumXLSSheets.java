@@ -4,7 +4,17 @@ public enum EnumXLSSheets {
 	
 	FOLHA_METAS("Folha de Metas"),
 	INDICADORES("Indicadores"),
-	COLABORADORES("Colaboradores");
+	COLABORADORES("Colaboradores"),
+	CARGOS("Cargos"),
+	EQUIVALENCIAS("Equivalencias"),
+	DIRETORIAS("Diretorias"),
+	FILIAIS("Filiais"),
+	TIMES("Times"),
+	TIPOS_METAS("Tipos de Metas"),
+	TIPOS_MEDICAO("Tipos de Medicao"),
+	FORMULA("Formula"),
+	FREQUENCIA_MEDICAO("Frequencia de Medicao"),
+	ESCALONAMENTO("Escalonamentos");
 
 	private String nome;
 	

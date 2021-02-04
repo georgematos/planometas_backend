@@ -1,9 +1,13 @@
 package br.com.zipext.plr.controller.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,7 @@ import br.com.zipext.plr.dto.FilialDTO;
 import br.com.zipext.plr.dto.GenericDTO;
 import br.com.zipext.plr.model.FilialModel;
 import br.com.zipext.plr.service.FilialService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/filiais")
@@ -58,5 +63,17 @@ public class FilialController {
 		FilialModel entity = this.service.update(id, dto);
 
 		return ResponseEntity.ok().body(new FilialDTO(entity));
+	}
+
+	@GetMapping("/export")
+	public ResponseEntity<InputStreamResource> exportFiliais() throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "FILIAIS" + "_" + PLRUtils.today() + ".xlsx";
+
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
+		ByteArrayInputStream exported = service.export();
+
+		return new ResponseEntity<>(new InputStreamResource(exported), headers, HttpStatus.OK);
 	}
 }

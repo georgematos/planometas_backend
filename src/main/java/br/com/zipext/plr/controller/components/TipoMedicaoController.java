@@ -1,9 +1,13 @@
 package br.com.zipext.plr.controller.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.com.zipext.plr.dto.TipoMedicaoDTO;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.service.TipoMedicaoService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/tiposmedicao")
@@ -58,5 +63,17 @@ public class TipoMedicaoController {
 		TipoMedicaoModel entity = this.service.update(id, dto);
 
 		return ResponseEntity.ok().body(new TipoMedicaoDTO(entity));
+	}
+	
+	@GetMapping("/export")
+	public ResponseEntity<InputStreamResource> exportTiposMedicao() throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "TIPOS_MEDICAO" + "_" + PLRUtils.today() + ".xlsx";
+
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
+		ByteArrayInputStream exported = service.export();
+		
+		return new ResponseEntity<>(new InputStreamResource(exported), headers, HttpStatus.OK);
 	}
 }
