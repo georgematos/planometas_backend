@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.zipext.plr.dto.FolhaMetaMensalDTO;
+import br.com.zipext.plr.dto.MetasDTO;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -38,7 +38,9 @@ public class FolhaMetaMensalController {
 		private List<FolhaMetaMensalDTO> dtosIndicador = new ArrayList<>();
 		private List<FolhaMetaMensalDTO> dtosPlanejados = new ArrayList<>();
 		private List<FolhaMetaMensalDTO> dtosRealizados = new ArrayList<>();
+		private Long MetaNumeradorId;
 		private String metaNumeradorDescricao;
+		private Long MetaDenominadorId;
 		private String metaDenominadorDescricao;
 		public List<FolhaMetaMensalDTO> getDtosIndicador() {
 			return dtosIndicador;
@@ -70,6 +72,41 @@ public class FolhaMetaMensalController {
 		public void setMetaDenominadorDescricao(String metaDenominadorDescricao) {
 			this.metaDenominadorDescricao = metaDenominadorDescricao;
 		}
+		public Long getMetaNumeradorId() {
+			return MetaNumeradorId;
+		}
+		public void setMetaNumeradorId(Long metaNumeradorId) {
+			MetaNumeradorId = metaNumeradorId;
+		}
+		public Long getMetaDenominadorId() {
+			return MetaDenominadorId;
+		}
+		public void setMetaDenominadorId(Long metaDenominadorId) {
+			MetaDenominadorId = metaDenominadorId;
+		}
+
+	}
+	
+	class ResponseMetaSalvaDTO {
+		
+		private MetasDTO meta;
+		private List<FolhaMetaMensalDTO> results = new ArrayList<>();
+
+		public List<FolhaMetaMensalDTO> getResults() {
+			return results;
+		}
+
+		public void setResults(List<FolhaMetaMensalDTO> results) {
+			this.results = results;
+		}
+
+		public MetasDTO getMeta() {
+			return meta;
+		}
+
+		public void setMeta(MetasDTO meta) {
+			this.meta = meta;
+		}
 
 	}
 	
@@ -91,7 +128,9 @@ public class FolhaMetaMensalController {
 		
 		if (indicador.getFormula().getId() == 2 && indicador.getMetaNumerador() != null && indicador.getMetaDenominador() != null) {
 			
+			responseMetasMensaisDTO.setMetaNumeradorId(indicador.getMetaNumerador().getId());
 			responseMetasMensaisDTO.setMetaNumeradorDescricao(indicador.getMetaNumerador().getDescricao());
+			responseMetasMensaisDTO.setMetaDenominadorId(indicador.getMetaDenominador().getId());
 			responseMetasMensaisDTO.setMetaDenominadorDescricao(indicador.getMetaDenominador().getDescricao());
 			
 			List<FolhaMetaMensalModel> metasMensaisNumerador = service.findByMetaColaboradorAndAno(indicador.getMetaNumerador(), new ColaboradorModel(matricula), periodoPLR);
@@ -170,30 +209,35 @@ public class FolhaMetaMensalController {
 
 			responseMetasMensaisDTO.setDtosPlanejados(dtosPlanejados);
 			responseMetasMensaisDTO.setDtosRealizados(dtosRealizados);
-			
 			responseMetasMensaisDTO.setDtosIndicador(dtosIndicador);
 			
 			return ResponseEntity.ok().body(responseMetasMensaisDTO);
 		}
-		
+
 		responseMetasMensaisDTO.setDtosIndicador(dtosIndicador);
-		
+
 		return ResponseEntity.ok().body(responseMetasMensaisDTO);
 	}
 	
 	@PostMapping("/meta/{idMeta}/periodoPLR/{periodoPLR}/colaborador/{matricula}")
-	public ResponseEntity<List<FolhaMetaMensalDTO>> save(@RequestBody List<FolhaMetaMensalDTO> dtos, 
+	public ResponseEntity<ResponseMetaSalvaDTO> save(@RequestBody List<FolhaMetaMensalDTO> dtos, 
 			@PathVariable("idMeta") Long idMeta, @PathVariable("periodoPLR") Integer periodoPLR,
 			@PathVariable("matricula") String matricula) {
 		List<FolhaMetaMensalModel> modelsToSave = dtos.stream().map(dto -> dto.obterModel()).collect(Collectors.toList());
 		this.service.deleteByMetaColaboradorAndAno(new MetasModel(idMeta), new ColaboradorModel(matricula), periodoPLR);
 		
 		List<FolhaMetaMensalModel> models = this.service.saveAll(modelsToSave);
-		List<FolhaMetaMensalDTO> results= new ArrayList<>();
+		List<FolhaMetaMensalDTO> results = new ArrayList<>();
 		if (models != null && !models.isEmpty()) {
 			models.forEach(m -> results.add(new FolhaMetaMensalDTO(m)));
 		}
 		
-		return new ResponseEntity<>(results, HttpStatus.OK);
+		ResponseMetaSalvaDTO metaSalvaDTO = new ResponseMetaSalvaDTO(); 
+		MetasDTO meta = new MetasDTO(metasService.findById(idMeta), periodoPLR);
+		
+		metaSalvaDTO.setResults(results);
+		metaSalvaDTO.setMeta(meta);
+		
+		return ResponseEntity.ok().body(metaSalvaDTO);
 	}
 }

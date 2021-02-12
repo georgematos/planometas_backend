@@ -99,7 +99,7 @@ public class FolhaMetaMensalDTO {
 		this.idSet = fmSet.getId();
 		this.idOut = fmOut.getId();
 		this.idNov = fmNov.getId();
-		this.idDez = fmNov.getId();
+		this.idDez = fmDez.getId();
 		
 		if (tipoMeta.equalsIgnoreCase("REAL")) {
 			this.valJan = isMetaRestrita ? fmJan.getValorPorcentagem() : fmJan.getValorReal();
