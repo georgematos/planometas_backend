@@ -1,6 +1,8 @@
 package br.com.zipext.plr.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -61,6 +63,15 @@ public class FolhaMetaMensalService {
 
 	@Transactional(readOnly = false)
 	public List<FolhaMetaMensalModel> saveAll(List<FolhaMetaMensalModel> models) {
+		models.stream().forEach((x) -> {
+			x.setResponsavelAlteracao(x.getColaboradorMeta().getMatricula());
+			x.setAlteracao(LocalDateTime.now());
+		});
 		return this.repository.saveAll(models);
+	}
+	
+	@Transactional(readOnly = false)
+	public Optional<FolhaMetaMensalModel> findById(Long metaId) {
+		return this.repository.findById(metaId);
 	}
 }
