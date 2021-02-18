@@ -21,64 +21,67 @@ import br.com.zipext.plr.enums.EnumSimNao;
 import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.utils.PLRUtils;
 
-
 @Entity
-@Table(schema = "CORPORATIVO" ,name = "CAD_COLABORADOR")
+@Table(schema = "CORPORATIVO", name = "CAD_COLABORADOR")
 public class ColaboradorModel {
 
 	@Id
 	@Column(name = "CD_MATRICULA")
-	private String matricula; 
-	
+	private String matricula;
+
 	@Column(name = "CD_CPF")
 	private String cpf;
-	
+
 	@Column(name = "NM_COLABORADOR")
 	private String nome;
-	
+
 	@Column(name = "DT_ADMISSAO")
 	private LocalDate dataAdmissao;
-	
+
 	@Column(name = "DT_DEMISSAO")
 	private LocalDate dataDemissao;
-	
+
 	@Column(name = "FL_SIT_ELEGIVEL")
 	private String elegivel;
-	
+
 	@Column(name = "FL_SIT_CADASTRO")
 	private String situacao;
-	
+
 	@Column(name = "DT_INC")
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime inclusao;
-    
-    @Column(name = "CD_LOGIN_INC")
-    private String responsavelInclusao;
-	
+	@Convert(converter = LocalDateTimeConverter.class)
+	private LocalDateTime inclusao;
+
+	@Column(name = "CD_LOGIN_INC")
+	private String responsavelInclusao;
+
+	@Column(name = "CD_SUP_IMEDIATO")
+	private String superiorImediato;
+
 	@ManyToOne
 	@JoinColumn(name = "CD_DIRETORIA")
 	private DiretoriaModel diretoria;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "CD_CARGO")
 	private CargoModel cargo;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "CD_TIME")
 	private TimeModel time;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "CD_FILIAL")
 	private FilialModel filial;
-	
+
 	@OneToMany(mappedBy = "colaborador")
 	private List<UsuarioModel> usuarios;
-	
+
 	@OneToMany(mappedBy = "pk.colaborador")
 	private List<AfastamentoModel> afastamentos;
-	
-	public ColaboradorModel() {}
-	
+
+	public ColaboradorModel() {
+	}
+
 	public ColaboradorModel(String matricula) {
 		this.matricula = matricula;
 	}
@@ -162,7 +165,7 @@ public class ColaboradorModel {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public LocalDateTime getInclusao() {
 		return inclusao;
 	}
@@ -178,7 +181,7 @@ public class ColaboradorModel {
 	public void setResponsavelInclusao(String responsavelInclusao) {
 		this.responsavelInclusao = responsavelInclusao;
 	}
-	
+
 	public String getCpf() {
 		return cpf;
 	}
@@ -186,17 +189,25 @@ public class ColaboradorModel {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	
+
 	public List<AfastamentoModel> getAfastamentos() {
 		return afastamentos;
 	}
 
 	public void setAfastamentos(List<AfastamentoModel> afastamentos) {
 		this.afastamentos = afastamentos;
-	}	
+	}
 	
+	public String getSuperiorImediato() {
+		return superiorImediato;
+	}
+
+	public void setSuperiorImediato(String superiorImediato) {
+		this.superiorImediato = superiorImediato;
+	}
+
 	/* Export */
-	
+
 	public List<UsuarioModel> getUsuarios() {
 		return usuarios;
 	}
@@ -209,30 +220,30 @@ public class ColaboradorModel {
 		if (this.dataAdmissao != null) {
 			return this.dataAdmissao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		}
-		
+
 		return "";
 	}
-	
+
 	public String getDemissaoToString() {
 		if (this.dataDemissao != null) {
 			return this.dataDemissao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		}
-		
+
 		return "";
 	}
-	
+
 	public String isElegivelIndividual() {
 		if (!StringUtils.isNotBlank(this.elegivel)) {
 			return "";
 		}
-		
+
 		return this.elegivel.equals("1") ? EnumSimNao.SIM.getDescricao() : EnumSimNao.NAO.getDescricao();
 	}
-	
+
 	public String getStatusToExport() {
 		return EnumSituacao.forValue(this.situacao).getDescricao();
 	}
-	
+
 	public String getFormattedCPF() {
 		return PLRUtils.formatCPF(this.cpf);
 	}

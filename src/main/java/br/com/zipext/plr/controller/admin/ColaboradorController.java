@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.ColaboradorDTO;
+import br.com.zipext.plr.dto.ColaboradorResumoDTO;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.service.ColaboradorService;
 import br.com.zipext.plr.service.PerfilUsuarioService;
@@ -30,20 +31,28 @@ public class ColaboradorController {
 
 	@Autowired
 	private ColaboradorService service;
-	
+
 	@Autowired
 	private PerfilUsuarioService perfilUsuarioService;
-	
+
+	@GetMapping
+	public ResponseEntity<List<ColaboradorResumoDTO>> findAll() {
+		List<ColaboradorModel> colaboradores = service.findAll();
+		List<ColaboradorResumoDTO> colaboradoresDTOs = colaboradores.stream().map(x -> new ColaboradorResumoDTO(x))
+				.collect(Collectors.toList());
+		return ResponseEntity.ok().body(colaboradoresDTOs);
+	}
+
 	@GetMapping("/export")
 	public ResponseEntity<InputStreamResource> exportIndicadores() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		String fileName = "COLABORADORES" + "_" + PLRUtils.today() + ".xlsx";
-		
+
 		headers.add("Content-Disposition", "attachment; filename=" + fileName);
-		
+
 		return new ResponseEntity<>(new InputStreamResource(this.service.export()), headers, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/filter")
 	public ResponseEntity<List<ColaboradorDTO>> findByFilter(
 			@RequestParam(required = false, name = "matricula") String matricula,
@@ -52,34 +61,45 @@ public class ColaboradorController {
 			@RequestParam(required = false, name = "situacao") String situacao,
 			@RequestParam(required = false, name = "cargo") String cargo,
 			@RequestParam(required = false, name = "diretoria") String diretoria,
-			@RequestParam(required = false, name = "time") String time) {
-		List<ColaboradorDTO> dtos = this.service.findByFilter(StringUtils.isNotBlank(matricula) ? matricula : null,
-				StringUtils.isNotBlank(cpf) ? cpf.toUpperCase() : null,
-				StringUtils.isNotBlank(nome) ? nome.toUpperCase() : null, StringUtils.isNotBlank(situacao) ? situacao : null,
-				StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null, StringUtils.isNotBlank(diretoria) ? diretoria.toUpperCase() : null,
-				StringUtils.isNotBlank(time) ? time.toUpperCase() : null).stream().map(ColaboradorDTO::new)
-				.collect(Collectors.toList());
+			@RequestParam(required = false, name = "time") String time,
+			@RequestParam(required = false, name = "superiorImediato") String superiorImediato) {
+		List<ColaboradorDTO> dtos = this.service
+				.findByFilter(StringUtils.isNotBlank(matricula) ? matricula : null,
+						StringUtils.isNotBlank(cpf) ? cpf.toUpperCase() : null,
+						StringUtils.isNotBlank(nome) ? nome.toUpperCase() : null,
+						StringUtils.isNotBlank(situacao) ? situacao : null,
+						StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null,
+						StringUtils.isNotBlank(diretoria) ? diretoria.toUpperCase() : null,
+						StringUtils.isNotBlank(time) ? time.toUpperCase() : null,
+						StringUtils.isNoneBlank(superiorImediato) ? superiorImediato : null)
+				.stream().map(ColaboradorDTO::new).collect(Collectors.toList());
+		dtos.stream().forEach(x -> {
+			if (x.getSuperiorImediato().getMatricula() != null) {
+				x.getSuperiorImediato()
+						.setNome(service.findByMatricula(x.getSuperiorImediato().getMatricula()).getNome());
+			}
+		});
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{matricula}")
 	public ResponseEntity<ColaboradorDTO> findByMatricula(@PathVariable("matricula") String matricula) {
 		return new ResponseEntity<>(new ColaboradorDTO(this.service.findByMatricula(matricula)), HttpStatus.OK);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<ColaboradorDTO> save(@RequestBody ColaboradorDTO dto) throws Exception {
 		ColaboradorModel model = this.service.findByMatricula(dto.getMatricula());
 		if (model != null && dto.isNewColaborador()) {
 			throw new Exception("Já existe um colaborador cadastrado para a mesma matrícula! ");
 		}
-		
+
 		ColaboradorModel resultModel = this.service.save(dto.obterModel());
-		
+
 		if (dto.isNewColaborador()) {
-				this.perfilUsuarioService.associaUsuarioGenerico(dto.getMatricula());
+			this.perfilUsuarioService.associaUsuarioGenerico(dto.getMatricula());
 		}
-		
+
 		return new ResponseEntity<>(new ColaboradorDTO(resultModel), HttpStatus.OK);
 	}
 }
