@@ -23,7 +23,7 @@ public interface ColaboradorRepository extends JpaRepository<ColaboradorModel, S
 		 + "and (:cargo is null or cargo.nome like %:cargo%) "
 		 + "and (:diretoria is null or diretoria.nome like %:diretoria%) "
 		 + "and (:time is null or time.nome like %:time%) "
-		 + "and (:superiorImediato is null or model.superiorImediato = :superiorImediato) "
+		 + "and (:superiorImediato is null or model.superiorImediato.matricula = :superiorImediato) "
 		 + "order by model.nome asc")
 	public List<ColaboradorModel> findByFilter(
 			@Param("matricula") String matricula,

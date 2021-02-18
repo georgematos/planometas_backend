@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -52,6 +53,22 @@ public class FolhaMetaModel {
 	@ManyToOne
 	@JoinColumn(name = "CD_CARGO")
 	private CargoModel cargo;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CD_SUP_IMEDIATO", referencedColumnName = "CD_MATRICULA")
+	private ColaboradorModel superiorImediato;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CD_FILIAL", referencedColumnName = "CD_FILIAL")
+	private FilialModel filial;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CD_TIME", referencedColumnName = "CD_TIME")
+	private TimeModel time;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CD_DIRETORIA", referencedColumnName = "CD_DIRETORIA")
+	private DiretoriaModel diretoria;
 	
 	@Column(name = "DT_INC")
     @Convert(converter = LocalDateTimeConverter.class)
@@ -149,6 +166,38 @@ public class FolhaMetaModel {
 		this.responsavelInclusao = responsavelInclusao;
 	}
 	
+	public ColaboradorModel getSuperiorImediato() {
+		return superiorImediato;
+	}
+
+	public void setSuperiorImediato(ColaboradorModel superiorImediato) {
+		this.superiorImediato = superiorImediato;
+	}
+
+	public FilialModel getFilial() {
+		return filial;
+	}
+
+	public void setFilial(FilialModel filial) {
+		this.filial = filial;
+	}
+
+	public TimeModel getTime() {
+		return time;
+	}
+
+	public void setTime(TimeModel time) {
+		this.time = time;
+	}
+
+	public DiretoriaModel getDiretoria() {
+		return diretoria;
+	}
+
+	public void setDiretoria(DiretoriaModel diretoria) {
+		this.diretoria = diretoria;
+	}
+
 	/**
 	 * Export folha de metas  
 	 *

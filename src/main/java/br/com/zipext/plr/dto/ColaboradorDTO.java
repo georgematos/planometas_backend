@@ -60,7 +60,10 @@ public class ColaboradorDTO {
 		this.superiorImediato = new ColaboradorResumoDTO();
 		
 		if (model.getSuperiorImediato() != null) {
-			this.superiorImediato.setMatricula(model.getSuperiorImediato());
+			this.superiorImediato.setMatricula(model.getSuperiorImediato().getMatricula());
+			this.superiorImediato.setNome(model.getSuperiorImediato().getNome());
+			this.superiorImediato.setCargoId(model.getSuperiorImediato().getCargo().getId());
+			this.superiorImediato.setCargoNome(model.getSuperiorImediato().getCargo().getNome());
 		}
 		
 		this.dataAdmissao = model.getDataAdmissao() != null ? model.getDataAdmissao().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)) : "";
@@ -109,7 +112,7 @@ public class ColaboradorDTO {
 		}
 		
 		if (this.getSuperiorImediato() != null) {
-			model.setSuperiorImediato(this.getSuperiorImediato().getMatricula());
+			model.setSuperiorImediato(this.getSuperiorImediato().obterModel());
 		}
 		
 		if (StringUtils.isNotBlank(this.dataDemissao)) {

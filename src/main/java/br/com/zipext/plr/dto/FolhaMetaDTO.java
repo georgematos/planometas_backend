@@ -32,6 +32,14 @@ public class FolhaMetaDTO {
 	
 	private ColaboradorDTO responsavel;
 	
+	private ColaboradorResumoDTO superiorImediato;
+	
+	private FilialDTO filial;
+	
+	private TimeDTO time;
+	
+	private DiretoriaDTO diretoria;
+
 	private CargoDTO cargo;
 	
 	private List<FolhaMetaItemDTO> folhasMetaItem;
@@ -47,6 +55,14 @@ public class FolhaMetaDTO {
 		this.dataCadastro = model.getInclusao() != null ? model.getInclusao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
 		this.responsavel = new ColaboradorDTO(model.getResponsavel());	
 		this.cargo = new CargoDTO(model.getCargo());
+		if (model.getSuperiorImediato() != null)
+			this.superiorImediato = new ColaboradorResumoDTO(model.getSuperiorImediato());
+		if (model.getFilial() != null)
+			this.filial = new FilialDTO(model.getFilial());
+		if (model.getTime() != null)
+			this.time = new TimeDTO(model.getTime());
+		if (model.getDiretoria() != null)
+			this.diretoria = new DiretoriaDTO(model.getDiretoria());
 		this.inicioVigencia = model.getInicioVigencia().getDescricao();
 		this.fimVigencia = model.getFimVigencia().getDescricao();
 		this.situacao = model.getSituacao();
@@ -185,5 +201,37 @@ public class FolhaMetaDTO {
 
 	public void setDataCadastro(String dataCadastro) {
 		this.dataCadastro = dataCadastro;
+	}
+	
+	public ColaboradorResumoDTO getSuperiorImediato() {
+		return superiorImediato;
+	}
+
+	public void setSuperiorImediato(ColaboradorResumoDTO superiorImediato) {
+		this.superiorImediato = superiorImediato;
+	}
+
+	public FilialDTO getFilial() {
+		return filial;
+	}
+
+	public void setFilial(FilialDTO filial) {
+		this.filial = filial;
+	}
+
+	public TimeDTO getTime() {
+		return time;
+	}
+
+	public void setTime(TimeDTO time) {
+		this.time = time;
+	}
+
+	public DiretoriaDTO getDiretoria() {
+		return diretoria;
+	}
+
+	public void setDiretoria(DiretoriaDTO diretoria) {
+		this.diretoria = diretoria;
 	}
 }

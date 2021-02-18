@@ -74,7 +74,7 @@ public class ColaboradorController {
 						StringUtils.isNoneBlank(superiorImediato) ? superiorImediato : null)
 				.stream().map(ColaboradorDTO::new).collect(Collectors.toList());
 		dtos.stream().forEach(x -> {
-			if (x.getSuperiorImediato().getMatricula() != null) {
+			if (StringUtils.isNotBlank(x.getSuperiorImediato().getMatricula())) {
 				x.getSuperiorImediato()
 						.setNome(service.findByMatricula(x.getSuperiorImediato().getMatricula()).getNome());
 			}
@@ -94,7 +94,9 @@ public class ColaboradorController {
 			throw new Exception("Já existe um colaborador cadastrado para a mesma matrícula! ");
 		}
 
-		ColaboradorModel resultModel = this.service.save(dto.obterModel());
+		ColaboradorModel newModel = dto.obterModel();
+		newModel.setSuperiorImediato(service.findByMatricula(dto.getSuperiorImediato().getMatricula()));
+		ColaboradorModel resultModel = this.service.save(newModel);
 
 		if (dto.isNewColaborador()) {
 			this.perfilUsuarioService.associaUsuarioGenerico(dto.getMatricula());
