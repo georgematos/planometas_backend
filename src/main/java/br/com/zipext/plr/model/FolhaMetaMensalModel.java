@@ -34,13 +34,20 @@ public class FolhaMetaMensalModel {
 	@Column(name = "VAL_REAL")
 	private BigDecimal valorReal;
 	
+	@Column(name = "CD_LOGIN_INC")
+	private String responsavelInclusao;
+
+	@Column(name = "CD_LOGIN_ALT")
+	private String responsavelAlteracao;
+
 	@Column(name = "DT_INC")
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime inclusao;
-    
-    @Column(name = "CD_LOGIN_INC")
-    private String responsavelInclusao;
 	
+	@Column(name = "DT_ALT")
+	@Convert(converter = LocalDateTimeConverter.class)
+	private LocalDateTime alteracao;
+    
 	@ManyToOne
 	@JoinColumn(name = "CD_META")
 	private MetasModel meta;
@@ -141,6 +148,22 @@ public class FolhaMetaMensalModel {
 
 	public void setColaboradorMeta(ColaboradorModel colaboradorMeta) {
 		this.colaboradorMeta = colaboradorMeta;
+	}
+	
+	public String getResponsavelAlteracao() {
+		return responsavelAlteracao;
+	}
+
+	public void setResponsavelAlteracao(String responsavelAlteracao) {
+		this.responsavelAlteracao = responsavelAlteracao;
+	}
+
+	public LocalDateTime getAlteracao() {
+		return alteracao;
+	}
+
+	public void setAlteracao(LocalDateTime alteracao) {
+		this.alteracao = alteracao;
 	}
 
 	@Override
