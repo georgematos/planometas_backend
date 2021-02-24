@@ -26,88 +26,88 @@ public class FolhaMetaService {
 
 	@Autowired
 	private FolhaMetaRepository repository;
-	
+
 	@Autowired
 	private PropertyService propertyService;
-	
+
 	@Autowired
 	private TemplateCampoService templateCampoService;
-	
+
 	@Modifying
 	@Transactional(readOnly = false)
 	public void deleteById(Long id) {
 		this.repository.deleteById(id);
 	}
-	
+
 	public ByteArrayInputStream export(Long idFolhaMeta) throws IOException {
-		XlsFileExport export = new XlsFileExport(this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_FOLHA_META_PATH), EnumXLSSheets.FOLHA_METAS);
+		XlsFileExport export = new XlsFileExport(
+				this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_FOLHA_META_PATH), EnumXLSSheets.FOLHA_METAS);
 		Optional<FolhaMetaModel> optionalFolhaMeta = this.findById(idFolhaMeta);
 		byte emptyBuff[] = new byte[] {};
-		
+
 		if (optionalFolhaMeta.isPresent()) {
 			FolhaMetaModel folhaMeta = optionalFolhaMeta.get();
-			
+
 			export.processField(folhaMeta, this.templateCampoService.findByTemplateAndArea(
 					new TemplateModel(EnumXLSTemplates.FOLHA_METAS.getCodigo()), EnumXLSArea.FOLHA_META.getArea()));
 			export.processTable(folhaMeta.getFolhaMetaItems(), this.templateCampoService.findByTemplateAndArea(
 					new TemplateModel(EnumXLSTemplates.FOLHA_METAS.getCodigo()), EnumXLSArea.ITEM_FOLHA.getArea()));
-			
-			return 
-					export.writeToFile();
+
+			return export.writeToFile();
 		}
-		
-		return
-				new ByteArrayInputStream(emptyBuff);
+
+		return new ByteArrayInputStream(emptyBuff);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<FolhaMetaModel> findAll() {
-		return
-				this.repository.findAll();
+		return this.repository.findAll();
 	}
-	
+
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findByFilter(String matricula, String cargo, Long skyInicioVigencia, Long skyFimVigencia, String colaborador, String responsavel, String situacao) {
-		return
-				this.repository.findByFilter(matricula, cargo, skyInicioVigencia, skyFimVigencia, colaborador, responsavel, situacao);
+	public List<FolhaMetaModel> findByFilter(String matricula, String cargo, Long skyInicioVigencia,
+			Long skyFimVigencia, String colaborador, String responsavel, String situacao, String superiorImediato, 
+			Long filial, String time, Long diretoria) {
+		return this.repository.findByFilter(matricula, cargo, skyInicioVigencia, skyFimVigencia, colaborador,
+				responsavel, situacao, superiorImediato, filial, time, diretoria);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Optional<FolhaMetaModel> findById(Long id) {
-		return
-				this.repository.findById(id);
+		return this.repository.findById(id);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia, Long fimVigencia) {
-		return
-				this.repository.findByColaboradorAndVigencia(colaborador, inicioVigencia, fimVigencia, EnumSituacao.ATIVO.getCodigo().toString());
+	public List<FolhaMetaModel> findByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia,
+			Long fimVigencia) {
+		return this.repository.findByColaboradorAndVigencia(colaborador, inicioVigencia, fimVigencia,
+				EnumSituacao.ATIVO.getCodigo().toString());
 	}
-	
+
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findByResponsavelAndVigencia(ColaboradorModel responsavel, Long inicioVigencia, Long fimVigencia) {
-		return 
-				this.repository.findByResponsavelAndVigencia(responsavel, inicioVigencia, fimVigencia, null);
+	public List<FolhaMetaModel> findByResponsavelAndVigencia(ColaboradorModel responsavel, Long inicioVigencia,
+			Long fimVigencia) {
+		return this.repository.findByResponsavelAndVigencia(responsavel, inicioVigencia, fimVigencia, null);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findPendentesByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia, Long fimVigencia) {
-		return
-				this.repository.findByColaboradorAndVigencia(colaborador, inicioVigencia, fimVigencia, EnumSituacao.PENDENTE.getCodigo().toString());
+	public List<FolhaMetaModel> findPendentesByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia,
+			Long fimVigencia) {
+		return this.repository.findByColaboradorAndVigencia(colaborador, inicioVigencia, fimVigencia,
+				EnumSituacao.PENDENTE.getCodigo().toString());
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<FolhaMetaModel> findAllPendentesByVigencia(Long inicioVigencia, Long fimVigencia) {
-		return
-				this.repository.findByResponsavelAndVigencia(null, inicioVigencia, fimVigencia, EnumSituacao.PENDENTE.getCodigo().toString());
+		return this.repository.findByResponsavelAndVigencia(null, inicioVigencia, fimVigencia,
+				EnumSituacao.PENDENTE.getCodigo().toString());
 	}
-	
+
 	@Transactional(readOnly = false)
 	public FolhaMetaModel save(FolhaMetaModel folhaMeta) {
-		return
-				this.repository.save(folhaMeta);
+		return this.repository.save(folhaMeta);
 	}
-	
+
 	@Modifying
 	@Transactional(readOnly = false)
 	public void updateSituacaoById(Long id, String situacao) {

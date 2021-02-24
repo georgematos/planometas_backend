@@ -37,6 +37,8 @@ public class ColaboradorDTO {
 	
 	private CargoDTO cargo;
 	
+	private ColaboradorResumoDTO superiorImediato;
+	
 	private DiretoriaDTO diretoria;
 	
 	private TimeDTO time;
@@ -55,6 +57,14 @@ public class ColaboradorDTO {
 		this.diretoria = new DiretoriaDTO(model.getDiretoria());
 		this.time = new TimeDTO(model.getTime());
 		this.filial = new GenericDTO(model.getFilial());
+		this.superiorImediato = new ColaboradorResumoDTO();
+		
+		if (model.getSuperiorImediato() != null) {
+			this.superiorImediato.setMatricula(model.getSuperiorImediato().getMatricula());
+			this.superiorImediato.setNome(model.getSuperiorImediato().getNome());
+			this.superiorImediato.setCargoId(model.getSuperiorImediato().getCargo().getId());
+			this.superiorImediato.setCargoNome(model.getSuperiorImediato().getCargo().getNome());
+		}
 		
 		this.dataAdmissao = model.getDataAdmissao() != null ? model.getDataAdmissao().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)) : "";
 		this.dataDemissao = model.getDataDemissao() != null ? model.getDataDemissao().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)) : "";
@@ -99,6 +109,10 @@ public class ColaboradorDTO {
 		
 		if (StringUtils.isNotBlank(this.dataAdmissao)) {
 			model.setDataAdmissao(LocalDate.parse(this.dataAdmissao.substring(0, 10), DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
+		}
+		
+		if (this.getSuperiorImediato() != null) {
+			model.setSuperiorImediato(this.getSuperiorImediato().obterModel());
 		}
 		
 		if (StringUtils.isNotBlank(this.dataDemissao)) {
@@ -222,6 +236,14 @@ public class ColaboradorDTO {
 	public void setAfastamento(AfastamentoDTO afastamento) {
 		this.afastamento = afastamento;
 	}
+	
+	public ColaboradorResumoDTO getSuperiorImediato() {
+		return superiorImediato;
+	}
+
+	public void setSuperiorImediato(ColaboradorResumoDTO superiorImediato) {
+		this.superiorImediato = superiorImediato;
+	}
 
 	public DiretoriaDTO getDiretoriaOrElse() {
 		if (this.diretoria != null) {
@@ -248,4 +270,5 @@ public class ColaboradorDTO {
 		
 		return new CargoDTO();
 	}
+
 }

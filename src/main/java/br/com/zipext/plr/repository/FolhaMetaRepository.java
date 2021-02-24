@@ -25,17 +25,27 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 		 + "and (:inicioVigencia is null or ini.id >= :inicioVigencia) "
 		 + "and (:fimVigencia is null or fim.id <= :fimVigencia) "
 		 + "and (:colaborador is null or colab.nome like %:colaborador%) "
-		 + "and (:cargo is null or cargo.nome like %:cargo%)"
+		 + "and (:cargo is null or cargo.nome like %:cargo%) "
 		 + "and (:responsavel is null or resp.nome like %:responsavel%) "
+		 + "and (:superiorImediato is null or model.superiorImediato.matricula = :superiorImediato) "
+		 + "and (:filial is null or model.filial.id = :filial) "
+		 + "and (:time is null or model.time.codigo = :time) "
+		 + "and (:diretoria is null or model.diretoria.id = :diretoria) "
 		 + "order by colab.nome asc")
-	public List<FolhaMetaModel> findByFilter(@Param("matricula") String matricula, 
-											 @Param("cargo") String cargo,
-											 @Param("inicioVigencia") Long skyInicioVigencia, 
-											 @Param("fimVigencia") Long skyFimVigencia,
-											 @Param("colaborador") String colaborador,
-											 @Param("responsavel") String responsavel,
-											 @Param("situacao") String situacao);
-	
+	public List<FolhaMetaModel> findByFilter(
+			 @Param("matricula") String matricula, 
+			 @Param("cargo") String cargo,
+			 @Param("inicioVigencia") Long skyInicioVigencia, 
+			 @Param("fimVigencia") Long skyFimVigencia,
+			 @Param("colaborador") String colaborador,
+			 @Param("responsavel") String responsavel,
+			 @Param("situacao") String situacao,
+			 @Param("superiorImediato") String superiorImediato,
+			 @Param("filial") Long filial,
+			 @Param("time") String time,
+			 @Param("diretoria") Long diretoria
+	);
+
 	@Query("select model from FolhaMetaModel model "
 		+  "join fetch model.colaborador colab "
 		+  "join fetch model.inicioVigencia ini "
