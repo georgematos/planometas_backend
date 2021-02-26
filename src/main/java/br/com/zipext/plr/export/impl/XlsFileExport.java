@@ -67,9 +67,10 @@ public class XlsFileExport extends FileExport {
 	}
 	
 	public void processTable(Collection<?> models, List<TemplateCampoModel> campos) {
+		System.out.println(campos);
 		models.forEach(m -> {
 			campos.forEach(campo -> {
-				this.processFieldData(m, campo);	
+				this.processFieldData(m, campo);
 				campo.incremetaIndiceLinha();
 			});
 		});

@@ -1,5 +1,6 @@
 package br.com.zipext.plr.controller.admin;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -7,6 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +26,7 @@ import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.service.FolhaMetaMensalService;
 import br.com.zipext.plr.service.MetasService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/folhasmensais")
@@ -348,6 +353,19 @@ public class FolhaMetaMensalController {
 			modelsDenominador.get(i).setValorMeta(valoresMetaPlanejado.get(i));
 			modelsDenominador.get(i).setValorReal(valoresRealPlanejado.get(i));
 		}
+	}
+	
+	@GetMapping("/export/{periodoPLR}")
+	public ResponseEntity<InputStreamResource> exportIndicadores(@PathVariable Integer periodoPLR) throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "FOLHAS_METAS_MENSAIS" + "_" + PLRUtils.today() + ".xlsx";
+		
+		Long inicioVigencia = PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString());
+		Long fimVigencia = PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString());
+
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
+		return new ResponseEntity<>(new InputStreamResource(this.service.export(inicioVigencia, fimVigencia)), headers, HttpStatus.OK);
 	}
 	
 }

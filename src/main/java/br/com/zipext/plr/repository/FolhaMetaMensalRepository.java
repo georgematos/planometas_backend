@@ -40,6 +40,14 @@ public interface FolhaMetaMensalRepository extends JpaRepository<FolhaMetaMensal
 															@Param("ano") Integer ano);
 	
 	@Query("select model from FolhaMetaMensalModel model "
+		   	+  "where model.prazo.id >= :inicioVigencia "
+		   	+  "and model.prazo.id <= :fimVigencia "
+		   	+  "order by prazo.mes asc")
+		public List<FolhaMetaMensalModel> findByPeriodo(
+				@Param("inicioVigencia") Long inicioVigencia,
+				@Param("fimVigencia") Long fimVigencia);
+	
+	@Query("select model from FolhaMetaMensalModel model "
 		   	+  "join fetch model.meta meta "
 		   	+  "join fetch model.prazo prazo "
 		   	+  "where meta = :meta "

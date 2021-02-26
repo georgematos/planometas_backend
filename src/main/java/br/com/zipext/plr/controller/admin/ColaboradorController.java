@@ -44,7 +44,7 @@ public class ColaboradorController {
 	}
 
 	@GetMapping("/export")
-	public ResponseEntity<InputStreamResource> exportIndicadores() throws IOException {
+	public ResponseEntity<InputStreamResource> exportColaboradores() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
 		String fileName = "COLABORADORES" + "_" + PLRUtils.today() + ".xlsx";
 
