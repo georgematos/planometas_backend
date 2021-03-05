@@ -3,12 +3,14 @@ package br.com.zipext.plr.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
-import br.com.zipext.plr.model.AfastamentoModel;
 import br.com.zipext.plr.model.CargoModel;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.DiretoriaModel;
@@ -47,7 +49,7 @@ public class ColaboradorDTO {
 	
 	private UsuarioDTO usuario;
 	
-	private AfastamentoDTO afastamento;
+	private List<AfastamentoDTO> afastamentos = new ArrayList<AfastamentoDTO>();
 	
 	public ColaboradorDTO() {}
 	
@@ -78,13 +80,9 @@ public class ColaboradorDTO {
 		}
 		
 		if (model.getAfastamentos() != null && !model.getAfastamentos().isEmpty()) {
-			Optional<AfastamentoModel> afastamentoOptional = model.getAfastamentos()
-																  .stream().filter(p -> p.getFimAfastamento() == null)
-																  .findFirst();
-			if (afastamentoOptional.isPresent()) {
-				this.afastamento = new AfastamentoDTO(afastamentoOptional.get());
-			}
+			afastamentos = model.getAfastamentos().stream().map(x -> new AfastamentoDTO(x)).collect(Collectors.toList());
 		}
+
 	}
 	
 	public ColaboradorModel obterModel() {
@@ -229,12 +227,12 @@ public class ColaboradorDTO {
 		this.usuario = usuario;
 	}
 	
-	public AfastamentoDTO getAfastamento() {
-		return afastamento;
+	public List<AfastamentoDTO> getAfastamentos() {
+		return afastamentos;
 	}
 
-	public void setAfastamento(AfastamentoDTO afastamento) {
-		this.afastamento = afastamento;
+	public void setAfastamentos(List<AfastamentoDTO> afastamentos) {
+		this.afastamentos = afastamentos;
 	}
 	
 	public ColaboradorResumoDTO getSuperiorImediato() {
