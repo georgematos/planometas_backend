@@ -23,6 +23,8 @@ public class FolhaMetaItemDTO {
 	
 	private FolhaMetaDTO folhaMeta;
 	
+	private FolhaMetaSimpleDTO folhaMetaSimple;
+	
 	private Integer sequencia;
 	
 	private BigDecimal peso;
@@ -46,6 +48,8 @@ public class FolhaMetaItemDTO {
 	public FolhaMetaItemDTO(FolhaMetaItemModel model) {
 		BeanUtils.copyProperties(model, this);
 		this.meta = new MetasDTO(model.getMeta());
+		if(model.getFolhaMeta().getId() != null)
+			this.setFolhaMetaSimple(new FolhaMetaSimpleDTO(model.getFolhaMeta()));
 	}
 	
 	public FolhaMetaItemDTO(FolhaMetaItemModel model, FolhaMetaAnualModel folhaMetaAnual, List<FolhaMetaMensalModel> folhaMetasMensais, boolean isPerfilReadOnly) {
@@ -168,5 +172,13 @@ public class FolhaMetaItemDTO {
 
 	public void setIdTempo(Long idTempo) {
 		this.idTempo = idTempo;
+	}
+
+	public FolhaMetaSimpleDTO getFolhaMetaSimple() {
+		return folhaMetaSimple;
+	}
+
+	public void setFolhaMetaSimple(FolhaMetaSimpleDTO folhaMetaSimple) {
+		this.folhaMetaSimple = folhaMetaSimple;
 	}
 }

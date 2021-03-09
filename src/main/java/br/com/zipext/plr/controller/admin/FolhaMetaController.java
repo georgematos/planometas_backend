@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.zipext.plr.dto.FolhaMetaDTO;
+import br.com.zipext.plr.dto.FolhaMetaItemDTO;
 import br.com.zipext.plr.enums.EnumPerfil;
 import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.model.ColaboradorModel;
+import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
 import br.com.zipext.plr.model.PerfilUsuarioModel;
 import br.com.zipext.plr.model.UsuarioModel;
@@ -111,6 +113,25 @@ public class FolhaMetaController {
 						PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
 				.stream().map(FolhaMetaDTO::new).collect(Collectors.toList());
 
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
+	}
+	
+	@GetMapping("/porindicador/responsavel/{matricula}/periodo/{periodoPLR}")
+	public ResponseEntity<List<FolhaMetaItemDTO>> findMetasPorIndicadorUsuarioPeriodo(@PathVariable("matricula") String matricula,
+			@PathVariable("periodoPLR") Long periodoPLR, @RequestParam Long indicadorId) {
+
+		PerfilUsuarioModel perfilUsuario = this.perfilUsuarioService.findByUsuario(new UsuarioModel(matricula));
+		ColaboradorModel filtroColaborador = new ColaboradorModel(matricula);
+		if (perfilUsuario.getPk().getPerfil().getId().equals(EnumPerfil.ADMIN.getId())) {
+			filtroColaborador = null;
+		}
+		List<FolhaMetaItemModel> folhas = folhaMetaItemService.findMetasPorIndicadorUsuarioPeriodo(filtroColaborador,
+				PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
+				PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()),
+				indicadorId);
+		
+		List<FolhaMetaItemDTO> dtos = folhas.stream().map(FolhaMetaItemDTO::new).collect(Collectors.toList());
+		
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 

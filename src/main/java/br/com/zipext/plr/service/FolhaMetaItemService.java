@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaModel;
 import br.com.zipext.plr.model.MetasModel;
@@ -22,6 +23,13 @@ public class FolhaMetaItemService {
 	public Long countByMeta(MetasModel meta) {
 		return
 				this.repository.countByMeta(meta);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<FolhaMetaItemModel> findMetasPorIndicadorUsuarioPeriodo(ColaboradorModel colaborador, Long inicioVigencia,
+			Long fimVigencia, Long indicadorId) {
+		List<FolhaMetaItemModel> folhasItens = repository.findByMetaAndPeriodo(indicadorId, inicioVigencia, fimVigencia);
+		return folhasItens;
 	}
 	
 	@Modifying

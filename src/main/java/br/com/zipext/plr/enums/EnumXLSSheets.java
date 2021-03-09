@@ -14,7 +14,8 @@ public enum EnumXLSSheets {
 	TIPOS_MEDICAO("Tipos de Medicao"),
 	FORMULA("Formula"),
 	FREQUENCIA_MEDICAO("Frequencia de Medicao"),
-	ESCALONAMENTO("Escalonamentos");
+	ESCALONAMENTO("Escalonamentos"),
+	FOLHAS_METAS_MENSAIS("Folhas Metas Mensais");
 
 	private String nome;
 	

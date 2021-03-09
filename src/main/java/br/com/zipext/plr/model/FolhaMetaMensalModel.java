@@ -30,7 +30,6 @@ public class FolhaMetaMensalModel {
 	@Column(name = "VAL_META")
 	private BigDecimal valorMeta;
 	
-
 	@Column(name = "VAL_REAL")
 	private BigDecimal valorReal;
 	

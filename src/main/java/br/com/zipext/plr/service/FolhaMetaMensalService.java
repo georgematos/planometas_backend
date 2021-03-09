@@ -1,5 +1,7 @@
 package br.com.zipext.plr.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -9,10 +11,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.enums.EnumProperty;
+import br.com.zipext.plr.enums.EnumXLSArea;
+import br.com.zipext.plr.enums.EnumXLSSheets;
+import br.com.zipext.plr.enums.EnumXLSTemplates;
+import br.com.zipext.plr.export.impl.XlsFileExport;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaItemModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.TemplateModel;
 import br.com.zipext.plr.repository.FolhaMetaMensalRepository;
 
 @Service
@@ -20,6 +28,12 @@ public class FolhaMetaMensalService {
 
 	@Autowired
 	private FolhaMetaMensalRepository repository;
+
+	@Autowired
+	private PropertyService propertyService;
+	
+	@Autowired
+	private TemplateCampoService templateCampoService;
 
 	@Transactional(readOnly = true)
 	public Long countByMeta(MetasModel meta) {
@@ -73,5 +87,23 @@ public class FolhaMetaMensalService {
 	@Transactional(readOnly = false)
 	public Optional<FolhaMetaMensalModel> findById(Long metaId) {
 		return this.repository.findById(metaId);
+	}
+	
+	public ByteArrayInputStream export(Long inicioVigencia, Long fimVigencia) throws IOException {
+		XlsFileExport export = new XlsFileExport(
+				this.propertyService.getProperty(EnumProperty.XLS_TEMPLATE_FOLHAS_METAS_MENSAIS_PATH),
+				EnumXLSSheets.FOLHAS_METAS_MENSAIS);
+		byte emptyBuff[] = new byte[] {};
+
+		List<FolhaMetaMensalModel> models = this.repository.findByPeriodo(inicioVigencia, fimVigencia);
+		if (models != null && !models.isEmpty()) {
+			export.processTable(models,
+					this.templateCampoService.findByTemplateAndArea(
+							new TemplateModel(EnumXLSTemplates.FOLHAS_METAS_MENSAIS.getCodigo()),
+							EnumXLSArea.FOLHAS_METAS_MENSAIS.getArea()));
+			return export.writeToFile();
+		}
+
+		return new ByteArrayInputStream(emptyBuff);
 	}
 }
