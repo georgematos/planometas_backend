@@ -1,7 +1,9 @@
 package br.com.zipext.plr.controller.admin;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -182,10 +184,13 @@ public class FolhaMetaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<FolhaMetaDTO> save(@RequestBody FolhaMetaDTO dto) {
+	public ResponseEntity<FolhaMetaDTO> save(@RequestBody FolhaMetaDTO dto) throws Exception {
+		
 		if (dto.getId() != null) {
 			this.folhaMetaItemService.deleteByIdFolhaMeta(dto.getId());
 		}
+				
+		verificarIndicadoresDuplicados(dto);
 
 		FolhaMetaModel obtainedModel = dto.obterModel();
 		ColaboradorModel colaborador = colaboradorService.findByMatricula(dto.getColaborador().getMatricula());
@@ -196,10 +201,20 @@ public class FolhaMetaController {
 		obtainedModel.setTime(colaborador.getTime());
 		
 		FolhaMetaModel model = this.service.save(obtainedModel);
-		model.setFolhaMetaItems(this.folhaMetaItemService.saveAll(dto.obterFolhaMetaItems(model)));
+ 		model.setFolhaMetaItems(this.folhaMetaItemService.saveAll(dto.obterFolhaMetaItems(model)));
 		model.getFolhaMetaItems().forEach(item -> item.setMeta(this.metasService.findById(item.getMeta().getId())));
 
 		return new ResponseEntity<>(new FolhaMetaDTO(model), HttpStatus.OK);
+	}
+
+	private void verificarIndicadoresDuplicados(FolhaMetaDTO dto) throws Exception {
+		List<Long> indicadores = dto.getFolhasMetaItem().stream().map(x -> x.getMeta().getId()).collect(Collectors.toList());
+		if (dto.getId() == null) {
+			List<Long> duplicates= findDuplicates(indicadores).stream().collect(Collectors.toList());
+			if (duplicates.size() > 0) {
+				throw new Exception("Não pode haver dois indicadores para uma mesma Folha de Metas");
+			}
+		}
 	}
 
 	@PutMapping("/aprovacao/{id}")
@@ -215,4 +230,31 @@ public class FolhaMetaController {
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	public static Set<Long> findDuplicates(List<Long> listContainingDuplicates) {
+		 
+		final Set<Long> setToReturn = new HashSet<Long>();
+		final Set<Long> set = new HashSet<Long>();
+ 
+		for (Long item : listContainingDuplicates) {
+			if (!set.add(item)) {
+				setToReturn.add(item);
+			}
+		}
+		return setToReturn;
+	}
+	
+	public static Set<Long> getNotDuplicates(List<Long> listContainingDuplicates) {
+		 
+		final Set<Long> setToReturn = new HashSet<Long>();
+		final Set<Long> set = new HashSet<Long>();
+ 
+		for (Long item : listContainingDuplicates) {
+			if (set.add(item)) {
+				setToReturn.add(item);
+			}
+		}
+		return setToReturn;
+	}
+
 }

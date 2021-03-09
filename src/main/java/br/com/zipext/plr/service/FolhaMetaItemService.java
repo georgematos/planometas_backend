@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.zipext.plr.enums.EnumProperty;
@@ -32,10 +33,10 @@ public class FolhaMetaItemService {
 	@Autowired
 	private TemplateCampoService templateCampoService;
 	
+
 	@Transactional(readOnly = true)
 	public Long countByMeta(MetasModel meta) {
-		return
-				this.repository.countByMeta(meta);
+		return this.repository.countByMeta(meta);
 	}
 	
 	@Transactional(readOnly = true)
@@ -50,17 +51,21 @@ public class FolhaMetaItemService {
 	public void deleteByIdFolhaMeta(Long idFolhaMeta) {
 		this.repository.deleteByIdFolhaMeta(idFolhaMeta);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<FolhaMetaItemModel> findByFolhaMeta(FolhaMetaModel folhaMeta) {
-		return
-				this.repository.findByFolhaMetaOrderBySequenciaAsc(folhaMeta);
+		return this.repository.findByFolhaMetaOrderBySequenciaAsc(folhaMeta);
 	}
 	
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = true)
+	public List<FolhaMetaItemModel> findByFolhaMetaId(Long id) {
+		return this.repository.findByFolhaDeMetaId(id);
+	}
+
+
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public List<FolhaMetaItemModel> saveAll(List<FolhaMetaItemModel> models) {
-		return
-				this.repository.saveAll(models);
+		return this.repository.saveAll(models);
 	}
 	
 	public ByteArrayInputStream exportConsultas(Long inicioVigencia, Long fimVigencia, Long indicadorId) throws IOException {
