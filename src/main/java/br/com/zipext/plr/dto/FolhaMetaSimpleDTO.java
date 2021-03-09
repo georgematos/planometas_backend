@@ -65,11 +65,7 @@ public class FolhaMetaSimpleDTO {
 		this.inicioVigencia = model.getInicioVigencia().getDescricao();
 		this.fimVigencia = model.getFimVigencia().getDescricao();
 		this.situacao = model.getSituacao();
-//		this.folhasMetaItem = model.getFolhaMetaItems().stream().map(FolhaMetaItemDTO::new).collect(Collectors.toList());
-//		this.folhaMetasMensais = new ArrayList<>();
-//		
-//		model.getFolhaMetaItems().stream()
-//								 .forEach(item -> this.folhaMetasMensais.add(new FolhaMetaMensalDTO("META", null, item.getMeta(), item.getMeta().getFolhaMetasMensais(), false)));
+
 	}
 	
 	public FolhaMetaModel obterModel() {
