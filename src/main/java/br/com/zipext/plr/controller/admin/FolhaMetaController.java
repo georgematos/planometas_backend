@@ -117,15 +117,10 @@ public class FolhaMetaController {
 	}
 	
 	@GetMapping("/porindicador/responsavel/{matricula}/periodo/{periodoPLR}")
-	public ResponseEntity<List<FolhaMetaItemDTO>> findMetasPorIndicadorUsuarioPeriodo(@PathVariable("matricula") String matricula,
+	public ResponseEntity<List<FolhaMetaItemDTO>> findByMetaAndPeriodo(@PathVariable("matricula") String matricula,
 			@PathVariable("periodoPLR") Long periodoPLR, @RequestParam Long indicadorId) {
 
-		PerfilUsuarioModel perfilUsuario = this.perfilUsuarioService.findByUsuario(new UsuarioModel(matricula));
-		ColaboradorModel filtroColaborador = new ColaboradorModel(matricula);
-		if (perfilUsuario.getPk().getPerfil().getId().equals(EnumPerfil.ADMIN.getId())) {
-			filtroColaborador = null;
-		}
-		List<FolhaMetaItemModel> folhas = folhaMetaItemService.findMetasPorIndicadorUsuarioPeriodo(filtroColaborador,
+		List<FolhaMetaItemModel> folhas = folhaMetaItemService.findByMetaAndPeriodo(
 				PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
 				PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()),
 				indicadorId);
