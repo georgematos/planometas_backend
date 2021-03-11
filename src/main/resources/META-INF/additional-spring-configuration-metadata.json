@@ -1,89 +1,92 @@
-{
-	"properties": [
-		{
-			"name": "app.version",
-			"type": "java.lang.String",
-			"description": "A description for 'app.version'"
-		},
-		{
-			"name": "app.frontend.ext.ip",
-			"type": "java.lang.String",
-			"description": "A description for 'app.frontend.ext.ip'"
-		},
-		{
-			"name": "app.frontend.int.ip",
-			"type": "java.lang.String",
-			"description": "A description for 'app.frontend.int.ip'"
-		},
-		{
-			"name": "app.plr.export.template.folha.meta.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.folha.meta.path'"
-		},
-		{
-			"name": "app.plr.export.template.indicadores.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.indicadores.path'"
-		},
-		{
-			"name": "app.plr.export.template.colaboradores.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.colaboradores.path'"
-		},
-		{
-			"name": "app.plr.export.template.cargos.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.cargos.path'"
-		},
-		{
-			"name": "app.plr.export.template.equivalencias.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.equivalencias.path'"
-		},
-		{
-			"name": "app.plr.export.template.tipos.meta.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.tipos.meta.path'"
-		},
-		{
-			"name": "app.plr.export.template.times.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.times.path'"
-		},
-		{
-			"name": "app.plr.export.template.filiais.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.filiais.path'"
-		},
-		{
-			"name": "app.plr.export.template.diretorias.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.diretorias.path'"
-		},
-		{
-			"name": "app.plr.export.template.tipos.medicao.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.tipos.medicao.path'"
-		},
-		{
-			"name": "app.plr.export.template.formula.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.formula.path'"
-		},
-		{
-			"name": "app.plr.export.template.escalonamento.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.escalonamento.path'"
-		},
-		{
-			"name": "app.plr.export.template.frequencia.medicao.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.frequencia.medicao.path'"
-		},
-		{
-			"name": "app.plr.export.template.folhas.metas.mensais.path",
-			"type": "java.lang.String",
-			"description": "A description for 'app.plr.export.template.folhas.metas.mensais.path'"
-		}
-	]
-}
+{"properties": [
+  {
+    "name": "app.version",
+    "type": "java.lang.String",
+    "description": "A description for 'app.version'"
+  },
+  {
+    "name": "app.frontend.ext.ip",
+    "type": "java.lang.String",
+    "description": "A description for 'app.frontend.ext.ip'"
+  },
+  {
+    "name": "app.frontend.int.ip",
+    "type": "java.lang.String",
+    "description": "A description for 'app.frontend.int.ip'"
+  },
+  {
+    "name": "app.plr.export.template.folha.meta.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.folha.meta.path'"
+  },
+  {
+    "name": "app.plr.export.template.indicadores.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.indicadores.path'"
+  },
+  {
+    "name": "app.plr.export.template.colaboradores.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.colaboradores.path'"
+  },
+  {
+    "name": "app.plr.export.template.cargos.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.cargos.path'"
+  },
+  {
+    "name": "app.plr.export.template.equivalencias.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.equivalencias.path'"
+  },
+  {
+    "name": "app.plr.export.template.tipos.meta.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.tipos.meta.path'"
+  },
+  {
+    "name": "app.plr.export.template.times.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.times.path'"
+  },
+  {
+    "name": "app.plr.export.template.filiais.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.filiais.path'"
+  },
+  {
+    "name": "app.plr.export.template.diretorias.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.diretorias.path'"
+  },
+  {
+    "name": "app.plr.export.template.tipos.medicao.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.tipos.medicao.path'"
+  },
+  {
+    "name": "app.plr.export.template.formula.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.formula.path'"
+  },
+  {
+    "name": "app.plr.export.template.escalonamento.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.escalonamento.path'"
+  },
+  {
+    "name": "app.plr.export.template.frequencia.medicao.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.frequencia.medicao.path'"
+  },
+  {
+    "name": "app.plr.export.template.folhas.metas.mensais.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.folhas.metas.mensais.path'"
+  },
+  {
+    "name": "app.plr.export.template.consulta.folhas.metas.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.consulta.folhas.metas.path'"
+  }
+]}

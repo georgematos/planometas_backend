@@ -117,8 +117,7 @@ public class FolhaMetaController {
 	}
 	
 	@GetMapping("/porindicador/responsavel/{matricula}/periodo/{periodoPLR}")
-	public ResponseEntity<List<FolhaMetaItemDTO>> findByMetaAndPeriodo(@PathVariable("matricula") String matricula,
-			@PathVariable("periodoPLR") Long periodoPLR, @RequestParam Long indicadorId) {
+	public ResponseEntity<List<FolhaMetaItemDTO>> findByMetaAndPeriodo(@PathVariable("periodoPLR") Long periodoPLR, @RequestParam Long indicadorId) {
 
 		List<FolhaMetaItemModel> folhas = folhaMetaItemService.findByMetaAndPeriodo(
 				PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
@@ -162,6 +161,24 @@ public class FolhaMetaController {
 		headers.add("Content-Disposition", "attachment; filename=" + fileName);
 
 		return new ResponseEntity<>(new InputStreamResource(this.service.export(idFolhaMeta)), headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/exportconsulta")
+	public ResponseEntity<InputStreamResource> exportConsultaFolha(
+			@RequestParam("usuario") String usuario,
+			@RequestParam("periodo") String periodo,
+			@RequestParam Long indicadorId) throws IOException {
+
+		HttpHeaders headers = new HttpHeaders();
+		Long inicioVigencia = PLRUtils.getSkyTempoFromStringDate("01/01/" + periodo.toString());
+		Long fimVigencia = PLRUtils.getSkyTempoFromStringDate("31/12/" + periodo.toString());
+		String fileName = "USUARIO_"+ usuario + "_" + PLRUtils.today() + ".xlsx";
+
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
+		InputStreamResource isr = new InputStreamResource(this.folhaMetaItemService.exportConsultas(inicioVigencia, fimVigencia, indicadorId));
+
+		return new ResponseEntity<>(isr, headers, HttpStatus.OK);
 	}
 
 	@PostMapping
