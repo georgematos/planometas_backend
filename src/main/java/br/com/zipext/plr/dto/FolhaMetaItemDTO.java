@@ -39,6 +39,8 @@ public class FolhaMetaItemDTO {
 	
 	private boolean isReadOnly;
 	
+	private boolean isNewItem;
+	
 	private Long idTempo;
 	
 	private List<FolhaMetaMensalDTO> viewMetasMensais;
@@ -180,5 +182,14 @@ public class FolhaMetaItemDTO {
 
 	public void setFolhaMetaSimple(FolhaMetaSimpleDTO folhaMetaSimple) {
 		this.folhaMetaSimple = folhaMetaSimple;
+	}
+
+	public boolean getIsNewItem() {
+		return isNewItem;
+	}
+
+	public void setIsNewItem(boolean isNewItem) {
+		this.isNewItem = isNewItem;
+
 	}
 }

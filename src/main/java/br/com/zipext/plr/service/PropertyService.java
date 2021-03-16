@@ -50,6 +50,9 @@ public class PropertyService {
 	@Value("${app.plr.export.template.folhas.metas.mensais.path}")
 	private String templateFolhasMetasMensaisPath;
 	
+	@Value("${app.plr.export.template.consulta.folhas.metas.path}")
+	private String templateConsultaFolhasMetasPath;
+	
 	@Value("${app.frontend.ext.ip}")
 	private String appExternalHostIp;
 	
@@ -86,6 +89,8 @@ public class PropertyService {
 			return this.templateEscalonamentoPath;
 		case XLS_TEMPLATE_FOLHAS_METAS_MENSAIS_PATH:
 			return this.templateFolhasMetasMensaisPath;
+		case XLS_TEMPLATE_CONSULTA_FOLHAS_METAS_PATH:
+			return this.templateConsultaFolhasMetasPath;
 		case APP_EXTERNAL_HOST_IP:
 			return this.appExternalHostIp;
 		case APP_INTERNAL_HOST_IP:
