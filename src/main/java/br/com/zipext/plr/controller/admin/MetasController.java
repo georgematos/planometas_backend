@@ -120,7 +120,8 @@ public class MetasController {
 				LocalDate.now().format(DateTimeFormatter.ofPattern(PLRUtils.DATE_PATTERN_JS)));
 		List<MetasModel> models = this.service.findProjetosVencidosByResponsavel(periodoPLR, skyDataLimite, 
 				StringUtils.isNotBlank(aprovador) ? new ColaboradorModel(aprovador) : null);
-		return new ResponseEntity<>(models.stream().map(model -> new MetasDTO(model, periodoPLR)).collect(Collectors.toList()), HttpStatus.OK);
+		List<MetasDTO> metas = models.stream().map(model -> new MetasDTO(model, periodoPLR)).collect(Collectors.toList());
+		return new ResponseEntity<>(metas, HttpStatus.OK);
 	}
 	
 	@PostMapping

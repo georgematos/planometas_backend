@@ -24,8 +24,11 @@ import br.com.zipext.plr.dto.MetasDTO;
 import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.model.FolhaMetaMensalModel;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.RelAvaliacaoProjetoModel;
+import br.com.zipext.plr.model.RelAvaliacaoProjetoModel.RelAvaliacaoProjetoPK;
 import br.com.zipext.plr.service.FolhaMetaMensalService;
 import br.com.zipext.plr.service.MetasService;
+import br.com.zipext.plr.service.RelAvaliacaoProjetoService;
 import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
@@ -37,6 +40,9 @@ public class FolhaMetaMensalController {
 	
 	@Autowired
 	private MetasService metasService;
+	
+	@Autowired
+	private RelAvaliacaoProjetoService serviceAval;
 	
 	class ResponseMetasMensaisDTO {
 		
@@ -238,6 +244,19 @@ public class FolhaMetaMensalController {
 			@PathVariable("matricula") String matricula) {
 		List<FolhaMetaMensalModel> modelsToSave = dtos.stream().map(dto -> dto.obterModel()).collect(Collectors.toList());
 		this.service.deleteByMetaColaboradorAndAno(new MetasModel(idMeta), new ColaboradorModel(matricula), periodoPLR);
+		
+		if(dtos.size() == 1) { // Tipo ENTREGA ou PROJETO quando a origem é avaliação.
+			FolhaMetaMensalDTO dto = dtos.get(0);
+
+			if (metasService.findById(dto.getIdMeta()).getTipoMeta().getDescricao().equals("ENTREGA")
+				|| metasService.findById(dto.getIdMeta()).getTipoMeta().getDescricao().equals("PROJETO")
+			) {
+				RelAvaliacaoProjetoPK pk = serviceAval.getPKByDTO(dto.getAvaliacaoProjeto());
+				RelAvaliacaoProjetoModel avalProjModel = serviceAval.findById(pk);
+				
+				modelsToSave.get(0).setValorReal(avalProjModel.getValEscalonamento());
+			};
+		}
 		
 		List<FolhaMetaMensalModel> models = this.service.saveAll(modelsToSave);
 		List<FolhaMetaMensalDTO> results = new ArrayList<>();

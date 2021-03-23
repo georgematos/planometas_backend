@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.zipext.plr.dto.RelMetaAvaliacaoProjetoDTO;
 import br.com.zipext.plr.model.MetasModel;
+import br.com.zipext.plr.model.RelAvaliacaoProjetoModel;
+import br.com.zipext.plr.model.RelAvaliacaoProjetoModel.RelAvaliacaoProjetoPK;
 import br.com.zipext.plr.model.RelMetaAvaliacaoProjetoModel;
+import br.com.zipext.plr.service.RelAvaliacaoProjetoService;
 import br.com.zipext.plr.service.RelMetaAvaliacaoProjetoService;
 
 @Controller
@@ -21,6 +24,9 @@ public class RelMetaAvaliacaoProjetoController {
 
 	@Autowired
 	private RelMetaAvaliacaoProjetoService service;
+	
+	@Autowired
+	private RelAvaliacaoProjetoService serviceAval;
 	
 	@DeleteMapping("/meta/{idMeta}/periodo/{periodoPLR}")
 	public ResponseEntity<Void> delete(@PathVariable("idMeta") Long idMeta, @PathVariable("periodoPLR") String periodoPLR) {
@@ -31,7 +37,16 @@ public class RelMetaAvaliacaoProjetoController {
 	
 	@PostMapping
 	public ResponseEntity<RelMetaAvaliacaoProjetoDTO> save(@RequestBody RelMetaAvaliacaoProjetoDTO dto){
+		
+		// baseado no dto que chega, buscar o valor do escalonamento atraves do prazo, qualitativo e orcamento
+		RelAvaliacaoProjetoPK pk = serviceAval.getPKByDTO(dto);
+		
+		RelAvaliacaoProjetoModel findedModel = serviceAval.findById(pk);
+		
+		dto.setValEscalonamento(findedModel.getValEscalonamento());
+		
 		RelMetaAvaliacaoProjetoModel result = this.service.save(dto.obterModel());
+		
 		return new ResponseEntity<>(new RelMetaAvaliacaoProjetoDTO(result), HttpStatus.OK);
 	}
 }

@@ -2,6 +2,7 @@ package br.com.zipext.plr.dto;
 
 import java.math.BigDecimal;
 
+import br.com.zipext.plr.model.AvaliacaoProjetoOrcModel;
 import br.com.zipext.plr.model.AvaliacaoProjetoPrazoModel;
 import br.com.zipext.plr.model.AvaliacaoProjetoQualiModel;
 import br.com.zipext.plr.model.ColaboradorModel;
@@ -42,9 +43,11 @@ public class RelMetaAvaliacaoProjetoDTO {
 		
 		AvaliacaoProjetoPrazoModel prazo = new AvaliacaoProjetoPrazoModel(this.avaliacaoProjeto.getAvaliacaoPrazo().getId());
 		AvaliacaoProjetoQualiModel qualidade = new AvaliacaoProjetoQualiModel(this.avaliacaoProjeto.getAvaliacaoQualidade().getId());
+		AvaliacaoProjetoOrcModel orcamento = new AvaliacaoProjetoOrcModel(this.avaliacaoProjeto.getAvaliacaoOrcamento().getId());
 		
 		avalProjetoPK.setAvaliacaoProjetoPrazo(prazo);
 		avalProjetoPK.setAvaliacaoProjetoQuali(qualidade);
+		avalProjetoPK.setAvaliacaoProjetoOrc(orcamento);
 		
 		avalProjetoModel.setPk(avalProjetoPK);
 		

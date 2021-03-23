@@ -17,21 +17,20 @@ public class RelMetaAvaliacaoProjetoService {
 
 	@Autowired
 	private RelMetaAvaliacaoProjetoRepository repository;
-	
+
 	@Transactional(readOnly = false)
 	public void deleteByMetaAndPeriodo(MetasModel meta, Integer anoPeriodoPLR) {
 		this.repository.deleteByMetaAndPeriodo(meta);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public List<RelMetaAvaliacaoProjetoModel> findByResponsavelAndVigencia(ColaboradorModel responsavel, TempoModel dataAvaliacao) {
-		return 
-				this.repository.findByResponsavelAndDataAvaliacao(responsavel, dataAvaliacao);
+	public List<RelMetaAvaliacaoProjetoModel> findByResponsavelAndVigencia(ColaboradorModel responsavel,
+			TempoModel dataAvaliacao) {
+		return this.repository.findByResponsavelAndDataAvaliacao(responsavel, dataAvaliacao);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public RelMetaAvaliacaoProjetoModel save(RelMetaAvaliacaoProjetoModel model) {
-		return
-				this.repository.save(model);
+		return this.repository.save(model);
 	}
 }

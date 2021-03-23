@@ -118,7 +118,8 @@ public class RelMetaAvaliacaoProjetoModel {
 		@ManyToOne
 		@JoinColumns( {
 		    @JoinColumn(name="CD_AVAL_META_PRAZO", referencedColumnName="CD_AVAL_META_PRAZO"),
-		    @JoinColumn(name="CD_AVAL_META_QUAL", referencedColumnName="CD_AVAL_META_QUAL")
+		    @JoinColumn(name="CD_AVAL_META_QUAL", referencedColumnName="CD_AVAL_META_QUAL"),
+		    @JoinColumn(name="CD_AVAL_META_ORC", referencedColumnName="CD_AVAL_META_ORC"),
 		} )
 		private RelAvaliacaoProjetoModel relAvaliacaoProjeto;
 		
