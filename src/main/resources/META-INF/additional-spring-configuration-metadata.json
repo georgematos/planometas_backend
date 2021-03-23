@@ -88,5 +88,10 @@
     "name": "app.plr.export.template.consulta.folhas.metas.path",
     "type": "java.lang.String",
     "description": "A description for 'app.plr.export.template.consulta.folhas.metas.path'"
+  },
+  {
+    "name": "app.plr.export.template.escalonamento.qualitativo.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.plr.export.template.escalonamento.qualitativo.path'"
   }
 ]}
