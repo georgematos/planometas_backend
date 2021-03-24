@@ -1,10 +1,16 @@
 package br.com.zipext.plr.controller.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +23,7 @@ import br.com.zipext.plr.model.RelAvaliacaoProjetoModel.RelAvaliacaoProjetoPK;
 import br.com.zipext.plr.model.RelMetaAvaliacaoProjetoModel;
 import br.com.zipext.plr.service.RelAvaliacaoProjetoService;
 import br.com.zipext.plr.service.RelMetaAvaliacaoProjetoService;
+import br.com.zipext.plr.utils.PLRUtils;
 
 @Controller
 @RequestMapping("/metaaval")	
@@ -37,8 +44,6 @@ public class RelMetaAvaliacaoProjetoController {
 	
 	@PostMapping
 	public ResponseEntity<RelMetaAvaliacaoProjetoDTO> save(@RequestBody RelMetaAvaliacaoProjetoDTO dto){
-		
-		// baseado no dto que chega, buscar o valor do escalonamento atraves do prazo, qualitativo e orcamento
 		RelAvaliacaoProjetoPK pk = serviceAval.getPKByDTO(dto);
 		
 		RelAvaliacaoProjetoModel findedModel = serviceAval.findById(pk);
@@ -48,5 +53,17 @@ public class RelMetaAvaliacaoProjetoController {
 		RelMetaAvaliacaoProjetoModel result = this.service.save(dto.obterModel());
 		
 		return new ResponseEntity<>(new RelMetaAvaliacaoProjetoDTO(result), HttpStatus.OK);
+	}
+	
+	@GetMapping("/export")
+	public ResponseEntity<InputStreamResource> exportAvaliacaoProjetos() throws IOException {
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "AVALIACAO_PROJETOS" + "_" + PLRUtils.today() + ".xlsx";
+
+		headers.add("Content-Disposition", "attachment; filename=" + fileName);
+
+		ByteArrayInputStream exported = service.export();
+		
+		return new ResponseEntity<>(new InputStreamResource(exported), headers, HttpStatus.OK);
 	}
 }

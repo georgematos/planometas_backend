@@ -47,7 +47,7 @@ public class RelAvaliacaoProjetoController {
 	@GetMapping("/export")
 	public ResponseEntity<InputStreamResource> exportRelAvaliacaoProjetos() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
-		String fileName = "AVALIACAO_PROJETOS" + "_" + PLRUtils.today() + ".xlsx";
+		String fileName = "ESCALONAMENTO_QUALI" + "_" + PLRUtils.today() + ".xlsx";
 
 		headers.add("Content-Disposition", "attachment; filename=" + fileName);
 
