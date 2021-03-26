@@ -18,33 +18,35 @@ import br.com.zipext.plr.converter.LocalDateTimeConverter;
 @Entity
 @Table(schema = "METAS", name = "ASS_AVAL_META_PRAZO_QUAL")
 public class RelAvaliacaoProjetoModel {
-	
+
 	@EmbeddedId
 	private RelAvaliacaoProjetoPK pk;
-	
+
 	@Column(name = "VAL_ESCALONAMENTO")
 	private BigDecimal valEscalonamento;
 
 	@Column(name = "DT_INC")
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime inclusao;
-    
-    @Column(name = "CD_LOGIN_INC")
-    private String responsavelInclusao;
-    
-    @Column(name = "DT_ALT")
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime alteracao;
-    
-    @Column(name = "CD_LOGIN_ALT")
-    private String responsavelAlteracao;
-    
-    public RelAvaliacaoProjetoModel() {}
-    
-    public RelAvaliacaoProjetoModel(AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo, AvaliacaoProjetoQualiModel avaliacaoProjetoQuali) {
-    	this.pk = new RelAvaliacaoProjetoPK(avaliacaoProjetoPrazo, avaliacaoProjetoQuali);
-    }
-	
+	@Convert(converter = LocalDateTimeConverter.class)
+	private LocalDateTime inclusao;
+
+	@Column(name = "CD_LOGIN_INC")
+	private String responsavelInclusao;
+
+	@Column(name = "DT_ALT")
+	@Convert(converter = LocalDateTimeConverter.class)
+	private LocalDateTime alteracao;
+
+	@Column(name = "CD_LOGIN_ALT")
+	private String responsavelAlteracao;
+
+	public RelAvaliacaoProjetoModel() {
+	}
+
+	public RelAvaliacaoProjetoModel(AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo,
+			AvaliacaoProjetoQualiModel avaliacaoProjetoQuali, AvaliacaoProjetoOrcModel avaliacaoProjetoOrc) {
+		this.pk = new RelAvaliacaoProjetoPK(avaliacaoProjetoPrazo, avaliacaoProjetoQuali, avaliacaoProjetoOrc);
+	}
+
 	public RelAvaliacaoProjetoPK getPk() {
 		return pk;
 	}
@@ -92,7 +94,7 @@ public class RelAvaliacaoProjetoModel {
 	public void setResponsavelAlteracao(String responsavelAlteracao) {
 		this.responsavelAlteracao = responsavelAlteracao;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -122,20 +124,27 @@ public class RelAvaliacaoProjetoModel {
 	public static class RelAvaliacaoProjetoPK implements Serializable {
 
 		private static final long serialVersionUID = 8780212793915401691L;
-	
+
 		@ManyToOne
 		@JoinColumn(name = "CD_AVAL_META_PRAZO")
 		private AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo;
-		
+
 		@ManyToOne
 		@JoinColumn(name = "CD_AVAL_META_QUAL")
 		private AvaliacaoProjetoQualiModel avaliacaoProjetoQuali;
-		
-		public RelAvaliacaoProjetoPK() {}
-		
-		public RelAvaliacaoProjetoPK(AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo, AvaliacaoProjetoQualiModel avaliacaoProjetoQuali) {
+
+		@ManyToOne
+		@JoinColumn(name = "CD_AVAL_META_ORC")
+		private AvaliacaoProjetoOrcModel avaliacaoProjetoOrc;
+
+		public RelAvaliacaoProjetoPK() {
+		}
+
+		public RelAvaliacaoProjetoPK(AvaliacaoProjetoPrazoModel avaliacaoProjetoPrazo,
+				AvaliacaoProjetoQualiModel avaliacaoProjetoQuali, AvaliacaoProjetoOrcModel avaliacaoProjetoOrc) {
 			this.avaliacaoProjetoPrazo = avaliacaoProjetoPrazo;
 			this.avaliacaoProjetoQuali = avaliacaoProjetoQuali;
+			this.avaliacaoProjetoOrc = avaliacaoProjetoOrc;
 		}
 
 		public AvaliacaoProjetoPrazoModel getAvaliacaoProjetoPrazo() {
@@ -154,10 +163,19 @@ public class RelAvaliacaoProjetoModel {
 			this.avaliacaoProjetoQuali = avaliacaoProjetoQuali;
 		}
 
+		public AvaliacaoProjetoOrcModel getAvaliacaoProjetoOrc() {
+			return avaliacaoProjetoOrc;
+		}
+
+		public void setAvaliacaoProjetoOrc(AvaliacaoProjetoOrcModel avaliacaoProjetoOrc) {
+			this.avaliacaoProjetoOrc = avaliacaoProjetoOrc;
+		}
+
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
+			result = prime * result + ((avaliacaoProjetoOrc == null) ? 0 : avaliacaoProjetoOrc.hashCode());
 			result = prime * result + ((avaliacaoProjetoPrazo == null) ? 0 : avaliacaoProjetoPrazo.hashCode());
 			result = prime * result + ((avaliacaoProjetoQuali == null) ? 0 : avaliacaoProjetoQuali.hashCode());
 			return result;
@@ -172,6 +190,11 @@ public class RelAvaliacaoProjetoModel {
 			if (getClass() != obj.getClass())
 				return false;
 			RelAvaliacaoProjetoPK other = (RelAvaliacaoProjetoPK) obj;
+			if (avaliacaoProjetoOrc == null) {
+				if (other.avaliacaoProjetoOrc != null)
+					return false;
+			} else if (!avaliacaoProjetoOrc.equals(other.avaliacaoProjetoOrc))
+				return false;
 			if (avaliacaoProjetoPrazo == null) {
 				if (other.avaliacaoProjetoPrazo != null)
 					return false;
@@ -184,5 +207,6 @@ public class RelAvaliacaoProjetoModel {
 				return false;
 			return true;
 		}
+
 	}
 }

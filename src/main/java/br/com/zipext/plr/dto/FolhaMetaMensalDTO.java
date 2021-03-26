@@ -24,6 +24,8 @@ public class FolhaMetaMensalDTO {
 	private GenericDTO meta;
 	private GenericDTO colaboradorMeta;
 	
+	private RelAvaliacaoProjetoDTO avaliacaoProjeto;
+	
 	private String tipoMeta;
 	
 	private Long idJan;
@@ -448,5 +450,13 @@ public class FolhaMetaMensalDTO {
 
 	public void setColaboradorMeta(GenericDTO colaboradorMeta) {
 		this.colaboradorMeta = colaboradorMeta;
+	}
+
+	public RelAvaliacaoProjetoDTO getAvaliacaoProjeto() {
+		return avaliacaoProjeto;
+	}
+
+	public void setAvaliacaoProjeto(RelAvaliacaoProjetoDTO avaliacaoProjeto) {
+		this.avaliacaoProjeto = avaliacaoProjeto;
 	}
 }

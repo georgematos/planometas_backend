@@ -16,7 +16,9 @@ public enum EnumXLSSheets {
 	FREQUENCIA_MEDICAO("Frequencia de Medicao"),
 	ESCALONAMENTO("Escalonamentos"),
 	FOLHAS_METAS_MENSAIS("Folhas Metas Mensais"),
-	CONSULTA_FOLHAS_METAS("Consulta Folhas Metas");
+	CONSULTA_FOLHAS_METAS("Consulta Folhas Metas"),
+	ESCALONAMENTO_QUALI("Escalonamento Qualitativo"),
+	AVALIACAO_QUALI("Avaliacao Qualitativa");
 
 	private String nome;
 	

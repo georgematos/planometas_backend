@@ -84,6 +84,9 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/avalquali/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
+		registry.addMapping("/avalorcamento/**")
+			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
+			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
 		registry.addMapping("/metaaval/**")
 			.allowedOrigins(this.propertyService.getProperty(EnumProperty.APP_INTERNAL_HOST_IP), this.propertyService.getProperty(EnumProperty.APP_EXTERNAL_HOST_IP))
 			.allowedMethods("GET","POST","DELETE","PUT","HEAD","OPTIONS");
