@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import br.com.zipext.plr.model.ColaboradorModel;
 import br.com.zipext.plr.service.ColaboradorService;
 import br.com.zipext.plr.service.PerfilUsuarioService;
 import br.com.zipext.plr.utils.PLRUtils;
+import br.com.zipext.plr.utils.PaginationJsGridObject;
 
 @Controller
 @RequestMapping("/colaboradores")
@@ -54,7 +56,7 @@ public class ColaboradorController {
 	}
 
 	@GetMapping("/filter")
-	public ResponseEntity<List<ColaboradorDTO>> findByFilter(
+	public ResponseEntity<PaginationJsGridObject<ColaboradorDTO>> findByFilter(
 			@RequestParam(required = false, name = "matricula") String matricula,
 			@RequestParam(required = false, name = "cpf") String cpf,
 			@RequestParam(required = false, name = "nome") String nome,
@@ -62,24 +64,29 @@ public class ColaboradorController {
 			@RequestParam(required = false, name = "cargo") String cargo,
 			@RequestParam(required = false, name = "diretoria") String diretoria,
 			@RequestParam(required = false, name = "time") String time,
-			@RequestParam(required = false, name = "superiorImediato") String superiorImediato) {
-		List<ColaboradorDTO> dtos = this.service
-				.findByFilter(StringUtils.isNotBlank(matricula) ? matricula : null,
-						StringUtils.isNotBlank(cpf) ? cpf.toUpperCase() : null,
-						StringUtils.isNotBlank(nome) ? nome.toUpperCase() : null,
-						StringUtils.isNotBlank(situacao) ? situacao : null,
-						StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null,
-						StringUtils.isNotBlank(diretoria) ? diretoria.toUpperCase() : null,
-						StringUtils.isNotBlank(time) ? time.toUpperCase() : null,
-						StringUtils.isNoneBlank(superiorImediato) ? superiorImediato : null)
-				.stream().map(ColaboradorDTO::new).collect(Collectors.toList());
-		dtos.stream().forEach(x -> {
+			@RequestParam(required = false, name = "superiorImediato") String superiorImediato,
+			@RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+		Page<ColaboradorDTO> dtos = this.service.findByFilter(StringUtils.isNotBlank(matricula) ? matricula : null,
+				StringUtils.isNotBlank(cpf) ? cpf.toUpperCase() : null,
+				StringUtils.isNotBlank(nome) ? nome.toUpperCase() : null,
+				StringUtils.isNotBlank(situacao) ? situacao : null,
+				StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null,
+				StringUtils.isNotBlank(diretoria) ? diretoria.toUpperCase() : null,
+				StringUtils.isNotBlank(time) ? time.toUpperCase() : null,
+				StringUtils.isNoneBlank(superiorImediato) ? superiorImediato : null,
+				pageIndex,
+				pageSize);
+		dtos.getContent().stream().forEach(x -> {
 			if (StringUtils.isNotBlank(x.getSuperiorImediato().getMatricula())) {
 				x.getSuperiorImediato()
 						.setNome(service.findByMatricula(x.getSuperiorImediato().getMatricula()).getNome());
 			}
 		});
-		return new ResponseEntity<>(dtos, HttpStatus.OK);
+		
+		PaginationJsGridObject<ColaboradorDTO> po = new PaginationJsGridObject<>(dtos.getContent(), dtos.getTotalElements());
+
+		return ResponseEntity.ok().body(po);
 	}
 
 	@GetMapping("/{matricula}")
