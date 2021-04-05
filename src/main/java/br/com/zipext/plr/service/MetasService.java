@@ -2,7 +2,9 @@ package br.com.zipext.plr.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,4 +112,27 @@ public class MetasService {
 	public MetasModel save(MetasModel model) {
 		return this.repository.save(model);
 	}
+	
+	@Transactional(readOnly = true)
+	public List<MetasModel> findAllResumidoByPeriodo(Long periodoPLR) {
+		List<Object[]> models = this.repository.findAllResumidoByPeriodo(periodoPLR);
+		return createMetasModels(models);
+	}
+	
+	private List<MetasModel> createMetasModels(List<Object[]> models) {
+		List<MetasModel> metasModels = new ArrayList<>();
+		
+		Iterator<Object[]> it = models.iterator();
+		while(it.hasNext()) {
+		     Object[] line = it.next();
+		     MetasModel mm = new MetasModel();
+		     mm.setId(((Integer) line[0]).longValue());
+		     mm.setDescricao((String) line[1]);
+
+		     metasModels.add(mm);
+		}
+		
+		return metasModels;
+	}
+	
 }

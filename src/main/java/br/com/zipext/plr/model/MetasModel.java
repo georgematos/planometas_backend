@@ -18,10 +18,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import br.com.zipext.plr.converter.LocalDateTimeConverter;
+import br.com.zipext.plr.repository.MetaIdAndDescricao;
 
 @Entity
 @Table(schema = "METAS", name = "CAD_META")
-public class MetasModel {
+public class MetasModel implements MetaIdAndDescricao {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cadMetasSeq")

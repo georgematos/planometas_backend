@@ -71,4 +71,16 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 			@Param("skyDataLimite") Long skyDataLimite, 
 			@Param("aprovador") ColaboradorModel aprovador,
 			@Param("tiposMeta") List<String> tiposMeta);
+	
+	@Query(value = "SELECT cm.cd_meta as meta_id, ds_meta FROM metas.cad_meta cm "
+					+ "LEFT JOIN metas.ass_periodo_meta pmm "
+					+ "ON (cm.cd_meta = pmm.cd_meta) "
+					+ "AND pmm.sky_periodo_meta = :periodoPLR "
+					+ "ORDER BY cm.ds_meta", nativeQuery = true)
+		public List<Object[]> findAllResumidoByPeriodo(@Param("periodoPLR") Long periodoPLR);
+	
 }
+
+//select meta from MetasModel meta "
+//+ "where meta.prazo.id = :periodoPLR "
+//+ "order by meta.descricao asc

@@ -144,6 +144,7 @@ public class FolhaMetaMensalController {
 		}
 		
 		MetasModel indicador = metasService.findById(idMeta);
+		responseMetasMensaisDTO.setIndicador(new MetasDTO(indicador));
 
 		if (indicador.getFormula().getId() == 2 && indicador.getMetaNumerador() != null && indicador.getMetaDenominador() != null) {
 			
