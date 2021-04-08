@@ -89,12 +89,30 @@ public class FolhaMetaService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<FolhaMetaDTO> findByResponsavelAndVigencia(ColaboradorModel responsavel, Long inicioVigencia,
-			Long fimVigencia, int page, int size) {
-		
+	public Page<FolhaMetaDTO> findByResponsavelAndVigencia(
+		Long folha,
+		String colaborador,
+		String cargo,
+		String situacao,
+		Long inicioVigencia,
+		Long fimVigencia,
+		ColaboradorModel responsavel,
+		int page,
+		int size)
+	{
+
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
 		
-		Page<FolhaMetaModel> folhas = this.repository.findByResponsavelAndVigenciaPage(responsavel, inicioVigencia, fimVigencia, null, pageRequest);
+			Page<FolhaMetaModel> folhas = this.repository.findByResponsavelAndVigenciaPage(
+			folha,
+			colaborador,
+			cargo,
+			situacao,
+			inicioVigencia,
+			fimVigencia,
+			responsavel,
+			pageRequest);
+
 		Page<FolhaMetaDTO> dtos = folhas.map(x -> new FolhaMetaDTO(x));
 		return dtos;
 	}
@@ -117,13 +135,26 @@ public class FolhaMetaService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<FolhaMetaDTO> findAllPendentesByVigencia(Long inicioVigencia, Long fimVigencia, int page, int size) {
+	public Page<FolhaMetaDTO> findAllPendentesByVigencia(
+			Long folha,
+			String colaborador,
+			String cargo,
+			String situacao,
+			Long inicioVigencia,
+			Long fimVigencia,
+			ColaboradorModel responsavel,
+			int page,
+			int size)
+	{
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
 		Page<FolhaMetaModel> folhas = this.repository.findByResponsavelAndVigenciaPage(
-				null,
+				folha,
+				colaborador,
+				cargo,
+				EnumSituacao.PENDENTE.getCodigo().toString(),
 				inicioVigencia,
 				fimVigencia,
-				EnumSituacao.PENDENTE.getCodigo().toString(),
+				null,
 				pageRequest);
 		
 		Page<FolhaMetaDTO> dtos = folhas.map(x -> new FolhaMetaDTO(x));

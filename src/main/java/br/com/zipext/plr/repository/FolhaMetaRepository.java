@@ -106,6 +106,9 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 			+  "join fetch model.inicioVigencia ini "
 			+  "join fetch model.fimVigencia fim "
 			+  "where (:responsavel is null or resp = :responsavel) "
+			+  "and (:folha is null or model.id = :folha) "
+			+  "and (:colaborador is null or model.colaborador.nome like %:colaborador%) "
+			+  "and (:cargo is null or model.cargo.nome like %:cargo%) "
 			+  "and ini.id >= :inicioVigencia "
 			+  "and fim.id <= :fimVigencia "
 			+  "and (:situacao is null or model.situacao = :situacao) "
@@ -115,15 +118,21 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 					+  "join model.inicioVigencia ini "
 					+  "join model.fimVigencia fim "
 					+  "where (:responsavel is null or resp = :responsavel) "
+					+  "and (:folha is null or model.id = :folha) "
+					+  "and (:colaborador is null or model.colaborador.nome = :colaborador) "
+					+  "and (:cargo is null or model.cargo.nome = :cargo) "
 					+  "and ini.id >= :inicioVigencia "
 					+  "and fim.id <= :fimVigencia "
 					+  "and (:situacao is null or model.situacao = :situacao) "
-					+  "group by model.id ")
+					+  "group by model.id")
 	public Page<FolhaMetaModel> findByResponsavelAndVigenciaPage(
-			@Param("responsavel") ColaboradorModel responsavel,
+			@Param("folha") Long folha,
+			@Param("colaborador") String colaborador,
+			@Param("cargo") String cargo,			
+			@Param("situacao") String situacao,
 			@Param("inicioVigencia") Long inicioVigencia, 
 			@Param("fimVigencia") Long fimVigencia,
-			@Param("situacao") String situacao,
+			@Param("responsavel") ColaboradorModel responsavel,
 			Pageable pageable);
 	
 	@Modifying
