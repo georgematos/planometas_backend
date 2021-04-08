@@ -80,7 +80,3 @@ public interface MetasRepository extends JpaRepository<MetasModel, Long> {
 		public List<Object[]> findAllResumidoByPeriodo(@Param("periodoPLR") Long periodoPLR);
 	
 }
-
-//select meta from MetasModel meta "
-//+ "where meta.prazo.id = :periodoPLR "
-//+ "order by meta.descricao asc

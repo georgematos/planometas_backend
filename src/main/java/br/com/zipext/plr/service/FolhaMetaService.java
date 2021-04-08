@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.dto.FolhaMetaDTO;
 import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.enums.EnumSituacao;
 import br.com.zipext.plr.enums.EnumXLSArea;
@@ -85,22 +89,47 @@ public class FolhaMetaService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findByResponsavelAndVigencia(ColaboradorModel responsavel, Long inicioVigencia,
-			Long fimVigencia) {
-		return this.repository.findByResponsavelAndVigencia(responsavel, inicioVigencia, fimVigencia, null);
+	public Page<FolhaMetaDTO> findByResponsavelAndVigencia(ColaboradorModel responsavel, Long inicioVigencia,
+			Long fimVigencia, int page, int size) {
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+		
+		Page<FolhaMetaModel> folhas = this.repository.findByResponsavelAndVigenciaPage(responsavel, inicioVigencia, fimVigencia, null, pageRequest);
+		Page<FolhaMetaDTO> dtos = folhas.map(x -> new FolhaMetaDTO(x));
+		return dtos;
 	}
 
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findPendentesByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia,
-			Long fimVigencia) {
-		return this.repository.findByColaboradorAndVigencia(colaborador, inicioVigencia, fimVigencia,
-				EnumSituacao.PENDENTE.getCodigo().toString());
+	public Page<FolhaMetaDTO> findPendentesByColaboradorAndVigencia(ColaboradorModel colaborador, Long inicioVigencia,
+			Long fimVigencia, int page, int size) {
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");	
+		
+		Page<FolhaMetaModel> folhas = this.repository.findByColaboradorAndVigenciaPage(
+				colaborador,
+				inicioVigencia,
+				fimVigencia,
+				EnumSituacao.PENDENTE.getCodigo().toString(),
+				pageRequest);
+		Page<FolhaMetaDTO> dtos = folhas.map(x -> new FolhaMetaDTO(x));
+		
+		return dtos;
 	}
 
 	@Transactional(readOnly = true)
-	public List<FolhaMetaModel> findAllPendentesByVigencia(Long inicioVigencia, Long fimVigencia) {
-		return this.repository.findByResponsavelAndVigencia(null, inicioVigencia, fimVigencia,
-				EnumSituacao.PENDENTE.getCodigo().toString());
+	public Page<FolhaMetaDTO> findAllPendentesByVigencia(Long inicioVigencia, Long fimVigencia, int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+		Page<FolhaMetaModel> folhas = this.repository.findByResponsavelAndVigenciaPage(
+				null,
+				inicioVigencia,
+				fimVigencia,
+				EnumSituacao.PENDENTE.getCodigo().toString(),
+				pageRequest);
+		
+		Page<FolhaMetaDTO> dtos = folhas.map(x -> new FolhaMetaDTO(x));
+		
+		return dtos;
+		
 	}
 
 	@Transactional(readOnly = false)
