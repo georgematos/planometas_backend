@@ -86,21 +86,6 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 				@Param("situacao") String situacao,
 				Pageable pageable);
 	
-	@Query("select model from FolhaMetaModel model "
-			+  "join fetch model.responsavel resp "
-			+  "join fetch model.inicioVigencia ini "
-			+  "join fetch model.fimVigencia fim "
-			+  "where (:responsavel is null or resp = :responsavel) "
-			+  "and ini.id >= :inicioVigencia "
-			+  "and fim.id <= :fimVigencia "
-			+  "and (:situacao is null or model.situacao = :situacao) "
-			+  "order by resp.nome asc")
-	public List<FolhaMetaModel> findByResponsavelAndVigencia(
-			@Param("responsavel") ColaboradorModel responsavel,
-			@Param("inicioVigencia") Long inicioVigencia, 
-			@Param("fimVigencia") Long fimVigencia,
-			@Param("situacao") String situacao);
-	
 	@Query(value = "select model from FolhaMetaModel model "
 			+  "join fetch model.responsavel resp "
 			+  "join fetch model.inicioVigencia ini "
