@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ import br.com.zipext.plr.service.FolhaMetaService;
 import br.com.zipext.plr.service.MetasService;
 import br.com.zipext.plr.service.PerfilUsuarioService;
 import br.com.zipext.plr.utils.PLRUtils;
+import br.com.zipext.plr.utils.PaginationJsGridObject;
 
 @Controller
 @RequestMapping("/folhametas")
@@ -72,10 +74,10 @@ public class FolhaMetaController {
 			@RequestParam(name = "diretoria", required = false) Long diretoria) {
 
 		List<FolhaMetaDTO> dtos = this.service
-				.findByFilter(StringUtils.isNotBlank(matricula) ? matricula.toUpperCase() : null,
+				.findByFilter(
+						StringUtils.isNotBlank(matricula) ? matricula.toUpperCase() : null,
 						StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null,
-						StringUtils.isNotBlank(inicioVigencia) ? PLRUtils.getSkyTempoFromStringDate(inicioVigencia)
-								: null,
+						StringUtils.isNotBlank(inicioVigencia) ? PLRUtils.getSkyTempoFromStringDate(inicioVigencia) : null,
 						StringUtils.isNotBlank(fimVigencia) ? PLRUtils.getSkyTempoFromStringDate(fimVigencia) : null,
 						StringUtils.isNotBlank(colaborador) ? colaborador.toUpperCase() : null,
 						StringUtils.isNotBlank(responsavel) ? responsavel.toUpperCase() : null,
@@ -102,20 +104,42 @@ public class FolhaMetaController {
 	}
 
 	@GetMapping("/responsavel/{matricula}/periodo/{periodoPLR}")
-	public ResponseEntity<List<FolhaMetaDTO>> findByResponsavel(@PathVariable("matricula") String matricula,
-			@PathVariable("periodoPLR") Long periodoPLR) {
+	public ResponseEntity<PaginationJsGridObject<FolhaMetaDTO>> findByResponsavel(
+			@PathVariable("matricula") String matricula,
+			@PathVariable("periodoPLR") Long periodoPLR,
+			@RequestParam(value ="folha", required = false) Long folha,
+			@RequestParam(value ="colaborador", required = false) String colaborador,
+			@RequestParam(value ="cargo", required = false) String cargo,
+			@RequestParam(value ="situacao", required = false) String situacao,
+			@RequestParam(value ="inicioVigencia", required = false) String inicioVigencia,
+			@RequestParam(value ="fimVigencia", required = false) String fimVigencia,
+			@RequestParam(value ="responsavel", required = false) String responsavel,
+			@RequestParam(value ="pageIndex", required = false, defaultValue = "0") int pageIndex,
+			@RequestParam(value ="pageSize", required = false, defaultValue = "10") int pageSize
+	) {
+		
 		PerfilUsuarioModel perfilUsuario = this.perfilUsuarioService.findByUsuario(new UsuarioModel(matricula));
 		ColaboradorModel filtroColaborador = new ColaboradorModel(matricula);
+
 		if (perfilUsuario.getPk().getPerfil().getId().equals(EnumPerfil.ADMIN.getId())) {
 			filtroColaborador = null;
 		}
-		List<FolhaMetaDTO> dtos = this.service
-				.findByResponsavelAndVigencia(filtroColaborador,
-						PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
-						PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
-				.stream().map(FolhaMetaDTO::new).collect(Collectors.toList());
 
-		return new ResponseEntity<>(dtos, HttpStatus.OK);
+		Page<FolhaMetaDTO> dtos = this.service.findByResponsavelAndVigencia(
+			folha,
+			StringUtils.isNotBlank(colaborador) ? colaborador.toUpperCase() : null,
+			StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null,
+			StringUtils.isNotBlank(situacao) ? situacao : null,
+			StringUtils.isNotBlank(inicioVigencia) ? PLRUtils.getSkyTempoFromStringDate(inicioVigencia) : PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
+			StringUtils.isNotBlank(fimVigencia) ? PLRUtils.getSkyTempoFromStringDate(fimVigencia) : PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()),
+			filtroColaborador,
+			pageIndex - 1,
+			pageSize
+				);
+
+		PaginationJsGridObject<FolhaMetaDTO> po = new PaginationJsGridObject<>(dtos.getContent(), dtos.getTotalElements());
+
+		return ResponseEntity.ok().body(po);
 	}
 	
 	@GetMapping("/porindicador/responsavel/{matricula}/periodo/{periodoPLR}")
@@ -132,24 +156,50 @@ public class FolhaMetaController {
 	}
 
 	@GetMapping("/pendentes/colaborador/{matricula}/periodo/{periodoPLR}")
-	public ResponseEntity<List<FolhaMetaDTO>> findPendentes(@PathVariable("matricula") String matricula,
-			@PathVariable("periodoPLR") Long periodoPLR) {
+	public ResponseEntity<PaginationJsGridObject<FolhaMetaDTO>> findPendentes(
+			@PathVariable("matricula") String matricula,
+			@PathVariable("periodoPLR") Long periodoPLR,
+			@RequestParam(name = "folha", required = false) Long folha,
+			@RequestParam(name = "colaborador", required = false) String colaborador,
+			@RequestParam(name = "cargo", required = false) String cargo,
+			@RequestParam(name = "situacao", required = false) String situacao,
+			@RequestParam(name = "inicioVigencia", required = false) String inicioVigencia,
+			@RequestParam(name = "fimVigencia", required = false) String fimVigencia,
+			@RequestParam(name = "responsavel", required = false) String responsavel,
+			@RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+
 		PerfilUsuarioModel perfilUsuario = this.perfilUsuarioService.findByUsuario(new UsuarioModel(matricula));
-		List<FolhaMetaDTO> dtos;
+		Page<FolhaMetaDTO> dtos;
 		if (perfilUsuario.getPk().getPerfil().getId().equals(EnumPerfil.ADMIN.getId())) {
-			dtos = this.service
-					.findAllPendentesByVigencia(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
-							PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
-					.stream().map(FolhaMetaDTO::new).collect(Collectors.toList());
+
+			dtos = this.service.findAllPendentesByVigencia(
+					folha,
+					StringUtils.isNotBlank(colaborador) ? colaborador.toUpperCase() : null,
+					StringUtils.isNotBlank(cargo) ? cargo.toUpperCase() : null,
+					StringUtils.isNotBlank(situacao) ? situacao : null,
+					StringUtils.isNotBlank(inicioVigencia) ? PLRUtils.getSkyTempoFromStringDate(inicioVigencia) : PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
+					StringUtils.isNotBlank(fimVigencia) ? PLRUtils.getSkyTempoFromStringDate(fimVigencia) : PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()),
+					null,
+					pageIndex - 1,
+					pageSize);
+			
+			PaginationJsGridObject<FolhaMetaDTO> po = new PaginationJsGridObject<>(dtos.getContent(), dtos.getTotalElements());
+
+			return ResponseEntity.ok().body(po);
+					
 		} else {
-			dtos = this.service
-					.findPendentesByColaboradorAndVigencia(new ColaboradorModel(matricula),
+			dtos = this.service.findPendentesByColaboradorAndVigencia(new ColaboradorModel(matricula),
 							PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR.toString()),
-							PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()))
-					.stream().map(FolhaMetaDTO::new).collect(Collectors.toList());
+							PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR.toString()),
+							pageIndex - 1, pageSize);
+			
+			PaginationJsGridObject<FolhaMetaDTO> po = new PaginationJsGridObject<>(dtos.getContent(), dtos.getTotalElements());
+
+			return ResponseEntity.ok().body(po);
 		}
 
-		return new ResponseEntity<>(dtos, HttpStatus.OK);
+//		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 
 	@GetMapping("/export")

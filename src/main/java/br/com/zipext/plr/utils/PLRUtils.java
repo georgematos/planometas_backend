@@ -17,8 +17,7 @@ public class PLRUtils {
 	
 	public static Long getSkyTempoFromStringDate(String stringDate) {
 		if (!StringUtils.isNotBlank(stringDate)) {
-			return
-					-1L;
+			return -1L;
 		}
 
 		String result;

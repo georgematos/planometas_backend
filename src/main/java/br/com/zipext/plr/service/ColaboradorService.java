@@ -6,9 +6,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.zipext.plr.dto.ColaboradorDTO;
 import br.com.zipext.plr.enums.EnumProperty;
 import br.com.zipext.plr.enums.EnumXLSArea;
 import br.com.zipext.plr.enums.EnumXLSSheets;
@@ -56,9 +60,22 @@ public class ColaboradorService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ColaboradorModel> findByFilter(String matricula, String cpf, String nome, String situacao, String cargo,
-			String diretoria, String time, String superiorImediato) {
-		return this.repository.findByFilter(matricula, cpf, nome, situacao, cargo, diretoria, time, superiorImediato);
+	public Page<ColaboradorDTO> findByFilter(
+			String matricula,
+			String cpf,
+			String nome,
+			String situacao,
+			String cargo,
+			String diretoria,
+			String time,
+			String superiorImediato,
+			int page, int size) {
+
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "nome");
+		
+		Page<ColaboradorModel> models = this.repository.findByFilter(matricula, cpf, nome, situacao, cargo, diretoria, time, superiorImediato, pageRequest);
+		Page<ColaboradorDTO> dtos = models.map(x -> new ColaboradorDTO(x));
+		return dtos;
 	}
 
 	@Transactional(readOnly = true)

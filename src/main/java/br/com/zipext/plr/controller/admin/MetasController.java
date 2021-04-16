@@ -29,6 +29,7 @@ import br.com.zipext.plr.model.MetasModel;
 import br.com.zipext.plr.model.TempoModel;
 import br.com.zipext.plr.model.TipoMedicaoModel;
 import br.com.zipext.plr.model.TipoMetaModel;
+import br.com.zipext.plr.repository.MetaIdAndDescricao;
 import br.com.zipext.plr.service.MetasPeriodoService;
 import br.com.zipext.plr.service.MetasService;
 import br.com.zipext.plr.utils.PLRUtils;
@@ -59,12 +60,22 @@ public class MetasController {
 		return new ResponseEntity<>(
 				this.service.findAllAtivasByOrderByDescricaoAsc().stream().map(MetasDTO::new).collect(Collectors.toList()), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{periodoPLR}")
 	public ResponseEntity<List<MetasDTO>> findAllByPeriodo(@PathVariable("periodoPLR") String periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
 		List<MetasDTO> dtos = this.metasPeriodoService.findAllByPeriodo(PLRUtils.getSkyTempoFromStringDate("01/01/" + periodoPLR), page)
 				.stream()
 				.map(mp -> new MetasDTO(mp.getPk().getMetas()))
+				.collect(Collectors.toList());
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
+	}
+	
+	@GetMapping("/resumo/{periodoPLR}")
+	public ResponseEntity<List<MetasResumoDTO>> findAllResumidoByPeriodo(@PathVariable("periodoPLR") String periodoPLR, @RequestParam(name = "page", required = false) Integer page) {
+		List<MetasModel> models = this.service.findAllResumidoByPeriodo(PLRUtils.getSkyTempoFromStringDate("31/12/" + periodoPLR));
+		List<MetasResumoDTO> dtos = models 
+				.stream()
+				.map(mp -> new MetasResumoDTO(mp))
 				.collect(Collectors.toList());
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
@@ -129,4 +140,32 @@ public class MetasController {
 		MetasModel meta = this.service.save(dto.obterModel());
 		return new ResponseEntity<MetasDTO>(new MetasDTO(meta), HttpStatus.OK);
 	}
+}
+
+class MetasResumoDTO {
+	
+	public Long id;
+	public String descricao;
+	
+	public MetasResumoDTO(MetaIdAndDescricao meta) {
+		this.id = meta.getId();
+		this.descricao = meta.getDescricao();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 }

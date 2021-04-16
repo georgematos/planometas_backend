@@ -73,8 +73,6 @@ public class MetasPeriodoModel {
 		return true;
 	}
 
-
-
 	@Embeddable
 	public static class MetasPeriodoPK implements Serializable {
 

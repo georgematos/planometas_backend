@@ -2,6 +2,8 @@ package br.com.zipext.plr.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -60,20 +62,63 @@ public interface FolhaMetaRepository extends JpaRepository<FolhaMetaModel, Long>
 			@Param("fimVigencia") Long fimVigencia,
 			@Param("situacao") String situacao);
 	
-	@Query("select model from FolhaMetaModel model "
+	@Query(value = "select model from FolhaMetaModel model "
+			+  "join fetch model.colaborador colab "
+			+  "join fetch model.inicioVigencia ini "
+			+  "join fetch model.fimVigencia fim "
+			+  "where colab = :colaborador "
+			+  "and ini.id >= :inicioVigencia "
+			+  "and fim.id <= :fimVigencia "
+			+  "and model.situacao = :situacao "
+			+  "order by colab.nome asc",
+			countQuery = "select count(model) from FolhaMetaModel model "
+					+  "join model.colaborador colab "
+					+  "join model.inicioVigencia ini "
+					+  "join model.fimVigencia fim "
+					+  "where colab = :colaborador "
+					+  "and ini.id >= :inicioVigencia "
+					+  "and fim.id <= :fimVigencia "
+					+  "and model.situacao = :situacao "
+					+  "group by model.id ")
+		public Page<FolhaMetaModel> findByColaboradorAndVigenciaPage(@Param("colaborador") ColaboradorModel colaborador, 
+				@Param("inicioVigencia") Long inicioVigencia, 
+				@Param("fimVigencia") Long fimVigencia,
+				@Param("situacao") String situacao,
+				Pageable pageable);
+	
+	@Query(value = "select model from FolhaMetaModel model "
 			+  "join fetch model.responsavel resp "
 			+  "join fetch model.inicioVigencia ini "
 			+  "join fetch model.fimVigencia fim "
 			+  "where (:responsavel is null or resp = :responsavel) "
+			+  "and (:folha is null or model.id = :folha) "
+			+  "and (:colaborador is null or model.colaborador.nome like %:colaborador%) "
+			+  "and (:cargo is null or model.cargo.nome like %:cargo%) "
 			+  "and ini.id >= :inicioVigencia "
 			+  "and fim.id <= :fimVigencia "
 			+  "and (:situacao is null or model.situacao = :situacao) "
-			+  "order by resp.nome asc")
-	public List<FolhaMetaModel> findByResponsavelAndVigencia(
-			@Param("responsavel") ColaboradorModel responsavel,
+			+  "order by resp.nome asc",
+			countQuery = "select count(model) from FolhaMetaModel model "
+					+  "join model.responsavel resp "
+					+  "join model.inicioVigencia ini "
+					+  "join model.fimVigencia fim "
+					+  "where (:responsavel is null or resp = :responsavel) "
+					+  "and (:folha is null or model.id = :folha) "
+					+  "and (:colaborador is null or model.colaborador.nome like %:colaborador%) "
+					+  "and (:cargo is null or model.cargo.nome like %:cargo%) "
+					+  "and ini.id >= :inicioVigencia "
+					+  "and fim.id <= :fimVigencia "
+					+  "and (:situacao is null or model.situacao = :situacao) "
+					+  "group by model.id")
+	public Page<FolhaMetaModel> findByResponsavelAndVigenciaPage(
+			@Param("folha") Long folha,
+			@Param("colaborador") String colaborador,
+			@Param("cargo") String cargo,			
+			@Param("situacao") String situacao,
 			@Param("inicioVigencia") Long inicioVigencia, 
 			@Param("fimVigencia") Long fimVigencia,
-			@Param("situacao") String situacao);
+			@Param("responsavel") ColaboradorModel responsavel,
+			Pageable pageable);
 	
 	@Modifying
 	@Query("update FolhaMetaModel model "
