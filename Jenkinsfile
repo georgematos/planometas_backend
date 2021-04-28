@@ -6,7 +6,6 @@ pipeline {
             args  '-v /tmp:/tmp'
         }
     }
-}
     stages {
         stage('Build') { 
             steps {
